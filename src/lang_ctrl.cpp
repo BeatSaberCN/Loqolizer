@@ -11,7 +11,9 @@ void SSLCTRL::SyncSelectedLanguage(){
     auto lang = (SSLCTRL::LanguageOption)opt;
 
     if(lang == L_FollowGame){
-        // SSL10n::LanguageController::SetFollowGameLanguage(true);
+        // This will not works immediately
+        // the sslocalization library only follows language when game set it
+        SSL10n::LanguageController::SetFollowGameLanguage(true);
         return;
     }
 
