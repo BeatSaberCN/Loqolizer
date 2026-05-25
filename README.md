@@ -1,6 +1,6 @@
 # Loqolizer
 
-Localize your mods
+Translate your game and mods
 
 Use `qpm s build` to build
 Same goes for `qpm s copy` and `qpm s qmod`

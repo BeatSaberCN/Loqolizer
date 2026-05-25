@@ -3,7 +3,8 @@
 #include "sslocalization/shared/SSL10n.hpp"
 #include "modconfig.hpp"
 
-namespace SSLCTRL {
+namespace LangCtrl {
+    void DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
     enum LanguageOption{
         L_FollowGame,
         L_English,
