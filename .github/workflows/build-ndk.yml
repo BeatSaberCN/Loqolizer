@@ -52,7 +52,7 @@ jobs:
 
     - name: Create ndkpath.txt
       run: |
-        echo ${{ steps.setup-ndk.outputs.ndk-path }} > ${GITHUB_WORKSPACE}/ndkpath.txt
+        echo $ANDROID_NDK_HOME > ${GITHUB_WORKSPACE}/ndkpath.txt
         cat ${GITHUB_WORKSPACE}/ndkpath.txt
 
     # get version from pushed tag
@@ -83,6 +83,9 @@ jobs:
         pattern="lib${module_id}*.so"
         files=( $pattern )
         echo "NAME=${files[0]}" >> ${GITHUB_OUTPUT}
+
+    - name: Rename debug artifact
+      run: mv "./build/debug/${{ steps.libname.outputs.NAME }}" "./build/debug_${{ steps.libname.outputs.NAME }}"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
