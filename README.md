@@ -1,4 +1,4 @@
-# SSLocalizationController
+# Loqolizer
 
 Localize your mods
 

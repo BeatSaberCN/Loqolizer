@@ -34,8 +34,8 @@ on:
         - 'fix/*'
 
 env:
-    module_id: "SSLocalizationController"
-    qmod_name: "SSLocalizationController"
+    module_id: "Loqolizer"
+    qmod_name: "Loqolizer"
 
 jobs:
   build:

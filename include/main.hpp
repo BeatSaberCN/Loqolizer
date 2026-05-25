@@ -17,7 +17,7 @@
 
 #include "_config.hpp"
 
-constexpr auto PaperLogger = Paper::ConstLoggerContext("SSLocalizationController");
+constexpr auto PaperLogger = Paper::ConstLoggerContext("Loqolizer");
 
 #define FOR_EACH_LANGUAGE(A)        \
         A(English)                  \

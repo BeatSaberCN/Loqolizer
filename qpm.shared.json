@@ -5,12 +5,12 @@
     "sharedDir": "shared",
     "dependenciesDir": "extern",
     "info": {
-      "name": "SSLocalizationController",
-      "id": "SSLocalizationController",
+      "name": "Loqolizer",
+      "id": "Loqolizer",
       "version": "0.1.0",
       "url": null,
       "additionalData": {
-        "overrideSoName": "libSSLocalizationController.so",
+        "overrideSoName": "libLoqolizer.so",
         "cmake": true
       }
     },
@@ -47,7 +47,7 @@
         "./extern/libs"
       ],
       "qmodIncludeFiles": [],
-      "qmodOutput": "./SSLocalizationController.qmod"
+      "qmodOutput": "./Loqolizer.qmod"
     },
     "dependencies": [
       {
