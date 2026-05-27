@@ -73,3 +73,28 @@ RECURSE_FILES(src_inline_hook_beatsaber_hook_local_extra_cpp ${EXTERN_DIR}/inclu
 
 target_sources(${COMPILE_ID} PRIVATE ${src_inline_hook_beatsaber_hook_local_extra_c})
 target_sources(${COMPILE_ID} PRIVATE ${src_inline_hook_beatsaber_hook_local_extra_cpp})
+
+
+################# begin of asset generate ####################
+
+file(GLOB_RECURSE ASSET_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/assets/*
+)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets_hpp)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets_cpp)
+set(ASSET_HPP   ${CMAKE_CURRENT_BINARY_DIR}/assets_hpp/asset.hpp)
+set(ASSET_CPP   ${CMAKE_CURRENT_BINARY_DIR}/assets_cpp/asset.cpp)
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+add_custom_command(
+        OUTPUT ${ASSET_HPP} ${ASSET_CPP}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/build_assets.py ${ASSET_HPP} ${ASSET_CPP}
+        DEPENDS ${ASSET_FILES}
+        COMMENT "Generating Assets"
+        VERBATIM
+)
+add_custom_target(generate_assets DEPENDS ${ASSET_HPP} ${ASSET_CPP})
+add_dependencies(${COMPILE_ID} generate_assets)
+target_sources(${COMPILE_ID} PRIVATE ${ASSET_CPP})
+target_include_directories(${COMPILE_ID} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/assets_hpp)
+
+################# end of asset generate ####################
