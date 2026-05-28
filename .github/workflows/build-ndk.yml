@@ -100,6 +100,12 @@ jobs:
         name: ${{env.qmod_name}}.qmod
         path: ./${{ env.qmod_name }}.qmod
         if-no-files-found: error
+    - name: Upload embbde data build report
+      uses: actions/upload-artifact@v4
+      with:
+        name: EmbbedDataReport.txt
+        path: ./EmbbedDataReport.txt
+        if-no-files-found: error
 
     # if we had a tag, we should make a release
     - name: Upload release artifacts
