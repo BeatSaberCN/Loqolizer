@@ -59,7 +59,7 @@ for modid in manifest:
 """
     output += "   }},\n"
 
-    embbed_data_report += "Mod: " + modid + ", md5: " + csv_md5 + ", version: " + version + "\n"
+    embbed_data_report += "Mod: " + modid + ", version:" + version + ", md5: " + csv_md5 + ", version: " + version + "\n"
 
     mod_build_count += 1
 
