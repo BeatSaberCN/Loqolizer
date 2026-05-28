@@ -114,5 +114,6 @@ jobs:
           ./build/${{ steps.libname.outputs.NAME }}
           ./build/debug_${{ steps.libname.outputs.NAME }}
           ./${{ env.qmod_name }}.qmod
+          ./EmbbedDataReport.txt
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

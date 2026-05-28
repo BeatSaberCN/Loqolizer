@@ -98,3 +98,20 @@ target_sources(${COMPILE_ID} PRIVATE ${ASSET_CPP})
 target_include_directories(${COMPILE_ID} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/assets_hpp)
 
 ################# end of asset generate ####################
+
+################# download embbed data #####################
+
+set(EMBBED_DATA_CPP   ${CMAKE_CURRENT_BINARY_DIR}/EmbbedDataGenerated.cpp)
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+add_custom_command(
+        OUTPUT ${EMBBED_DATA_CPP}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/download_translates.py ${EMBBED_DATA_CPP}
+        DEPENDS ${ASSET_FILES}
+        COMMENT "Download EmbbedData"
+        VERBATIM
+)
+add_custom_target(download_embbed_data DEPENDS ${EMBBED_DATA_CPP})
+add_dependencies(${COMPILE_ID} download_embbed_data)
+target_sources(${COMPILE_ID} PRIVATE ${EMBBED_DATA_CPP})
+
+############## end of download embbed data ################
