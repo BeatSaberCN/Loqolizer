@@ -1,5 +1,6 @@
 #include "main.hpp"
 
+#include "EmbbedData.hpp"
 #include "HMUI/ViewController.hpp"
 #include "PolyglotInject.hpp"
 #include "beatsaber-hook/shared/utils/typedefs-string.hpp"
@@ -36,6 +37,9 @@ MOD_EXTERN_FUNC void late_load() noexcept {
   PaperLogger.info("Install keys");
 
   LangCtrl::InitEmbbedKeys();
+
+  PaperLogger.info("Init Embbed Data");
+  LangCtrl::InitEmbbedData();
 
   PaperLogger.info("Register BSML Menu");
 

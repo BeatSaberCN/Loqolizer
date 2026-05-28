@@ -6,6 +6,8 @@
 
 namespace LangCtrl{
 
+void InitEmbbedData();
+
 struct EmbbedData{
     const char * modId;
     const char * name;
