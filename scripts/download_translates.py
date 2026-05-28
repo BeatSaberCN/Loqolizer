@@ -1,4 +1,6 @@
-MANIFEST_URL = "https://frto027.github.io/ssl10n.csv/manifest.json"
+import time
+
+MANIFEST_URL = f"https://frto027.github.io/ssl10n.csv/manifest.json?time={time.time()}"
 
 import urllib.request
 import json
