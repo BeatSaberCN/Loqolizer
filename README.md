@@ -2,6 +2,12 @@
 
 Translate your game and mods.
 
+For modder, use [sslocalization](https://github.com/frto027/SimpleStupidLocalization) library from qpm to add localize support. And make a pull request in [ssl10n.csv](https://github.com/frto027/ssl10n.csv/tree/master), to tell me about how to synchronize your key values.
+
+For player, install this mod via ... not avaliable.
+
+For this mod's developer...
+
 Don't forget clone submoudles if you git clone this repop.
 
 ```
@@ -15,7 +21,7 @@ git submodule init
 git submodule update
 ```
 
-Use `qpm s build` to build
+Use `qpm s build` to build.  
 Same goes for `qpm s copy` and `qpm s qmod`
 
 # Embbed Data
@@ -23,6 +29,8 @@ Same goes for `qpm s copy` and `qpm s qmod`
 This mod download translate from [ssl10n.csv](https://github.com/frto027/ssl10n.csv/tree/master) at build time, including the translate's version number.
 
 **Only** the latest version translate of every mods are included.
+
+If you need old data, download an old mod. Or waiting for developing of this mod's Online Data feature.
 
 # Version check
 
