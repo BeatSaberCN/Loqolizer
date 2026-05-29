@@ -1,6 +1,6 @@
 # Loqolizer
 
-Translate your game and mods
+Translate your game and mods.
 
 Don't forget clone submoudles if you git clone this repop.
 
@@ -18,7 +18,11 @@ git submodule update
 Use `qpm s build` to build
 Same goes for `qpm s copy` and `qpm s qmod`
 
-This mod download translate from [ssl10n.csv](https://github.com/frto027/ssl10n.csv/tree/master) at build time.
+# Embbed Data
+
+This mod download translate from [ssl10n.csv](https://github.com/frto027/ssl10n.csv/tree/master) at build time, including the translate's version number.
+
+**Only** the latest version translate of every mods are included.
 
 # Version check
 
@@ -28,9 +32,7 @@ We use [Neargye/semver](https://github.com/Neargye/semver) to match the mod vers
 
 ## Embbed Data Version Check
 
-At the mod build time, the mod **only** embbed the every mod's latest version translate, including the version number.
-
-At the runtime, the mod check every mod's id and version. The mismatched translate will be skipped.
+When game start, the mod check every mod's id and version. The mismatched translate will be skipped.
 
 ## Online Data Version Check
 
