@@ -8,7 +8,7 @@ For player, install this mod via ... not avaliable.
 
 For this mod's developer...
 
-Don't forget clone submoudles if you git clone this repop.
+Don't forget clone submoudles if you git clone this repo.
 
 ```
 git clone --recursive xxx
