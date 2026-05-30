@@ -1,10 +1,6 @@
 # Loqolizer
 
-Translate your game and mods.
-
-For modder, use [sslocalization](https://github.com/frto027/SimpleStupidLocalization) library from qpm to add localize support. And make a pull request in [ssl10n.csv](https://github.com/frto027/ssl10n.csv/tree/master), to tell me about how to synchronize your key values.
-
-For player, install this mod via ... not avaliable.
+Translate your game and mods. This mod is for player. For other part, refert to [this](https://github.com/frto027/ssl10n.csv/tree/master).
 
 For this mod's developer...
 
