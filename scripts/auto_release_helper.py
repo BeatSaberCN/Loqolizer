@@ -21,6 +21,7 @@ remote_json = json.loads(urllib.request.urlopen("https://frto027.github.io/ssl10
 import os
 
 if "GITHUB_OUTPUT" in os.environ:
+    print("github environ detected, will write results")
     with open(os.environ["GITHUB_OUTPUT"],'w') as f:
         f.write(f"""cur_ver={'true' if version else 'false'}
 next_ver={'true' if next_version else 'false'}
