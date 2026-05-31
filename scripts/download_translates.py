@@ -22,7 +22,7 @@ output_first = """#include "EmbbedData.hpp"
 next_source_index = 0
 
 output = """
-std::map<std::string, LangCtrl::EmbbedData> LangCtrl::embbedData = {
+std::map<std::string, LangCtrl::DataModInfo> LangCtrl::embbedData = {
 """
 
 mod_build_count = 0
@@ -42,30 +42,37 @@ for modid in manifest:
     
     if len(body["datas"]) == 0:
         continue
-    data = body["datas"][0]
-    version = data["version"]
-    csv_bytes = urllib.request.urlopen(data["csv_url"]).read()
-    csv_md5 = data["md5"]
-    bytes_str = ','.join([str(x) for x in csv_bytes])
-
-    next_source_index += 1
-
-    output_first += f"static const char res_{next_source_index}[{len(csv_bytes)}] = " + "{" + bytes_str + "};\n"
-
+    
     output += "   {\"" + escape(modid) + "\",{"
     output += f"""
     .modId = "{escape(modid)}",
     .name = "{escape(name)}",
-    .csv_buffer = res_{next_source_index},
-    .csv_buffer_size = {len(csv_bytes)},
-    .md5 = "{escape(csv_md5)}",
-    .version = "{escape(version)}"
+    .datas = {'{'}"""
+    
+
+    for data in body["datas"]:
+        version = data["version"]
+        csv_bytes = urllib.request.urlopen(data["csv_url"]).read()
+        csv_md5 = data["md5"]
+        bytes_str = ','.join([str(x) for x in csv_bytes])
+
+        next_source_index += 1
+
+        output_first += f"static const char res_{next_source_index}[{len(csv_bytes)}] = " + "{" + bytes_str + "};\n"
+        output += f"""
+        {'{'}
+            .csv_buffer = res_{next_source_index},
+            .csv_buffer_size = {len(csv_bytes)},
+            .md5 = "{escape(csv_md5)}",
+            .version = "{escape(version)}"
+        {'}'},"""
+    output += """
+    }
 """
-    output += "   }},\n"
-
+    output += """
+    }},
+"""
     embbed_data_report_json["mods"][modid] = body
-
-
     mod_build_count += 1
 
 

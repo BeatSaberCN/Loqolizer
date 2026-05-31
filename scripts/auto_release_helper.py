@@ -21,15 +21,15 @@ print(f"Remote latest tag is {latest_tag}. Will bump release version {version} -
 
 has_new_data = False
 local_json = json.loads(urllib.request.urlopen(f"https://github.com/BeatSaberCN/Loqolizer/releases/latest/download/EmbbedDataReport.json?time={time.time()}").read().decode("utf8"))["mods"]
-local_md5s:dict[str,str] = {}
+local_md5s:dict[str,set[str]] = {}
 remote_json = json.loads(urllib.request.urlopen(f"https://frto027.github.io/ssl10n.csv/manifest.json?time={time.time()}").read().decode("utf8"))
-remote_md5s:dict[str,str] = {}
+remote_md5s:dict[str,set[str]] = {}
 for mod_id in local_json:
     if "datas" in local_json[mod_id] and len(local_json[mod_id]["datas"]) > 0:
-        local_md5s[mod_id] = local_json[mod_id]["datas"][0]["md5"]
+        local_md5s[mod_id] = set([x["md5"] for x in local_json[mod_id]["datas"]])
 for mod_id in remote_json:
     if "datas" in remote_json[mod_id] and len(remote_json[mod_id]["datas"]) > 0:
-        remote_md5s[mod_id] = remote_json[mod_id]["datas"][0]["md5"]
+        remote_md5s[mod_id] = set([x["md5"] for x in remote_json[mod_id]["datas"]])
 print(f"we have {len(remote_json)} remote mods and {len(local_md5s)} local mods.")
 auto_release_change_log = ""
 for mod_id in remote_md5s:

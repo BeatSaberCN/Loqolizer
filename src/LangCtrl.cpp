@@ -52,12 +52,13 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         BSML::Lite::CreateText(container->get_transform(), SSL10n::Get("LOQOLIZER_SETTHING_EMBBED_DATA_TITLE"),{0,0},{0,5});
         auto embbedDataList = BSML::Lite::CreateScrollableList(container->get_transform(),{0, 0}, {55.0f, 30.0f});
         for(auto & data : embbedData){
-            std::string desc = std::string("(") + data.second.version + ")";
-            if(loadedResourceMd5.contains(data.second.md5)){
-                desc = "[loaded]" + desc;
-            }else{
-                desc = "[not load]" + desc;
+            bool loaded = false;
+            for(auto & ver:data.second.datas){
+                if(loadedResourceMd5.contains(ver.md5))
+                    loaded = true;
             }
+            std::string desc = loaded ? "[loaded]" : "[not loaded]";
+            // std::string desc = std::string("(") + data.second.version + ")";
             auto item = BSML::CustomCellInfo::New_ctor();
             item->text = data.second.modId;
             item->subText = desc;

@@ -22,11 +22,7 @@ Same goes for `qpm s copy` and `qpm s qmod`
 
 # Embbed Data
 
-This mod download translate from [ssl10n.csv](https://github.com/frto027/ssl10n.csv/tree/master) at build time, including the translate's version number.
-
-**Only** the latest version translate of every mods are included.
-
-If you need old data, download an old mod. Or waiting for developing of this mod's Online Data feature.
+This mod download translate from [ssl10n.csv](https://github.com/frto027/ssl10n.csv) at build time, including the translate's version number.
 
 # Version check
 
