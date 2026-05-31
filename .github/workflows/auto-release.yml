@@ -94,9 +94,11 @@ jobs:
       id: upload_file_release
       uses: softprops/action-gh-release@v0.1.15
       with:
+        name: Automatic Release v${{ steps.mod.outputs.next_ver }}
         tag_name: v${{ steps.mod.outputs.next_ver }}
         draft: true
         generate_release_notes: true
+        body_path: AutoReleaseChangelog.txt
         files: |
           ./build/${{ steps.libname.outputs.NAME }}
           ./build/debug_${{ steps.libname.outputs.NAME }}

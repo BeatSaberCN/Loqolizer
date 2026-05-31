@@ -16,8 +16,26 @@ assert ver_match, f"Invalid version number {version} in qpm.json"
 next_version = f"{ver_match[1]}.{ver_match[2]}.{int(ver_match[3])+1}"
 print(f"Bump release version {version} -> {next_version}")
 
-has_new_data = True
+has_new_data = False
 remote_json = json.loads(urllib.request.urlopen("https://frto027.github.io/ssl10n.csv/manifest.json?time={time.time()}").read().decode("utf8"))
+remote_md5s:dict[str,str] = {}
+local_md5s:dict[str,str] = {}
+auto_release_change_log = ""
+for mod_id in remote_json:
+    if "datas" in remote_json[mod_id] and len(remote_json[mod_id]["datas"]) > 0:
+        remote_md5s[mod_id] = remote_json[mod_id]["datas"]["md5"]
+for mod_id in remote_md5s:
+    if not mod_id in local_md5s:
+        has_new_data = True
+        auto_release_change_log += f"{mod_id}: Added\n"
+    if mod_id in local_md5s and remote_md5s[mod_id] != local_md5s[mod_id]:
+        has_new_data = True
+        auto_release_change_log += f"{mod_id}: Updated\n"
+for mod_id in local_md5s:
+    if not mod_id in remote_md5s:
+        has_new_data = True
+        auto_release_change_log += f"{mod_id}: Removed\n"
+
 # TODO: has_new_data
 
 if has_new_data:
@@ -34,6 +52,10 @@ if has_new_data:
         json.dump(mod_template, f)
     
     print("qpm.shared.json will not update, please run 'qpm restore'")
+
+    print("Emit AutoReleaseChangelog.txt...")
+    with open("AutoReleaseChangelog.txt",'w', encoding='utf-8') as f:
+        f.write(auto_release_change_log)
 
 import os
 
