@@ -46,7 +46,7 @@ The mod will iterates every avaliable version data for every mod, and use the fi
 
 ## Auto release action
 
-The action `auto-release.yml` will automatically make a draft release if `ssl10n.csv` is changed since the latest release. We use semver and it bumps the PATCH version number.
+The action `auto-release.yml` will automatically make a draft release if `ssl10n.csv` is changed since the latest release. We use semver and auto bumps the PATCH version number.
 
 ## Credits
 
