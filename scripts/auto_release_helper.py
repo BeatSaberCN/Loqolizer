@@ -40,7 +40,7 @@ import os
 if "GITHUB_OUTPUT" in os.environ:
     print("github environ detected, will write results")
     with open(os.environ["GITHUB_OUTPUT"],'w') as f:
-        f.write(f"""cur_ver={'true' if version else 'false'}
-next_ver={'true' if next_version else 'false'}
+        f.write(f"""cur_ver={version}
+next_ver={next_version}
 has_new_data={'true' if has_new_data else 'false'}
 """)

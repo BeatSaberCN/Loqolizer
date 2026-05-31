@@ -7,7 +7,7 @@ env:
     qmod_name: "Loqolizer"
 
 jobs:
-  check:
+  auto_rel:
     runs-on: ubuntu-latest
 
     steps:
