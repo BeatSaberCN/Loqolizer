@@ -11,11 +11,13 @@ mod_template_path = Path(__file__).parent.parent / 'mod.template.json'
 with qpm_json_path.open("r",encoding="utf-8") as f:
     qpm_json = json.load(f)
 version = qpm_json["info"]["version"]
-ver_re = re.compile(r"^(\d+)\.(\d+)\.(\d+)$")
-ver_match = ver_re.match(version)
-assert ver_match, f"Invalid version number {version} in qpm.json"
-next_version = f"{ver_match[1]}.{ver_match[2]}.{int(ver_match[3])+1}"
-print(f"Bump release version {version} -> {next_version}")
+
+latest_tag = json.loads(urllib.request.urlopen("https://api.github.com/repos/BeatSaberCN/Loqolizer/releases/latest").read().decode("utf8"))["tag_name"]
+ver_re = re.compile(r"^(auto-)?v(\d+)\.(\d+)\.(\d+)$")
+ver_match = ver_re.match(latest_tag)
+assert ver_match, f"Invalid version number {latest_tag} in remote release"
+next_version = f"{ver_match[2]}.{ver_match[3]}.{int(ver_match[4])+1}"
+print(f"Remote latest tag is {latest_tag}. Will bump release version {version} -> {next_version} if new data avaliable.")
 
 has_new_data = False
 local_json = json.loads(urllib.request.urlopen(f"https://github.com/BeatSaberCN/Loqolizer/releases/latest/download/EmbbedDataReport.json?time={time.time()}").read().decode("utf8"))["mods"]
@@ -69,6 +71,7 @@ if "GITHUB_OUTPUT" in os.environ:
     print("github environ detected, will write results")
     with open(os.environ["GITHUB_OUTPUT"],'w') as f:
         f.write(f"""cur_ver={version}
+cur_latest_tag={latest_tag}
 next_ver={next_version}
 has_new_data={'true' if has_new_data else 'false'}
 """)
