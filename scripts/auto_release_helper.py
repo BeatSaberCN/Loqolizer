@@ -3,6 +3,7 @@ import sys
 import re
 import json
 import urllib.request
+import time
 
 qpm_json_path = Path(__file__).parent.parent / 'qpm.json'
 mod_template_path = Path(__file__).parent.parent / 'mod.template.json'
@@ -17,13 +18,18 @@ next_version = f"{ver_match[1]}.{ver_match[2]}.{int(ver_match[3])+1}"
 print(f"Bump release version {version} -> {next_version}")
 
 has_new_data = False
-remote_json = json.loads(urllib.request.urlopen("https://frto027.github.io/ssl10n.csv/manifest.json?time={time.time()}").read().decode("utf8"))
-remote_md5s:dict[str,str] = {}
+local_json = json.loads(urllib.request.urlopen(f"https://github.com/BeatSaberCN/Loqolizer/releases/latest/download/EmbbedDataReport.json?time={time.time()}").read().decode("utf8"))["mods"]
 local_md5s:dict[str,str] = {}
-auto_release_change_log = ""
+remote_json = json.loads(urllib.request.urlopen(f"https://frto027.github.io/ssl10n.csv/manifest.json?time={time.time()}").read().decode("utf8"))
+remote_md5s:dict[str,str] = {}
+for mod_id in local_json:
+    if "datas" in local_json[mod_id] and len(local_json[mod_id]["datas"]) > 0:
+        local_md5s[mod_id] = local_json[mod_id]["datas"][0]["md5"]
 for mod_id in remote_json:
     if "datas" in remote_json[mod_id] and len(remote_json[mod_id]["datas"]) > 0:
         remote_md5s[mod_id] = remote_json[mod_id]["datas"][0]["md5"]
+print(f"we have {len(remote_json)} remote mods and {len(local_md5s)} local mods.")
+auto_release_change_log = ""
 for mod_id in remote_md5s:
     if not mod_id in local_md5s:
         has_new_data = True
@@ -35,8 +41,6 @@ for mod_id in local_md5s:
     if not mod_id in remote_md5s:
         has_new_data = True
         auto_release_change_log += f"{mod_id}: Removed\n"
-
-# TODO: has_new_data
 
 if has_new_data:
     print("New data detected, will update qpm.json to prepare the next auto release")
@@ -56,6 +60,8 @@ if has_new_data:
     print("Emit AutoReleaseChangelog.txt...")
     with open("AutoReleaseChangelog.txt",'w', encoding='utf-8') as f:
         f.write(auto_release_change_log)
+else:
+    print("no translate update detected")
 
 import os
 
