@@ -23,7 +23,7 @@ local_md5s:dict[str,str] = {}
 auto_release_change_log = ""
 for mod_id in remote_json:
     if "datas" in remote_json[mod_id] and len(remote_json[mod_id]["datas"]) > 0:
-        remote_md5s[mod_id] = remote_json[mod_id]["datas"]["md5"]
+        remote_md5s[mod_id] = remote_json[mod_id]["datas"][0]["md5"]
 for mod_id in remote_md5s:
     if not mod_id in local_md5s:
         has_new_data = True
