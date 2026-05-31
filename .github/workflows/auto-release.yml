@@ -90,6 +90,7 @@ jobs:
         if-no-files-found: error
 
     - name: Create and Push Tag
+      if: steps.mod.outputs.has_new_data == 'true'
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
