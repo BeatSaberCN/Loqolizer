@@ -2,8 +2,12 @@
 
 #include "sslocalization/shared/SSL10n.hpp"
 #include "modconfig.hpp"
-
+#include <set>
+#include <string>
 namespace LangCtrl {
+
+    extern std::set<std::string> loadedResourceMd5;
+
     void DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
     enum LanguageOption{
         L_FollowGame,

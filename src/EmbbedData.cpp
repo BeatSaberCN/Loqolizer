@@ -1,4 +1,5 @@
 #include "EmbbedData.hpp"
+#include "LangCtrl.hpp"
 #include "main.hpp"
 #include "scotland2/shared/loader.hpp"
 #include "sslocalization/shared/SSL10n.hpp"
@@ -39,6 +40,7 @@ void LangCtrl::InitEmbbedData(){
             }
         }
 
+        loadedResourceMd5.insert(it->second.md5);
         SSL10n::Database::PolyglotFormat::AddCSVContent(it->second.csv_buffer, it->second.csv_buffer_size);
     }
 }

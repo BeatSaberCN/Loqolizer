@@ -1,12 +1,17 @@
 #include "LangCtrl.hpp"
+#include "bsml/shared/BSML-Lite/Creation/Lists.hpp"
+#include "bsml/shared/BSML/Components/CustomListTableData.hpp"
 #include "main.hpp"
 #include "sslocalization/shared/SSL10n.hpp"
 #include "UnityEngine/Resources.hpp"
 #include "GlobalNamespace/MenuTransitionsHelper.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Buttons.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Text.hpp"
+#include "EmbbedData.hpp"
 
 #define TEXT_FOLLOW_GAME "FollowGame"
+
+std::set<std::string> LangCtrl::loadedResourceMd5;
 
 void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {    
     static std::vector<std::string_view> languages = {
@@ -43,6 +48,22 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
           LangCtrl::SyncSelectedLanguage();
           UnityEngine::Resources::FindObjectsOfTypeAll<GlobalNamespace::MenuTransitionsHelper*>()->First()->RestartGame(nullptr);
         });
+
+        BSML::Lite::CreateText(container->get_transform(), SSL10n::Get("LOQOLIZER_SETTHING_EMBBED_DATA_TITLE"),{0,0},{0,5});
+        auto embbedDataList = BSML::Lite::CreateScrollableList(container->get_transform(),{0, 0}, {55.0f, 30.0f});
+        for(auto & data : embbedData){
+            std::string desc = std::string("(") + data.second.version + ")";
+            if(loadedResourceMd5.contains(data.second.md5)){
+                desc = "[loaded]" + desc;
+            }else{
+                desc = "[not load]" + desc;
+            }
+            auto item = BSML::CustomCellInfo::New_ctor();
+            item->text = data.second.modId;
+            item->subText = desc;
+            embbedDataList->data.push_back(item);
+        }
+        embbedDataList->tableView->ReloadData();
     }
 }
 
@@ -55,7 +76,7 @@ void LangCtrl::SyncSelectedLanguage(){
     }
 
     auto lang = (LangCtrl::LanguageOption)opt;
-
+    PaperLogger.info("Synchronize language to {}", opt);
     if(lang == L_FollowGame){
         // This will not works immediately
         // the sslocalization library only follows language when game set it
