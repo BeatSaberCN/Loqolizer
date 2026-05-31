@@ -89,13 +89,24 @@ jobs:
         path: ./EmbbedDataReport.json
         if-no-files-found: error
 
+    - name: Create and Push Tag
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+        git add .
+        git commit -m "Auto release for v${{ steps.mod.outputs.next_ver }}"
+        git tag auto-v${{ steps.mod.outputs.next_ver }}
+        git push -f origin auto-v${{ steps.mod.outputs.next_ver }}
+
+
     - name: Upload release artifacts
       if: steps.mod.outputs.has_new_data == 'true'
       id: upload_file_release
       uses: softprops/action-gh-release@v0.1.15
       with:
         name: Automatic Release v${{ steps.mod.outputs.next_ver }}
-        tag_name: v${{ steps.mod.outputs.next_ver }}
+        tag_name: auto-v${{ steps.mod.outputs.next_ver }}
         draft: true
         generate_release_notes: true
         body_path: AutoReleaseChangelog.txt
