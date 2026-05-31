@@ -11,7 +11,9 @@ assert len(sys.argv) == 2, "usage: scripts/download_translates.py <generate cpp 
 
 manifest = json.loads(urllib.request.urlopen(MANIFEST_URL).read().decode("utf8"))
 
-embbed_data_report = "Embbed Data Report:\n"
+embbed_data_report_json = {
+    "mods":{}
+}
 
 output_first = """#include "EmbbedData.hpp"
 
@@ -61,7 +63,8 @@ for modid in manifest:
 """
     output += "   }},\n"
 
-    embbed_data_report += "Mod: " + modid + ", version:" + version + ", md5: " + csv_md5 + "\n"
+    embbed_data_report_json["mods"][modid] = body
+
 
     mod_build_count += 1
 
@@ -72,12 +75,12 @@ output += "};\n"
 timestamp = datetime.datetime.now()
 
 output += "const char * LangCtrl::embbedDataTimestamp = " + f'"{timestamp}";\n'
-embbed_data_report += f"{mod_build_count} mods built\n"
-embbed_data_report += "Build Timestamp: " + str(timestamp) + "\n"
+embbed_data_report_json["timestamp"] = str(timestamp)
+embbed_data_report_json["mod_count"] = mod_build_count
 
 with open(sys.argv[1], "w") as f:
     f.write(output_first)
     f.write(output)
 
-with (pathlib.Path(__file__).parent.parent / "EmbbedDataReport.txt").open("w") as f:
-    f.write(embbed_data_report)
+with (pathlib.Path(__file__).parent.parent / "EmbbedDataReport.json").open("w", encoding='utf-8') as f:
+    f.write(json.dumps(embbed_data_report_json, ensure_ascii=False))
