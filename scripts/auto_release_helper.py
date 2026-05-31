@@ -14,7 +14,7 @@ assert ver_match, f"Invalid version number {version} in qpm.json"
 next_version = f"{ver_match[1]}.{ver_match[2]}.{int(ver_match[3])+1}"
 print(f"Bump release version {version} -> {next_version}")
 
-has_new_data = False
+has_new_data = True
 remote_json = json.loads(urllib.request.urlopen("https://frto027.github.io/ssl10n.csv/manifest.json?time={time.time()}").read().decode("utf8"))
 # TODO: has_new_data
 
