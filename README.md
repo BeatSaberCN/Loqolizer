@@ -44,6 +44,10 @@ WIP, online data download feature not avaliable.
 
 The mod will iterates every avaliable version data for every mod, and use the first matched data.
 
+## Auto release action
+
+The action `auto-release.yml` will automatically make a draft release if `ssl10n.csv` is changed since the latest release. We use semver and it bumps the PATCH version number.
+
 ## Credits
 
 * [zoller27osu](https://github.com/zoller27osu), [Sc2ad](https://github.com/Sc2ad) and [jakibaki](https://github.com/jakibaki) - [beatsaber-hook](https://github.com/sc2ad/beatsaber-hook)
