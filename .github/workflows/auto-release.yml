@@ -2,6 +2,8 @@ name: Auto release
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 10 */1 * *'
 env:
     module_id: "Loqolizer"
     qmod_name: "Loqolizer"
