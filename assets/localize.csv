@@ -1,5 +1,5 @@
 ﻿LANGUAGE_EN,description,English,French,Spanish,German,Italian,Portuguese (Brazil),Portuguese,Russian,Greek,Turkish,Danish,Norwegian,Swedish,Dutch,Polish,Finnish,Japanese,Simplified Chinese,Traditional Chinese,Korean,Czech,Hungarian,Romanian,Thai,Bulgarian,Hebrew,Arabic,Bosnian
-Polyglot,(don't delete this line),(can add anything before this line),,,,,,,,,,,,,,,,,,,,,,,,,,,
+Polyglot,(don't delete this line),(anything before this line will be parsed as csv but ignored),,,,,,,,,,,,,,,,,,,,,,,,,,,
 LOQOLIZER_SETTHING_LABEL_LANGUAGE,Language Select tab label,Language,,,,,,,,,,,,,,,,,,,,,,,,,,,
 LOQOLIZER_SETTHING_MENU_TITLE,Mod menu title at left,Mod Language,,,,,,,,,,,,,,,,,,,,,,,,,,,
 LOQOLIZER_SETTHING_APPLY_NOW,button title,Apply Now,,,,,,,,,,,,,,,,,,,,,,,,,,,
