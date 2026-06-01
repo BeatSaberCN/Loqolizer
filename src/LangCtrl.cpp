@@ -68,7 +68,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
                 if(loadedResourceMd5.contains(ver.md5))
                     loaded = true;
             }
-            std::string desc = loaded ? "[loaded]" : "[not loaded]";
+            std::string desc = loaded ? SSL10n::Get("LOQOLIZER_TRANSLATE_LOADED") : SSL10n::Get("LOQOLIZER_TRANSLATE_NOT_LOADED");
             // std::string desc = std::string("(") + data.second.version + ")";
             auto item = BSML::CustomCellInfo::New_ctor();
             item->text = data.second.modId;
