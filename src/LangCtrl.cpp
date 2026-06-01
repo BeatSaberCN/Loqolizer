@@ -1,4 +1,5 @@
 #include "LangCtrl.hpp"
+#include "System/Object.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Lists.hpp"
 #include "bsml/shared/BSML/Components/CustomListTableData.hpp"
 #include "main.hpp"
@@ -29,7 +30,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         if(old_config < 0 || old_config >= languages.size())
           old_config = 0;
 
-        BSML::Lite::CreateDropdown(container->get_transform(), SSL10n::Get("LOQOLIZER_SETTHING_LABEL_LANGUAGE"), languages[old_config],  languages, [](StringW str){
+        auto dropdown = BSML::Lite::CreateDropdown(container->get_transform(), SSL10n::Get("LOQOLIZER_SETTHING_LABEL_LANGUAGE"), languages[old_config],  languages, [](StringW str){
           std::string v = str;
           if(v == TEXT_FOLLOW_GAME){
             getConfig().SelectedLanguage.SetValue(LangCtrl::L_FollowGame);
@@ -40,6 +41,16 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
           FOR_EACH_LANGUAGE(L)
           #undef  L
         });
+
+        dropdown->formatter = [](System::Object* obj)->StringW{
+            if(!obj) return "null";
+            std::string ret = obj->ToString();
+            if(ret == "FollowGame")
+                return SSL10n::Get("LOQOLIZER_FOLLOW_GAME");
+            return ret;
+        };
+        dropdown->UpdateChoices();
+        dropdown->UpdateState();
 
         BSML::Lite::CreateText(container->get_transform(), SSL10n::Get("LOQOLIZER_SETTHING_TEXT_FOLLOW_HINT"), {0,0},{0,5});
         BSML::Lite::CreateText(container->get_transform(), SSL10n::Get("LOQOLIZER_SETTHING_TEXT_KEPT"), {0,0},{0,5});
