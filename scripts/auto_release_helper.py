@@ -12,37 +12,47 @@ with qpm_json_path.open("r",encoding="utf-8") as f:
     qpm_json = json.load(f)
 version = qpm_json["info"]["version"]
 
-latest_tag = json.loads(urllib.request.urlopen("https://api.github.com/repos/BeatSaberCN/Loqolizer/releases/latest").read().decode("utf8"))["tag_name"]
-ver_re = re.compile(r"^(auto-)?v(\d+)\.(\d+)\.(\d+)$")
-ver_match = ver_re.match(latest_tag)
-assert ver_match, f"Invalid version number {latest_tag} in remote release"
-next_version = f"{ver_match[2]}.{ver_match[3]}.{int(ver_match[4])+1}"
-print(f"Remote latest tag is {latest_tag}. Will bump release version {version} -> {next_version} if new data avaliable.")
+def test_has_new_data(local_json, remote_json):
+    has_new_data = False
+    local_md5s:dict[str,set[str]] = {}
+    remote_md5s:dict[str,set[str]] = {}
+    for mod_id in local_json:
+        if "datas" in local_json[mod_id] and len(local_json[mod_id]["datas"]) > 0:
+            local_md5s[mod_id] = set([x["md5"] for x in local_json[mod_id]["datas"]])
+    for mod_id in remote_json:
+        if "datas" in remote_json[mod_id] and len(remote_json[mod_id]["datas"]) > 0:
+            remote_md5s[mod_id] = set([x["md5"] for x in remote_json[mod_id]["datas"]])
+    print(f"we have {len(remote_json)} remote mods and {len(local_md5s)} local mods.")
+    auto_release_change_log = ""
+    for mod_id in remote_md5s:
+        if not mod_id in local_md5s:
+            has_new_data = True
+            auto_release_change_log += f"{mod_id}: Added\n"
+        if mod_id in local_md5s and remote_md5s[mod_id] != local_md5s[mod_id]:
+            has_new_data = True
+            auto_release_change_log += f"{mod_id}: Updated\n"
+    for mod_id in local_md5s:
+        if not mod_id in remote_md5s:
+            has_new_data = True
+            auto_release_change_log += f"{mod_id}: Removed\n"
+    auto_release_change_log += "This is automatically released."
+    return [has_new_data, auto_release_change_log]
 
 has_new_data = False
-local_json = json.loads(urllib.request.urlopen(f"https://github.com/BeatSaberCN/Loqolizer/releases/latest/download/EmbbedDataReport.json?time={time.time()}").read().decode("utf8"))["mods"]
-local_md5s:dict[str,set[str]] = {}
+
+local_releases_json = json.loads(urllib.request.urlopen("https://api.github.com/repos/BeatSaberCN/Loqolizer/releases").read().decode("utf8"))[0]
+local_release_latest_tag = local_releases_json['tag_name']
+print(f"The latest release is {local_release_latest_tag}")
+ver_re = re.compile(r"^(auto-)?v(\d+)\.(\d+)\.(\d+)$")
+ver_match = ver_re.match(local_release_latest_tag)
+assert ver_match, f"Can't auto release with version number {local_release_latest_tag}"
+next_version = f"{ver_match[2]}.{ver_match[3]}.{int(ver_match[4])+1}"
+print(f"Remote latest tag is {local_release_latest_tag}. Will bump release version {version} -> {next_version} if new data avaliable.")
+
+local_json = json.loads(urllib.request.urlopen(f"https://github.com/BeatSaberCN/Loqolizer/releases/download/{local_release_latest_tag}/EmbbedDataReport.json").read().decode("utf8"))["mods"]
 remote_json = json.loads(urllib.request.urlopen(f"https://frto027.github.io/ssl10n.csv/manifest.json?time={time.time()}").read().decode("utf8"))
-remote_md5s:dict[str,set[str]] = {}
-for mod_id in local_json:
-    if "datas" in local_json[mod_id] and len(local_json[mod_id]["datas"]) > 0:
-        local_md5s[mod_id] = set([x["md5"] for x in local_json[mod_id]["datas"]])
-for mod_id in remote_json:
-    if "datas" in remote_json[mod_id] and len(remote_json[mod_id]["datas"]) > 0:
-        remote_md5s[mod_id] = set([x["md5"] for x in remote_json[mod_id]["datas"]])
-print(f"we have {len(remote_json)} remote mods and {len(local_md5s)} local mods.")
-auto_release_change_log = ""
-for mod_id in remote_md5s:
-    if not mod_id in local_md5s:
-        has_new_data = True
-        auto_release_change_log += f"{mod_id}: Added\n"
-    if mod_id in local_md5s and remote_md5s[mod_id] != local_md5s[mod_id]:
-        has_new_data = True
-        auto_release_change_log += f"{mod_id}: Updated\n"
-for mod_id in local_md5s:
-    if not mod_id in remote_md5s:
-        has_new_data = True
-        auto_release_change_log += f"{mod_id}: Removed\n"
+
+[has_new_data, auto_release_change_log] = test_has_new_data(local_json, remote_json)
 
 if has_new_data:
     print("New data detected, will update qpm.json to prepare the next auto release")
@@ -71,7 +81,7 @@ if "GITHUB_OUTPUT" in os.environ:
     print("github environ detected, will write results")
     with open(os.environ["GITHUB_OUTPUT"],'w') as f:
         f.write(f"""cur_ver={version}
-cur_latest_tag={latest_tag}
+cur_latest_tag={local_release_latest_tag}
 next_ver={next_version}
 has_new_data={'true' if has_new_data else 'false'}
 """)

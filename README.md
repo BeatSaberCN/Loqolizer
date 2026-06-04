@@ -40,9 +40,24 @@ WIP, online data download feature not avaliable.
 
 The mod will iterates every avaliable version data for every mod, and use the first matched data.
 
-## Auto release action
+# How to release this mod
 
-The action `auto-release.yml` will automatically make a draft release if `ssl10n.csv` is changed since the latest release. We use semver and auto bumps the PATCH version number.
+For maintainer of this repo.
+
+## Option 1: auto pre-release
+
+In action `auto-release.yml`, the mod check if the latest release(including pre-release) is synchronized with `ssl10n.csv`. If not, auto bump version and make a pre-release. Based on the `master` branch.
+
+The maintainer in this repo can test and update the pre-release to a latest-release.
+
+## Option 2: manual release
+
+Just push a version tag `v*.*.*`, this will trigger the action `build-ndk.yml` .
+
+`git tag v0.6.4 && git push origin v0.6.4`
+
+Make sure your release will not break `auto pre-release`. The next time when auto release happens, the version number is based on your release.
+
 
 ## Credits
 

@@ -114,7 +114,7 @@ jobs:
       with:
         name: Automatic Release v${{ steps.mod.outputs.next_ver }}
         tag_name: auto-v${{ steps.mod.outputs.next_ver }}
-        draft: true
+        prerelease: true
         generate_release_notes: true
         body_path: AutoReleaseChangelog.txt
         files: |
