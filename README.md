@@ -1,5 +1,10 @@
 # Loqolizer
 
+![GitHub Release](https://img.shields.io/github/v/release/BeatSaberCN/Loqolizer?label=release%20tag) ![GitHub Release](https://img.shields.io/github/v/release/BeatSaberCN/Loqolizer?include_prereleases&label=pre-release%20tag)
+
+
+
+
 Translate your game and mods. This mod is for player. For other part, refert to [this](https://github.com/frto027/ssl10n.csv/tree/master).
 
 For this mod's developer...
