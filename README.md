@@ -4,7 +4,7 @@
 ![GitHub Release Date](https://img.shields.io/github/release-date/BeatSaberCN/Loqolizer?style=social&label=release%20at)
 
 [![GitHub Release](https://img.shields.io/github/v/release/BeatSaberCN/Loqolizer?include_prereleases&label=pre-release&)](https://github.com/BeatSaberCN/Loqolizer/releases)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/BeatSaberCN/Loqolizer/auto-release.yml?label=auto-releasing)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/BeatSaberCN/Loqolizer/auto-release.yml?label=auto-releasing)](https://github.com/BeatSaberCN/Loqolizer/actions/workflows/auto-release.yml)
 ![GitHub Release Date](https://img.shields.io/github/release-date-pre/BeatSaberCN/Loqolizer?style=social&label=release%20at)
 
 Translate your game and mods. This mod is for player. For other part, refert to [this](https://github.com/frto027/ssl10n.csv/tree/master).
