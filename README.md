@@ -1,9 +1,9 @@
 # Loqolizer
 
-![GitHub Release](https://img.shields.io/github/v/release/BeatSaberCN/Loqolizer?label=stable-release) 
+[![GitHub Release](https://img.shields.io/github/v/release/BeatSaberCN/Loqolizer?label=stable-release)](https://github.com/BeatSaberCN/Loqolizer/releases/latest)
 ![GitHub Release Date](https://img.shields.io/github/release-date/BeatSaberCN/Loqolizer?style=social&label=release%20at)
 
-![GitHub Release](https://img.shields.io/github/v/release/BeatSaberCN/Loqolizer?include_prereleases&label=pre-release&)
+[![GitHub Release](https://img.shields.io/github/v/release/BeatSaberCN/Loqolizer?include_prereleases&label=pre-release&)](https://github.com/BeatSaberCN/Loqolizer/releases)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/BeatSaberCN/Loqolizer/auto-release.yml?label=auto-releasing)
 ![GitHub Release Date](https://img.shields.io/github/release-date-pre/BeatSaberCN/Loqolizer?style=social&label=release%20at)
 
