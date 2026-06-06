@@ -7,7 +7,7 @@
 #include "LangCtrl.hpp"
 #include "scotland2/shared/modloader.h"
 #include "modconfig.hpp"
-#include "sslocalization/shared/SSL10n.hpp"
+#include "SSL10nGenerated.hpp"
 #include "bsml/shared/BSML.hpp"
 #include "EmbbedKeys.hpp"
 
@@ -44,7 +44,7 @@ MOD_EXTERN_FUNC void late_load() noexcept {
   PaperLogger.info("Register BSML Menu");
 
   BSML::Init();
-  BSML::Register::RegisterSettingsMenu(SSL10n::Get("LOQOLIZER_SETTHING_MENU_TITLE"),LangCtrl::DidActivate, false);
+  BSML::Register::RegisterSettingsMenu(SSL10nGen::STR::LOQOLIZER_SETTHING_MENU_TITLE(),LangCtrl::DidActivate, false);
 
   PaperLogger.info("Init PolyglotInject");
 

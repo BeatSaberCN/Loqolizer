@@ -1,11 +1,8 @@
 #include "EmbbedKeys.hpp"
-#include "sslocalization/shared/SSL10n.hpp"
-#include "asset.hpp"
-
+#include "SSL10n.hpp"
+#include "SSL10nGenerated.hpp"
 void LangCtrl::InitEmbbedKeys(){
-
-  SSL10n::Database::PolyglotFormat::AddCSVContent((char*)AssetGenerated::localize_csv, sizeof(AssetGenerated::localize_csv));
-
+  SSL10nGen::LoadCsv();
   /* We can also add more language in the previous asset, it's polyglot's format */
   SSL10n::Database::Helper(SSL10n::L_Simplified_Chinese)
     .v("LOQOLIZER_SETTHING_LABEL_LANGUAGE", "语言设置/Language")
