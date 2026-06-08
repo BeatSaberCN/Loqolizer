@@ -9,7 +9,7 @@ import datetime
 import pathlib
 assert len(sys.argv) == 2, "usage: scripts/download_translates.py <generate cpp file path>"
 
-manifest = json.loads(urllib.request.urlopen(MANIFEST_URL).read().decode("utf8"))
+manifest = json.loads(urllib.request.urlopen(MANIFEST_URL).read().decode("utf8"))["mods"]
 
 embbed_data_report_json = {
     "mods":{}
