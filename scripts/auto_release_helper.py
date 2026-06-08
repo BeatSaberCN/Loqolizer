@@ -50,7 +50,7 @@ next_version = f"{ver_match[2]}.{ver_match[3]}.{int(ver_match[4])+1}"
 print(f"Remote latest tag is {local_release_latest_tag}. Will bump release version {version} -> {next_version} if new data avaliable.")
 
 local_json = json.loads(urllib.request.urlopen(f"https://github.com/BeatSaberCN/Loqolizer/releases/download/{local_release_latest_tag}/EmbbedDataReport.json").read().decode("utf8"))["mods"]
-remote_json = json.loads(urllib.request.urlopen(f"https://frto027.github.io/ssl10n.csv/manifest.json?time={time.time()}").read().decode("utf8"))
+remote_json = json.loads(urllib.request.urlopen(f"https://frto027.github.io/ssl10n.csv/manifest.json?time={time.time()}").read().decode("utf8"))["mods"]
 
 [has_new_data, auto_release_change_log] = test_has_new_data(local_json, remote_json)
 
