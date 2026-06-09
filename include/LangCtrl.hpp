@@ -1,6 +1,6 @@
 #pragma once
 
-#include "sslocalization/shared/SSL10n.hpp"
+#include "SSL10n.hpp"
 #include "modconfig.hpp"
 #include <set>
 #include <string>

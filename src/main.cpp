@@ -7,9 +7,8 @@
 #include "LangCtrl.hpp"
 #include "scotland2/shared/modloader.h"
 #include "modconfig.hpp"
-#include "sslocalization/shared/SSL10n.hpp"
+#include "SSL10nGenerated.hpp"
 #include "bsml/shared/BSML.hpp"
-#include "EmbbedKeys.hpp"
 
 static modloader::ModInfo modInfo{MOD_ID, VERSION, 0};
 // Stores the ID and version of our mod, and is sent to
@@ -36,7 +35,7 @@ MOD_EXTERN_FUNC void late_load() noexcept {
 
   PaperLogger.info("Install keys");
 
-  LangCtrl::InitEmbbedKeys();
+  SSL10nGen::LoadCsv();
 
   PaperLogger.info("Init Embbed Data");
   LangCtrl::InitEmbbedData();
@@ -44,7 +43,7 @@ MOD_EXTERN_FUNC void late_load() noexcept {
   PaperLogger.info("Register BSML Menu");
 
   BSML::Init();
-  BSML::Register::RegisterSettingsMenu(SSL10n::Get("LOQOLIZER_SETTHING_MENU_TITLE"),LangCtrl::DidActivate, false);
+  BSML::Register::RegisterSettingsMenu(SSL10nGen::STR::SETTHING_MENU_TITLE(),LangCtrl::DidActivate, false);
 
   PaperLogger.info("Init PolyglotInject");
 

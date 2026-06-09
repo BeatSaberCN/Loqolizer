@@ -2,7 +2,7 @@
 #include "LangCtrl.hpp"
 #include "main.hpp"
 #include "scotland2/shared/loader.hpp"
-#include "sslocalization/shared/SSL10n.hpp"
+#include "SSL10n.hpp"
 #include "semver.hpp"
 
 void LangCtrl::InitEmbbedData(){
