@@ -1,5 +1,5 @@
-﻿csv2hpp_config_key_start=LOQOLIZER_,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-LANGUAGE_EN,description,English,French,Spanish,German,Italian,Portuguese (Brazil),Portuguese,Russian,Greek,Turkish,Danish,Norwegian,Swedish,Dutch,Polish,Finnish,Japanese,Simplified Chinese,Traditional Chinese,Korean,Czech,Hungarian,Romanian,Thai,Bulgarian,Hebrew,Arabic,Bosnian
+﻿LANGUAGE_EN,description,English,French,Spanish,German,Italian,Portuguese (Brazil),Portuguese,Russian,Greek,Turkish,Danish,Norwegian,Swedish,Dutch,Polish,Finnish,Japanese,Simplified Chinese,Traditional Chinese,Korean,Czech,Hungarian,Romanian,Thai,Bulgarian,Hebrew,Arabic,Bosnian
+csv2hpp_config_key_start=LOQOLIZER_,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 Polyglot,(don't delete this line),(anything before this line will be parsed as csv but ignored),,,,,,,,,,,,,,,,,,,,,,,,,,,
 LOQOLIZER_SETTHING_LABEL_LANGUAGE,Language Select tab label,Language,,,,,,,,,,,,,,,,,,,,,,,,,,,
 LOQOLIZER_SETTHING_MENU_TITLE,Mod menu title at left,Mod Language,,,,,,,,,,,,,,,,,,,,,,,,,,,
