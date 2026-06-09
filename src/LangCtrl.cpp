@@ -30,7 +30,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         if(old_config < 0 || old_config >= languages.size())
           old_config = 0;
 
-        auto dropdown = BSML::Lite::CreateDropdown(container->get_transform(), SSL10nGen::STR::LOQOLIZER_SETTHING_LABEL_LANGUAGE(), languages[old_config],  languages, [](StringW str){
+        auto dropdown = BSML::Lite::CreateDropdown(container->get_transform(), SSL10nGen::STR::SETTHING_LABEL_LANGUAGE(), languages[old_config],  languages, [](StringW str){
           std::string v = str;
           if(v == TEXT_FOLLOW_GAME){
             getConfig().SelectedLanguage.SetValue(LangCtrl::L_FollowGame);
@@ -46,21 +46,21 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
             if(!obj) return "null";
             std::string ret = obj->ToString();
             if(ret == "FollowGame")
-                return SSL10nGen::STR::LOQOLIZER_FOLLOW_GAME();
+                return SSL10nGen::STR::FOLLOW_GAME();
             return ret;
         };
         dropdown->UpdateChoices();
         dropdown->UpdateState();
 
-        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::LOQOLIZER_SETTHING_TEXT_FOLLOW_HINT(), {0,0},{0,5});
-        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::LOQOLIZER_SETTHING_TEXT_KEPT(), {0,0},{0,5});
+        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_TEXT_FOLLOW_HINT(), {0,0},{0,5});
+        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_TEXT_KEPT(), {0,0},{0,5});
 
-        BSML::Lite::CreateUIButton(container->get_transform(), SSL10nGen::STR::LOQOLIZER_SETTHING_APPLY_NOW(), [](){
+        BSML::Lite::CreateUIButton(container->get_transform(), SSL10nGen::STR::SETTHING_APPLY_NOW(), [](){
           LangCtrl::SyncSelectedLanguage();
           UnityEngine::Resources::FindObjectsOfTypeAll<GlobalNamespace::MenuTransitionsHelper*>()->First()->RestartGame(nullptr);
         });
 
-        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::LOQOLIZER_SETTHING_EMBBED_DATA_TITLE(),{0,0},{0,5});
+        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_EMBBED_DATA_TITLE(),{0,0},{0,5});
         auto embbedDataList = BSML::Lite::CreateScrollableList(container->get_transform(),{0, 0}, {55.0f, 30.0f});
         for(auto & data : embbedData){
             bool loaded = false;
@@ -68,7 +68,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
                 if(loadedResourceMd5.contains(ver.md5))
                     loaded = true;
             }
-            std::string desc = loaded ? SSL10nGen::STR::LOQOLIZER_TRANSLATE_LOADED() : SSL10nGen::STR::LOQOLIZER_TRANSLATE_NOT_LOADED();
+            std::string desc = loaded ? SSL10nGen::STR::TRANSLATE_LOADED() : SSL10nGen::STR::TRANSLATE_NOT_LOADED();
             // std::string desc = std::string("(") + data.second.version + ")";
             auto item = BSML::CustomCellInfo::New_ctor();
             item->text = data.second.modId;

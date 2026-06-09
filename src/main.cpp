@@ -44,7 +44,7 @@ MOD_EXTERN_FUNC void late_load() noexcept {
   PaperLogger.info("Register BSML Menu");
 
   BSML::Init();
-  BSML::Register::RegisterSettingsMenu(SSL10nGen::STR::LOQOLIZER_SETTHING_MENU_TITLE(),LangCtrl::DidActivate, false);
+  BSML::Register::RegisterSettingsMenu(SSL10nGen::STR::SETTHING_MENU_TITLE(),LangCtrl::DidActivate, false);
 
   PaperLogger.info("Init PolyglotInject");
 
