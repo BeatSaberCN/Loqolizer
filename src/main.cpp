@@ -9,7 +9,6 @@
 #include "modconfig.hpp"
 #include "SSL10nGenerated.hpp"
 #include "bsml/shared/BSML.hpp"
-#include "EmbbedKeys.hpp"
 
 static modloader::ModInfo modInfo{MOD_ID, VERSION, 0};
 // Stores the ID and version of our mod, and is sent to
@@ -36,7 +35,7 @@ MOD_EXTERN_FUNC void late_load() noexcept {
 
   PaperLogger.info("Install keys");
 
-  LangCtrl::InitEmbbedKeys();
+  SSL10nGen::LoadCsv();
 
   PaperLogger.info("Init Embbed Data");
   LangCtrl::InitEmbbedData();
