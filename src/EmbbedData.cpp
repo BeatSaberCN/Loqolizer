@@ -7,7 +7,14 @@
 
 void LangCtrl::InitEmbbedData(){
     auto loaded_mods = modloader::get_loaded();
-
+    auto metadata = embbedData.find("ModMetadata");
+    if(metadata != embbedData.end()){
+        if(metadata->second.datas.size() > 0){
+            auto & data = metadata->second.datas[0];
+            loadedResourceMd5.insert(data.md5);
+            SSL10n::Database::PolyglotFormat::AddCSVContent(data.csv_buffer, data.csv_buffer_size);
+        }
+    }
     for(auto mod : loaded_mods){
         auto it = embbedData.find(mod.info.id);
         if(it == embbedData.end()){
