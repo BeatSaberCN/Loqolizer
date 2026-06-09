@@ -120,4 +120,4 @@ target_sources(${COMPILE_ID} PRIVATE ${EMBBED_DATA_CPP})
 ############## end of download embbed data ################
 
 include(${EXTERN_DIR}/includes/sslocalization/shared/utils/csv2hpp.cmake)
-ssl10n_csv_2_hpp(${COMPILE_ID} ${CMAKE_CURRENT_BINARY_DIR}/SSL10nGenerated SSL10nGenerated.hpp "${CMAKE_CURRENT_SOURCE_DIR}/localize.csv")
+ssl10n_csv2hpp(${COMPILE_ID} ${CMAKE_CURRENT_BINARY_DIR}/SSL10nGenerated SSL10nGenerated.hpp "${CMAKE_CURRENT_SOURCE_DIR}/localize.csv")
