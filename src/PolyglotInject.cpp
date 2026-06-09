@@ -1,4 +1,5 @@
 #include "PolyglotInject.hpp"
+#include "BGLib/Polyglot/Language.hpp"
 #include "main.hpp"
 #include "BGLib/Polyglot/LocalizationAsyncInstaller.hpp"
 #include "BGLib/Polyglot/Language.hpp"
@@ -29,7 +30,35 @@ MAKE_HOOK_MATCH(LocalizationInstallerHook,
                 std::string_view(std::get<std::string>(asset_text))
         ));
     }
-    self->_mainPolyglotAsset->supportedLanguages->Add(BGLib::Polyglot::Language::Simplified_Chinese);
+
+    std::vector<BGLib::Polyglot::Language> toBeAdded {
+        BGLib::Polyglot::Language::Arabic,
+        BGLib::Polyglot::Language::Czech,
+        BGLib::Polyglot::Language::Danish,
+        BGLib::Polyglot::Language::Dutch,
+        BGLib::Polyglot::Language::French,
+        BGLib::Polyglot::Language::German,
+        BGLib::Polyglot::Language::Hebrew,
+        BGLib::Polyglot::Language::Hungarian,
+        BGLib::Polyglot::Language::Italian,
+        BGLib::Polyglot::Language::Italian,
+        BGLib::Polyglot::Language::Japanese,
+        BGLib::Polyglot::Language::Korean,
+        BGLib::Polyglot::Language::Polish,
+        BGLib::Polyglot::Language::Portuguese_Brazil,
+        BGLib::Polyglot::Language::Romanian,
+        BGLib::Polyglot::Language::Russian,
+        BGLib::Polyglot::Language::Simplified_Chinese,
+        BGLib::Polyglot::Language::Spanish,
+        BGLib::Polyglot::Language::Swedish,
+        BGLib::Polyglot::Language::Traditional_Chinese,
+    };
+
+    for(auto lang : toBeAdded){
+        if(!self->____mainPolyglotAsset->IsLanguageSupported(lang)){}
+            self->_mainPolyglotAsset->supportedLanguages->Add(lang);
+    }
+    
     LocalizationInstallerHook(self, assets, registry);
 
     pending_assets.clear();

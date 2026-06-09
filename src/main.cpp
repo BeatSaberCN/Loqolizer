@@ -47,7 +47,11 @@ MOD_EXTERN_FUNC void late_load() noexcept {
 
   PaperLogger.info("Init PolyglotInject");
 
-  LangCtrl::PolyglotInjectInit();
+  if(getConfig().EnableGameLocalize.GetValue()){
+    LangCtrl::PolyglotInjectInit();
+  }else{
+    PaperLogger.info("Game Localize not enabled.");
+  }
 
   PaperLogger.info("Done");
 }

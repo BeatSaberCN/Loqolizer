@@ -1,6 +1,8 @@
 #include "LangCtrl.hpp"
 #include "System/Object.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Lists.hpp"
+#include "bsml/shared/BSML-Lite/Creation/Misc.hpp"
+#include "bsml/shared/BSML-Lite/Creation/Settings.hpp"
 #include "bsml/shared/BSML/Components/CustomListTableData.hpp"
 #include "main.hpp"
 #include "SSL10nGenerated.hpp"
@@ -9,6 +11,7 @@
 #include "bsml/shared/BSML-Lite/Creation/Buttons.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Text.hpp"
 #include "EmbbedData.hpp"
+#include "modconfig.hpp"
 
 #define TEXT_FOLLOW_GAME "FollowGame"
 
@@ -26,6 +29,10 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         // Create a container that has a scroll bar
         UnityEngine::GameObject* container = BSML::Lite::CreateScrollableSettingsContainer(self->get_transform());
         
+        BSML::Lite::AddHoverHint(BSML::Lite::CreateToggle(container->get_transform(), SSL10nGen::STR::SETTHING_ENABLE_GAME_LOCALIZE(), getConfig().EnableGameLocalize.GetValue(), [](bool v){
+           getConfig().EnableGameLocalize.SetValue(v); 
+        }), SSL10nGen::STR::SETTHING_ENABLE_GAME_LOCALIZE_HINT());
+
         int old_config = getConfig().SelectedLanguage.GetValue();
         if(old_config < 0 || old_config >= languages.size())
           old_config = 0;
@@ -52,7 +59,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         dropdown->UpdateChoices();
         dropdown->UpdateState();
 
-        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_TEXT_FOLLOW_HINT(), {0,0},{0,5});
+        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_HINT_RESTART_REQUIRED(), {0,0},{0,5});
         BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_TEXT_KEPT(), {0,0},{0,5});
 
         BSML::Lite::CreateUIButton(container->get_transform(), SSL10nGen::STR::SETTHING_APPLY_NOW(), [](){
