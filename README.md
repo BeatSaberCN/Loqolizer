@@ -11,10 +11,10 @@ Translate your game and mods. This mod is for player. For other part, refert to 
 
 For this mod's developer...
 
-Don't forget clone submoudles if you git clone this repo.
+Don't forget clone submodules if you git clone this repo.
 
 ```
-git clone --recursive xxx
+git clone --recursive https://github.com/BeatSaberCN/Loqolizer.git
 ```
 
 or
@@ -65,9 +65,15 @@ Just push a version tag `v*.*.*`, this will trigger the action `build-ndk.yml` a
 
 Make sure your release will not break `auto pre-release`. The next time when auto release happens, the version number is based on your release.
 
+# Contribution Guide
+
+Don't develop in master branch, unless your code is ready to use. This branch is used by auto update.
+
+This does not apply to pull requests. Feel free to open pull requests to the master branch, the maintainer will handle it.
 
 ## Credits
-
+* Frto027 (mod dev)
+* [qe201020335](https://github.com/qe201020335)(original PolyglotInject mod development)
 * [zoller27osu](https://github.com/zoller27osu), [Sc2ad](https://github.com/Sc2ad) and [jakibaki](https://github.com/jakibaki) - [beatsaber-hook](https://github.com/sc2ad/beatsaber-hook)
 * [raftario](https://github.com/raftario)
 * [Lauriethefish](https://github.com/Lauriethefish), [danrouse](https://github.com/danrouse) and [Bobby Shmurner](https://github.com/BobbyShmurner) for [this template](https://github.com/Lauriethefish/quest-mod-template)
