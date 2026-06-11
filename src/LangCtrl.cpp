@@ -80,7 +80,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
             std::string desc = loaded ? SSL10nGen::STR::TRANSLATE_LOADED() : SSL10nGen::STR::TRANSLATE_NOT_LOADED();
             // std::string desc = std::string("(") + data.second.version + ")";
             auto item = BSML::CustomCellInfo::New_ctor();
-            item->text = SSL10n::GetOptional(fmt::format("MOD_META_{}_NAME", data.second.modId)).value_or(data.second.modId);
+            item->text = SSL10n::GetOptional(fmt::format("QMOD_META_{}_NAME", data.second.modId)).value_or(data.second.modId);
             item->subText = desc;
             embbedDataList->data.push_back(item);
         }
