@@ -73,7 +73,7 @@ This does not apply to pull requests. Feel free to open pull requests to the mas
 
 ## Credits
 * Frto027 (mod dev)
-* [qe201020335](https://github.com/qe201020335)(original PolyglotInject mod development)
+* [qe201020335](https://github.com/qe201020335)(original [PolyglotInject](https://github.com/qe201020335/PolyglotInject) mod development)
 * [zoller27osu](https://github.com/zoller27osu), [Sc2ad](https://github.com/Sc2ad) and [jakibaki](https://github.com/jakibaki) - [beatsaber-hook](https://github.com/sc2ad/beatsaber-hook)
 * [raftario](https://github.com/raftario)
 * [Lauriethefish](https://github.com/Lauriethefish), [danrouse](https://github.com/danrouse) and [Bobby Shmurner](https://github.com/BobbyShmurner) for [this template](https://github.com/Lauriethefish/quest-mod-template)
