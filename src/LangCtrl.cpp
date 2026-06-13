@@ -14,6 +14,9 @@
 #include "EmbbedData.hpp"
 #include "modconfig.hpp"
 #include <fmt/format.h>
+#include "BGLib/Polyglot/Language.hpp"
+#include "BGLib/Polyglot/Localization.hpp"
+#include "BGLib/Polyglot/LocalizationModel.hpp"
 
 #define TEXT_FOLLOW_GAME "FollowGame"
 
@@ -31,7 +34,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         // Create a container that has a scroll bar
         UnityEngine::GameObject* container = BSML::Lite::CreateScrollableSettingsContainer(self->get_transform());
         
-        BSML::Lite::AddHoverHint(BSML::Lite::CreateToggle(container->get_transform(), SSL10nGen::STR::SETTHING_ENABLE_GAME_LOCALIZE(), getConfig().EnableGameLocalize.GetValue(), [](bool v){
+        BSML::Lite::AddHoverHint(BSML::Lite::CreateToggle(container->get_transform(), "*"+SSL10nGen::STR::SETTHING_ENABLE_GAME_LOCALIZE(), getConfig().EnableGameLocalize.GetValue(), [](bool v){
            getConfig().EnableGameLocalize.SetValue(v); 
         }), SSL10nGen::STR::SETTHING_ENABLE_GAME_LOCALIZE_HINT());
 
@@ -102,6 +105,19 @@ void LangCtrl::SyncSelectedLanguage(){
         // This will not works immediately
         // the sslocalization library only follows language when game set it
         SSL10n::LanguageController::SetFollowGameLanguage(true);
+        auto instance = BGLib::Polyglot::Localization::get_Instance();
+        if(instance){
+            switch(instance->get_SelectedLanguage()){
+                #define CASE(lang) \
+                    case BGLib::Polyglot::Language::lang:\
+                        SSL10n::LanguageController::SetCurrentLanguage(SSL10n::Language::L_##lang);
+                FOR_EACH_LANGUAGE(CASE)
+                #undef CASE
+
+                default:
+                    break;
+            }
+        }
         return;
     }
 
