@@ -77,14 +77,30 @@ for modid in manifest:
 
 
 
-output += "};\n"
+output += "};\n\n"
+
+# polyglot csv file from sira localizer
+
+distribution_key = "b8d0ace786d64ba14775878o9lk"
+siraLocalizerTexts = urllib.request.urlopen(f"https://distributions.crowdin.net/{distribution_key}/content/beat-saber.csv").read()
+output += f"static const char res_siraLocalizer[{len(siraLocalizerTexts)}] = " + "{" + ','.join([str(x) for x in siraLocalizerTexts]) + "};\n"
+import hashlib
+siraLocalizerTextsMd5 = hashlib.md5()
+siraLocalizerTextsMd5.update(siraLocalizerTexts)
+siraLocalizerTextsMd5Text = siraLocalizerTextsMd5.hexdigest()
+output += """
+std::string_view LangCtrl::siraLocalizerResource(){
+    return std::string_view(res_siraLocalizer, sizeof(res_siraLocalizer));
+}
+"""
 
 timestamp = datetime.datetime.now()
 
 output += "const char * LangCtrl::embbedDataTimestamp = " + f'"{timestamp}";\n'
+
 embbed_data_report_json["timestamp"] = str(timestamp)
 embbed_data_report_json["mod_count"] = mod_build_count
-
+embbed_data_report_json["siraLocalizerMd5"] = siraLocalizerTextsMd5Text
 with open(sys.argv[1], "w") as f:
     f.write(output_first)
     f.write(output)

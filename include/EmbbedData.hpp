@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <string>
+#include <string_view>
 #include <map>
 #include <vector>
 
@@ -25,5 +26,7 @@ struct DataModInfo{
 
 extern std::map<std::string, DataModInfo> embbedData;
 extern const char * embbedDataTimestamp;
+
+std::string_view siraLocalizerResource();
 }
 

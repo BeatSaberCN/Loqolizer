@@ -36,6 +36,7 @@ def test_has_new_data(local_json, remote_json):
             has_new_data = True
             auto_release_change_log += f"{mod_id}: Removed\n"
     auto_release_change_log += "This is automatically released."
+    # FIXME: check if sira localizer's resource has any update.
     return [has_new_data, auto_release_change_log]
 
 has_new_data = False
