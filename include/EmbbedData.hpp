@@ -28,5 +28,6 @@ extern std::map<std::string, DataModInfo> embbedData;
 extern const char * embbedDataTimestamp;
 
 std::string_view siraLocalizerResource();
+std::string_view siraLocalizerModResource();
 }
 

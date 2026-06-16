@@ -17,6 +17,10 @@
 #include "BGLib/Polyglot/Language.hpp"
 #include "BGLib/Polyglot/Localization.hpp"
 #include "BGLib/Polyglot/LocalizationModel.hpp"
+#include "UnityEngine/UI/ContentSizeFitter.hpp"
+#include "UnityEngine/GameObject.hpp"
+#include "UnityEngine/Component.hpp"
+#include "HMUI/CurvedTextMeshPro.hpp"
 
 #define TEXT_FOLLOW_GAME "FollowGame"
 
@@ -63,6 +67,14 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         };
         dropdown->UpdateChoices();
         dropdown->UpdateState();
+
+        auto sira_game_translator = SSL10n::GetOptional("SIRALOCALIZER_LANGUAGE_CONTRIBUTORS");
+        if(sira_game_translator.has_value() && SSL10n::GetCurrentLanguage() != SSL10n::L_English){
+            BSML::Lite::CreateText(container->get_transform(), SSL10n::FormatKey("SIRALOCALIZER_TRANSLATED_BY", sira_game_translator.value()))
+                ->get_gameObject()
+                ->AddComponent<UnityEngine::UI::ContentSizeFitter*>()
+                    ->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
+        }
 
         BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_HINT_RESTART_REQUIRED(), {0,0},{0,5});
         BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_TEXT_KEPT(), {0,0},{0,5});

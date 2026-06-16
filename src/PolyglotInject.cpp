@@ -1,6 +1,7 @@
 #include "PolyglotInject.hpp"
 #include "BGLib/Polyglot/Language.hpp"
 #include "EmbbedData.hpp"
+#include "SSL10n.hpp"
 #include "main.hpp"
 #include "BGLib/Polyglot/LocalizationAsyncInstaller.hpp"
 #include "BGLib/Polyglot/Language.hpp"
@@ -29,6 +30,8 @@ MAKE_HOOK_MATCH(LocalizationInstallerHook,
             UnityEngine::TextAsset::New_ctor( siraLocalizerRes)
         );
     }
+    auto siraRes = LangCtrl::siraLocalizerModResource();
+    SSL10n::Database::PolyglotFormat::AddCSVContent(siraRes.data(), siraRes.size());
 
     std::vector<BGLib::Polyglot::Language> toBeAdded {
         BGLib::Polyglot::Language::Arabic,
