@@ -69,4 +69,6 @@ MOD_EXTERN_FUNC void late_load() noexcept {
   }
 
   PaperLogger.info("Done");
+
+  LangCtrl::is_initialized = true;
 }

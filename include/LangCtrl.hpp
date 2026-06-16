@@ -6,6 +6,8 @@
 #include <string>
 namespace LangCtrl {
 
+    extern bool is_initialized;
+
     extern std::set<std::string> loadedResourceMd5;
 
     void DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);

@@ -26,6 +26,8 @@
 
 std::set<std::string> LangCtrl::loadedResourceMd5;
 
+bool LangCtrl::is_initialized = false;
+
 void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {    
     static std::vector<std::string_view> languages = {
       TEXT_FOLLOW_GAME,
@@ -113,7 +115,7 @@ void LangCtrl::SyncSelectedLanguage(){
 
     auto lang = (LangCtrl::LanguageOption)opt;
     PaperLogger.info("Synchronize language to {}", opt);
-    if(lang == L_FollowGame){
+    if(is_initialized && lang == L_FollowGame){
         // This will not works immediately
         // the sslocalization library only follows language when game set it
         SSL10n::LanguageController::SetFollowGameLanguage(true);
