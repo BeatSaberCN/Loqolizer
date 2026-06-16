@@ -1,6 +1,7 @@
 #include "LangCtrl.hpp"
 #include "SSL10n.hpp"
 #include "System/Object.hpp"
+#include "UnityEngine/Color.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Lists.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Misc.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Settings.hpp"
@@ -103,7 +104,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         });
 
         BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_EMBBED_DATA_TITLE(),{0,0},{0,5});
-        auto embbedDataList = BSML::Lite::CreateScrollableList(container->get_transform(),{0, 0}, {55.0f, 30.0f});
+        // auto embbedDataList = BSML::Lite::CreateScrollableList(container->get_transform(),{0, 0}, {55.0f, 30.0f});
         for(auto & data : embbedData){
             bool loaded = false;
             for(auto & ver:data.second.datas){
@@ -112,12 +113,17 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
             }
             std::string desc = loaded ? SSL10nGen::STR::TRANSLATE_LOADED() : SSL10nGen::STR::TRANSLATE_NOT_LOADED();
             // std::string desc = std::string("(") + data.second.version + ")";
-            auto item = BSML::CustomCellInfo::New_ctor();
-            item->text = SSL10n::GetOptional(fmt::format("QMOD_META_{}_NAME", data.second.modId)).value_or(data.second.modId);
-            item->subText = desc;
-            embbedDataList->data.push_back(item);
+
+            auto text = SSL10n::GetOptional(fmt::format("QMOD_META_{}_NAME", data.second.modId)).value_or(data.second.modId) + desc;
+            BSML::Lite::CreateText(container->get_transform(), text, {0,0},{0,5})
+                ->set_color(loaded ? UnityEngine::Color::get_green() : UnityEngine::Color::get_gray());
+            
+            // auto item = BSML::CustomCellInfo::New_ctor();
+            // item->text = SSL10n::GetOptional(fmt::format("QMOD_META_{}_NAME", data.second.modId)).value_or(data.second.modId) + desc;
+            // // item->subText = desc;
+            // embbedDataList->data.push_back(item);
         }
-        embbedDataList->tableView->ReloadData();
+        // embbedDataList->tableView->ReloadData();
     }
 }
 
