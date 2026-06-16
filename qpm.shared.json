@@ -84,7 +84,7 @@
       },
       {
         "id": "sslocalization",
-        "versionRange": "^0.6.4",
+        "versionRange": "^0.6.5",
         "additionalData": {}
       }
     ]
@@ -264,13 +264,13 @@
     {
       "dependency": {
         "id": "sslocalization",
-        "versionRange": "=0.6.4",
+        "versionRange": "=0.6.5",
         "additionalData": {
-          "soLink": "https://github.com/frto027/SimpleStupidLocalization/releases/download/v0.6.4/libsslocalization.so",
-          "debugSoLink": "https://github.com/frto027/SimpleStupidLocalization/releases/download/v0.6.4/debug_libsslocalization.so",
+          "soLink": "https://github.com/frto027/SimpleStupidLocalization/releases/download/v0.6.5/libsslocalization.so",
+          "debugSoLink": "https://github.com/frto027/SimpleStupidLocalization/releases/download/v0.6.5/debug_libsslocalization.so",
           "overrideSoName": "libsslocalization.so",
-          "modLink": "https://github.com/frto027/SimpleStupidLocalization/releases/download/v0.6.4/sslocalization.qmod",
-          "branchName": "version/v0_6_4",
+          "modLink": "https://github.com/frto027/SimpleStupidLocalization/releases/download/v0.6.5/sslocalization.qmod",
+          "branchName": "version/v0_6_5",
           "compileOptions": {
             "includePaths": [
               "shared/include"
@@ -279,7 +279,7 @@
           "cmake": true
         }
       },
-      "version": "0.6.4"
+      "version": "0.6.5"
     },
     {
       "dependency": {
