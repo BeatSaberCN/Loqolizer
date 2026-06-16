@@ -15,6 +15,7 @@
 #include "EmbbedData.hpp"
 #include "modconfig.hpp"
 #include <fmt/format.h>
+#include <optional>
 #include "BGLib/Polyglot/Language.hpp"
 #include "BGLib/Polyglot/Localization.hpp"
 #include "BGLib/Polyglot/LocalizationModel.hpp"
@@ -29,6 +30,23 @@
 std::set<std::string> LangCtrl::loadedResourceMd5;
 
 bool LangCtrl::is_initialized = false;
+
+std::optional<SSL10n::Language> getGameLanguage(){
+    auto instance = BGLib::Polyglot::Localization::get_Instance();
+    if(instance){
+        switch(instance->get_SelectedLanguage()){
+            #define CASE(lang) \
+                case BGLib::Polyglot::Language::lang:\
+                    return SSL10n::Language::L_##lang;
+            FOR_EACH_LANGUAGE(CASE)
+            #undef CASE
+
+            default:
+                break;
+        }
+    }
+    return std::nullopt;
+}
 
 void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {    
     static std::vector<std::string_view> languages = {
@@ -45,6 +63,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         BSML::Lite::AddHoverHint(BSML::Lite::CreateToggle(container->get_transform(), "*"+SSL10nGen::STR::SETTHING_ENABLE_GAME_LOCALIZE(), getConfig().EnableGameLocalize.GetValue(), [](bool v){
            getConfig().EnableGameLocalize.SetValue(v); 
         }), SSL10nGen::STR::SETTHING_ENABLE_GAME_LOCALIZE_HINT());
+        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_HINT_RESTART_REQUIRED(), {0,0},{0,5});
 
         int old_config = getConfig().SelectedLanguage.GetValue();
         if(old_config < 0 || old_config >= languages.size())
@@ -72,8 +91,10 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         dropdown->UpdateChoices();
         dropdown->UpdateState();
 
-        auto sira_game_translator = SSL10n::GetOptional("SIRALOCALIZER_LANGUAGE_CONTRIBUTORS");
-        if(sira_game_translator.has_value() && SSL10n::GetCurrentLanguage() != SSL10n::L_English){
+
+        auto gameLang = getGameLanguage().value_or(SSL10n::Language::L_English);
+        std::optional<std::string> sira_game_translator = SSL10n::GetOptional("SIRALOCALIZER_LANGUAGE_CONTRIBUTORS", gameLang, false);
+        if(sira_game_translator.has_value() && gameLang != SSL10n::L_English){
             float line_height = 5;
             std::string t = sira_game_translator.value();
             for(int i=0, comma_count = 0;i<t.size();i++){
@@ -87,7 +108,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
             }
 
             auto text = 
-            BSML::Lite::CreateText(container->get_transform(), SSL10n::FormatKey("SIRALOCALIZER_TRANSLATED_BY", t), {0,0},{0, 0});
+            BSML::Lite::CreateText(container->get_transform(), SSL10nGen::FMT::GAME_TRANSLATED_BY(t), {0,0},{0, 0});
 
             auto filter = 
             text->get_gameObject()
@@ -95,7 +116,6 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
             filter->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
         }
 
-        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_HINT_RESTART_REQUIRED(), {0,0},{0,5});
         BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_TEXT_KEPT(), {0,0},{0,5});
 
         BSML::Lite::CreateUIButton(container->get_transform(), SSL10nGen::STR::SETTHING_APPLY_NOW(), [](){
@@ -141,18 +161,9 @@ void LangCtrl::SyncSelectedLanguage(){
         // This will not works immediately
         // the sslocalization library only follows language when game set it
         SSL10n::LanguageController::SetFollowGameLanguage(true);
-        auto instance = BGLib::Polyglot::Localization::get_Instance();
-        if(instance){
-            switch(instance->get_SelectedLanguage()){
-                #define CASE(lang) \
-                    case BGLib::Polyglot::Language::lang:\
-                        SSL10n::LanguageController::SetCurrentLanguage(SSL10n::Language::L_##lang);
-                FOR_EACH_LANGUAGE(CASE)
-                #undef CASE
-
-                default:
-                    break;
-            }
+        auto gameLang = getGameLanguage();
+        if(gameLang.has_value()){
+            SSL10n::LanguageController::SetCurrentLanguage(gameLang.value());
         }
         return;
     }
