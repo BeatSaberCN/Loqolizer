@@ -21,6 +21,7 @@
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Component.hpp"
 #include "HMUI/CurvedTextMeshPro.hpp"
+#include "UnityEngine/RectTransform.hpp"
 
 #define TEXT_FOLLOW_GAME "FollowGame"
 
@@ -72,10 +73,25 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
 
         auto sira_game_translator = SSL10n::GetOptional("SIRALOCALIZER_LANGUAGE_CONTRIBUTORS");
         if(sira_game_translator.has_value() && SSL10n::GetCurrentLanguage() != SSL10n::L_English){
-            BSML::Lite::CreateText(container->get_transform(), SSL10n::FormatKey("SIRALOCALIZER_TRANSLATED_BY", sira_game_translator.value()))
-                ->get_gameObject()
-                ->AddComponent<UnityEngine::UI::ContentSizeFitter*>()
-                    ->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
+            float line_height = 5;
+            std::string t = sira_game_translator.value();
+            for(int i=0, comma_count = 0;i<t.size();i++){
+                if(t[i] == ','){
+                    comma_count++;
+                    if(comma_count % 4 == 0){
+                        t[i] = '\n';
+                        line_height += 5;
+                    }
+                }
+            }
+
+            auto text = 
+            BSML::Lite::CreateText(container->get_transform(), SSL10n::FormatKey("SIRALOCALIZER_TRANSLATED_BY", t), {0,0},{0, 0});
+
+            auto filter = 
+            text->get_gameObject()
+                ->AddComponent<UnityEngine::UI::ContentSizeFitter*>();
+            filter->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
         }
 
         BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_HINT_RESTART_REQUIRED(), {0,0},{0,5});
