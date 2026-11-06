@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BGLib/Polyglot/Language.hpp"
 #include "SSL10n.hpp"
 #include "modconfig.hpp"
 #include <optional>
@@ -46,5 +47,6 @@ namespace LangCtrl {
     };
     void SyncSelectedLanguage();
 
+    std::optional<SSL10n::Language> getGameLanguage(::BGLib::Polyglot::Language language);
     std::optional<SSL10n::Language> getGameLanguage();
 }

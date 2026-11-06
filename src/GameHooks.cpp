@@ -11,8 +11,8 @@
 #include "BGLib/Polyglot/LocalizationImporter.hpp"
 #include "modconfig.hpp"
 
-static bool SyncPolyglotLanguageFromPolyglot(BGLib::Polyglot::LocalizationModel *instance) {
-    auto currentSelected = LangCtrl::getGameLanguage();
+static bool SyncPolyglotLanguageFromPolyglot(::BGLib::Polyglot::Language lang) {
+    auto currentSelected = LangCtrl::getGameLanguage(lang);
     if(currentSelected.has_value()){
         SSL10n::LanguageController::SetCurrentLanguage(currentSelected.value());
         getConfig().LastGameLanguage.SetValue(currentSelected.value());
@@ -28,7 +28,7 @@ MAKE_HOOK_MATCH(Localization_SetSelectLang, &BGLib::Polyglot::LocalizationModel:
 
     if (getConfig().SelectedLanguage.GetValue() == LangCtrl::L_FollowGame) {
         PaperLogger.info("On localize executed");
-        if (SyncPolyglotLanguageFromPolyglot(self)) {
+        if (SyncPolyglotLanguageFromPolyglot(lang)) {
             PaperLogger.info("Language has been updated to {}.", (int)SSL10n::GetCurrentLanguage());
         }
     } else {

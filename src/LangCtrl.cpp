@@ -31,19 +31,24 @@ std::set<std::string> LangCtrl::loadedResourceMd5;
 
 bool LangCtrl::is_initialized = false;
 
+std::optional<SSL10n::Language> LangCtrl::getGameLanguage(::BGLib::Polyglot::Language language){
+    switch(language){
+        #define CASE(lang) \
+            case BGLib::Polyglot::Language::lang:\
+                return SSL10n::Language::L_##lang;
+        FOR_EACH_LANGUAGE(CASE)
+        #undef CASE
+
+        default:
+            break;
+    }
+    return std::nullopt;
+}
+
 std::optional<SSL10n::Language> LangCtrl::getGameLanguage(){
     auto instance = BGLib::Polyglot::Localization::get_Instance();
     if(instance){
-        switch(instance->get_SelectedLanguage()){
-            #define CASE(lang) \
-                case BGLib::Polyglot::Language::lang:\
-                    return SSL10n::Language::L_##lang;
-            FOR_EACH_LANGUAGE(CASE)
-            #undef CASE
-
-            default:
-                break;
-        }
+        return getGameLanguage(instance->get_SelectedLanguage());
     }
     return std::nullopt;
 }
