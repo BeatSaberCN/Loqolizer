@@ -66,17 +66,23 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_HINT_RESTART_REQUIRED(), {0,0},{0,5});
 
         int old_config = getConfig().SelectedLanguage.GetValue();
-        if(old_config < 0 || old_config >= languages.size())
+        if(old_config < 0 || old_config >= languages.size()){
           old_config = 0;
-
+          getConfig().SelectedLanguage.SetValue(0);
+        }
+        
         auto dropdown = BSML::Lite::CreateDropdown(container->get_transform(), SSL10nGen::STR::SETTHING_LABEL_LANGUAGE(), languages[old_config],  languages, [](StringW str){
           std::string v = str;
           if(v == TEXT_FOLLOW_GAME){
             getConfig().SelectedLanguage.SetValue(LangCtrl::L_FollowGame);
+            auto gameLang = getGameLanguage();
+            if(gameLang.has_value()){
+                getConfig().LastGameLanguage.SetValue(gameLang.value());
+            }
             return;
           }
 
-          #define L(x) if(v == #x) { getConfig().SelectedLanguage.SetValue(LangCtrl::L_##x); return; }
+          #define L(x) if(v == #x) { getConfig().LastGameLanguage.SetValue(SSL10n::L_##x); getConfig().SelectedLanguage.SetValue(LangCtrl::L_##x); return; }
           FOR_EACH_LANGUAGE(L)
           #undef  L
         });
@@ -120,7 +126,13 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
 
         BSML::Lite::CreateUIButton(container->get_transform(), SSL10nGen::STR::SETTHING_APPLY_NOW(), [](){
           LangCtrl::SyncSelectedLanguage();
-          UnityEngine::Resources::FindObjectsOfTypeAll<GlobalNamespace::MenuTransitionsHelper*>()->First()->RestartGame(nullptr);
+          auto lists = UnityEngine::Resources::FindObjectsOfTypeAll<GlobalNamespace::MenuTransitionsHelper*>();
+          if(lists.size() > 0){
+            auto first = lists->First();
+            if(first){
+                first->RestartGame(nullptr);
+            }
+          }
         });
 
         BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_EMBBED_DATA_TITLE(),{0,0},{0,5});
@@ -134,7 +146,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
             std::string desc = loaded ? SSL10nGen::STR::TRANSLATE_LOADED() : SSL10nGen::STR::TRANSLATE_NOT_LOADED();
             // std::string desc = std::string("(") + data.second.version + ")";
 
-            auto text = SSL10n::GetOptional(fmt::format("QMOD_META_{}_NAME", data.second.modId)).value_or(data.second.modId) + desc;
+            auto text = SSL10n::GetOptional(fmt::format("QMOD_META_{}_NAME", data.second.modId)).value_or(data.second.name) + desc;
             BSML::Lite::CreateText(container->get_transform(), text, {0,0},{0,5})
                 ->set_color(loaded ? UnityEngine::Color::get_green() : UnityEngine::Color::get_gray());
             
@@ -160,7 +172,6 @@ void LangCtrl::SyncSelectedLanguage(){
     if(is_initialized && lang == L_FollowGame){
         // This will not works immediately
         // the sslocalization library only follows language when game set it
-        getConfig().FollowGameLanguage.SetValue(true);
         auto gameLang = getGameLanguage();
         if(gameLang.has_value()){
             getConfig().LastGameLanguage.SetValue(gameLang.value());
@@ -168,8 +179,6 @@ void LangCtrl::SyncSelectedLanguage(){
         }
         return;
     }
-
-    getConfig().FollowGameLanguage.SetValue(false);
 
     switch ((LangCtrl::LanguageOption)opt) {
     #define CASE(lang) \

@@ -32,8 +32,6 @@ MOD_EXTERN_FUNC void setup(CModInfo *info) noexcept {
   SSL10n::LanguageController::SetCurrentLanguage((SSL10n::Language)getConfig().LastGameLanguage.GetValue());
 
   PaperLogger.info("Completed setup!");
-
-  LangCtrl::SyncSelectedLanguage();
 }
 
 // Called later on in the game loading - a good time to install function hooks

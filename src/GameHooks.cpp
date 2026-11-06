@@ -26,7 +26,7 @@ MAKE_HOOK_MATCH(Localization_SetSelectLang, &BGLib::Polyglot::LocalizationModel:
                 ::BGLib::Polyglot::LocalizationModel *self, ::BGLib::Polyglot::Language lang) {
     Localization_SetSelectLang(self, lang);
 
-    if (getConfig().FollowGameLanguage.GetValue()) {
+    if (getConfig().SelectedLanguage.GetValue() == LangCtrl::L_FollowGame) {
         PaperLogger.info("On localize executed");
         if (SyncPolyglotLanguageFromPolyglot(self)) {
             PaperLogger.info("Language has been updated to {}.", (int)SSL10n::GetCurrentLanguage());

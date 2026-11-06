@@ -5,7 +5,6 @@
 DECLARE_CONFIG(Config) {
     // LangCtrl::LanguageOption
     CONFIG_VALUE(SelectedLanguage, int, "SelectedLanguage", 0);
-    CONFIG_VALUE(FollowGameLanguage, bool, "FollowGameLanguage", true);
 
     // SSL10n::Language this is last selected game value, use for early mod load
     CONFIG_VALUE(LastGameLanguage, int, "LastGameLanguage", 0);

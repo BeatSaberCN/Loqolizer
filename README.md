@@ -25,7 +25,7 @@ git submodule update
 ```
 
 Use `qpm s build` to build.  
-Same goes for `qpm s copy` and `qpm s qmod`
+Use `qpm qmod zip` to get release mod.
 
 # Embbed Data
 
@@ -39,7 +39,7 @@ We use [Neargye/semver](https://github.com/Neargye/semver) to match the mod vers
 
 ## Embbed Data Version Check
 
-When game start, the mod check every mod's id and version. The mismatched translate will be skipped.
+When game start, the mod check every mod's id and version. The mismatched translate will be skipped. Mailformed version will be loaded.
 
 ## Online Data Version Check
 

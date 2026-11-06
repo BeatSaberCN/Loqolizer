@@ -62,7 +62,7 @@ jobs:
       if: steps.mod.outputs.has_new_data == 'true'
       run: |
         cd ${GITHUB_WORKSPACE}
-        qpm s qmod
+        qpm qmod zip
 
     - name: Get Library Name
       if: steps.mod.outputs.has_new_data == 'true'

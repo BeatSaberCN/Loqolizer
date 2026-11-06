@@ -39,7 +39,6 @@ MAKE_HOOK_MATCH(LocalizationInstallerHook,
         BGLib::Polyglot::Language::Hebrew,
         BGLib::Polyglot::Language::Hungarian,
         BGLib::Polyglot::Language::Italian,
-        BGLib::Polyglot::Language::Italian,
         // BGLib::Polyglot::Language::Japanese,
         // BGLib::Polyglot::Language::Korean,
         BGLib::Polyglot::Language::Polish,
@@ -53,7 +52,8 @@ MAKE_HOOK_MATCH(LocalizationInstallerHook,
     };
 
     for(auto lang : toBeAdded){
-        self->_mainPolyglotAsset->supportedLanguages->Add(lang);
+        if(!self->____mainPolyglotAsset->___supportedLanguages->Contains(lang))
+            self->_mainPolyglotAsset->supportedLanguages->Add(lang);
     }
     
     LocalizationInstallerHook(self, assets, registry);
