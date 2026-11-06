@@ -6,7 +6,7 @@
   "info": {
     "name": "Loqolizer",
     "id": "Loqolizer",
-    "version": "0.6.0",
+    "version": "0.7.0",
     "url": null,
     "additionalData": {
       "overrideSoName": "libLoqolizer.so",
@@ -82,7 +82,7 @@
     },
     {
       "id": "sslocalization",
-      "versionRange": "^0.6.5",
+      "versionRange": "^0.7.0",
       "additionalData": {}
     }
   ]
