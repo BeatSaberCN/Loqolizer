@@ -16,31 +16,25 @@
   "workspace": {
     "scripts": {
       "build": [
-        "pwsh ./scripts/build.ps1"
-      ],
-      "clean": [
-        "pwsh ./scripts/build.ps1 -clean"
+        "python3 ./extern/includes/mod-scripts/shared/build.py $0:?"
       ],
       "copy": [
-        "pwsh ./scripts/copy.ps1 $0:?"
+        "python3 ./extern/includes/mod-scripts/shared/cpy.py $0:?"
       ],
-      "logcat": [
-        "pwsh ./scripts/start-logging.ps1"
+      "debug": [
+        "python3 ./extern/includes/mod-scripts/shared/debug.py $0:?"
       ],
-      "qmod": [
-        "pwsh ./scripts/build.ps1",
-        "pwsh ./scripts/createqmod.ps1"
+      "log": [
+        "python3 ./extern/includes/mod-scripts/shared/log.py $0:?"
+      ],
+      "profile": [
+        "python3 ./extern/includes/mod-scripts/shared/profile.py $0:?"
       ],
       "restart": [
-        "pwsh ./scripts/restart-game.ps1"
-      ],
-      "stack": [
-        "pwsh ./scripts/ndk-stack.ps1"
-      ],
-      "tomb": [
-        "pwsh ./scripts/pull-tombstone.ps1"
+        "python3 ./extern/includes/mod-scripts/shared/restart.py $0:?"
       ]
     },
+    "ndk": "^27.3.13750724",
     "qmodIncludeDirs": [
       "./build",
       "./extern/libs"
@@ -49,6 +43,11 @@
     "qmodOutput": "./Loqolizer.qmod"
   },
   "dependencies": [
+    {
+      "id": "mod-scripts",
+      "versionRange": "^1.0.2",
+      "additionalData": {}
+    },
     {
       "id": "beatsaber-hook",
       "versionRange": "^6.4.1",

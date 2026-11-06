@@ -12,8 +12,6 @@
 #include <string>
 #include <string_view>
 
-#include "asset.hpp"
-
 /* this is modified from https://github.com/qe201020335/PolyglotInject */
 
 MAKE_HOOK_MATCH(LocalizationInstallerHook, 
