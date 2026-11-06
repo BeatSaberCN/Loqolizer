@@ -31,7 +31,7 @@ std::set<std::string> LangCtrl::loadedResourceMd5;
 
 bool LangCtrl::is_initialized = false;
 
-std::optional<SSL10n::Language> getGameLanguage(){
+std::optional<SSL10n::Language> LangCtrl::getGameLanguage(){
     auto instance = BGLib::Polyglot::Localization::get_Instance();
     if(instance){
         switch(instance->get_SelectedLanguage()){
@@ -160,19 +160,21 @@ void LangCtrl::SyncSelectedLanguage(){
     if(is_initialized && lang == L_FollowGame){
         // This will not works immediately
         // the sslocalization library only follows language when game set it
-        SSL10n::LanguageController::SetFollowGameLanguage(true);
+        getConfig().FollowGameLanguage.SetValue(true);
         auto gameLang = getGameLanguage();
         if(gameLang.has_value()){
+            getConfig().LastGameLanguage.SetValue(gameLang.value());
             SSL10n::LanguageController::SetCurrentLanguage(gameLang.value());
         }
         return;
     }
 
-    SSL10n::LanguageController::SetFollowGameLanguage(false);
+    getConfig().FollowGameLanguage.SetValue(false);
 
     switch ((LangCtrl::LanguageOption)opt) {
     #define CASE(lang) \
         case LangCtrl::LanguageOption::L_##lang: \
+            getConfig().LastGameLanguage.SetValue(SSL10n::Language::L_##lang); \
             SSL10n::LanguageController::SetCurrentLanguage(SSL10n::Language::L_##lang); \
             break;
         FOR_EACH_LANGUAGE(CASE)

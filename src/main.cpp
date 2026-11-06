@@ -1,6 +1,7 @@
 #include "main.hpp"
 
 #include "EmbbedData.hpp"
+#include "GameHooks.hpp"
 #include "HMUI/ViewController.hpp"
 #include "PolyglotInject.hpp"
 #include "SSL10n.hpp"
@@ -28,6 +29,8 @@ MOD_EXTERN_FUNC void setup(CModInfo *info) noexcept {
   // File logging
   Paper::Logger::RegisterFileContextId(PaperLogger.tag);
 
+  SSL10n::LanguageController::SetCurrentLanguage((SSL10n::Language)getConfig().LastGameLanguage.GetValue());
+
   PaperLogger.info("Completed setup!");
 
   LangCtrl::SyncSelectedLanguage();
@@ -49,15 +52,15 @@ MOD_EXTERN_FUNC void late_load() noexcept {
   BSML::Init();
 
   static SafePtr<BSML::SettingsMenu> menu = BSML::SettingsMenu::Make_new(SSL10nGen::STR::SETTHING_MENU_TITLE(), LangCtrl::DidActivate, false);
-  if (!BSML::BSMLSettings::get_instance()->TryAddSettingsMenu(&*menu)) {
-    PaperLogger.info("Menu init failed");
+  if (BSML::BSMLSettings::get_instance()->TryAddSettingsMenu(&*menu)) {
+      SSL10n::OnLanguageChangeCallback.addCallback([](){
+        menu->text = SSL10nGen::STR::SETTHING_MENU_TITLE();
+      });
   }else{
-    SSL10n::OnLanguageChangeCallback.addCallback([](){
-      menu->text = SSL10nGen::STR::SETTHING_MENU_TITLE();
-    });
+    PaperLogger.info("Menu init failed");
   }
 
-
+  // TODO: figure out why I did this again...
   BSML::Register::RegisterSettingsMenu(SSL10nGen::STR::SETTHING_MENU_TITLE(),LangCtrl::DidActivate, false);
 
   PaperLogger.info("Init PolyglotInject");
@@ -67,6 +70,10 @@ MOD_EXTERN_FUNC void late_load() noexcept {
   }else{
     PaperLogger.info("Game Localize not enabled.");
   }
+
+  PaperLogger.info("Init GameHooks...");
+
+  LangCtrl::GameHooks::Init();
 
   PaperLogger.info("Done");
 

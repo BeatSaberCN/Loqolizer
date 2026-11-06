@@ -6,6 +6,15 @@
 #include "semver.hpp"
 
 void LangCtrl::InitEmbbedData(){
+    std::string_view siraLocalizerRes = LangCtrl::siraLocalizerResource();
+    if(siraLocalizerRes.size() > 0){
+        SSL10n::Database::PolyglotFormat::AddCSVContent(siraLocalizerRes.data(), siraLocalizerRes.size());
+    }
+    
+    auto siraRes = LangCtrl::siraLocalizerModResource();
+    SSL10n::Database::PolyglotFormat::AddCSVContent(siraRes.data(), siraRes.size());
+
+
     auto loaded_mods = modloader::get_loaded();
     auto metadata = embbedData.find("ModMetadata");
     if(metadata != embbedData.end()){

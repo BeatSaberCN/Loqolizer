@@ -2,6 +2,7 @@
 
 #include "SSL10n.hpp"
 #include "modconfig.hpp"
+#include <optional>
 #include <set>
 #include <string>
 namespace LangCtrl {
@@ -44,4 +45,6 @@ namespace LangCtrl {
         L_LASTLANG
     };
     void SyncSelectedLanguage();
+
+    std::optional<SSL10n::Language> getGameLanguage();
 }
