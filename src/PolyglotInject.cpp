@@ -93,7 +93,7 @@ MAKE_HOOK_MATCH(SerializedNameHook,
     return SerializedNameHook(lang);
 }
 static void installLangFixHook(){
-    INSTALL_HOOK(logger, SerializedNameHook)
+    INSTALL_HOOK(PaperLogger, SerializedNameHook)
 }
 #else
 
