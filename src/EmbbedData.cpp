@@ -24,9 +24,14 @@ void LangCtrl::InitEmbbedData(){
             SSL10n::Database::PolyglotFormat::AddCSVContent(data.csv_buffer, data.csv_buffer_size);
         }
     }
+
+    for(auto & dat : embbedData){
+        PaperLogger.info("Embbed translate for mod id {}", dat.first);
+    }
     for(auto mod : loaded_mods){
         auto it = embbedData.find(mod.info.id);
         if(it == embbedData.end()){
+            PaperLogger.info("Translate data for {} not found.", mod.info.id);
             continue;
         }
         PaperLogger.info("Load Embbed mod translate for {}", mod.info.id);
