@@ -58,8 +58,8 @@ jobs:
       with:
         name: EmbbedData
         path: |
-          ${GITHUB_WORKSPACE}/build/EmbbedDataGenerated.cpp
-          ${GITHUB_WORKSPACE}/EmbbedDataReport.json
+          build/EmbbedDataGenerated.cpp
+          EmbbedDataReport.json
         if-no-files-found: error
 
 
