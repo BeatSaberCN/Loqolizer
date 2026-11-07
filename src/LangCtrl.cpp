@@ -5,6 +5,7 @@
 #include "bsml/shared/BSML-Lite/Creation/Lists.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Misc.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Settings.hpp"
+#include "UnityEngine/Resources.hpp"
 #include "bsml/shared/BSML/Components/CustomListTableData.hpp"
 #include "main.hpp"
 #include "SSL10nGenerated.hpp"
@@ -16,7 +17,7 @@
 #include "modconfig.hpp"
 #include <fmt/format.h>
 #include <optional>
-#include "BGLib/Polyglot/Language.hpp"
+#include "GameCompat.hpp"
 #include "BGLib/Polyglot/Localization.hpp"
 #include "BGLib/Polyglot/LocalizationModel.hpp"
 #include "UnityEngine/UI/ContentSizeFitter.hpp"
@@ -31,10 +32,10 @@ std::set<std::string> LangCtrl::loadedResourceMd5;
 
 bool LangCtrl::is_initialized = false;
 
-std::optional<SSL10n::Language> LangCtrl::getGameLanguage(::BGLib::Polyglot::Language language){
+std::optional<SSL10n::Language> LangCtrl::getGameLanguage(PolyglotLanguageTy language){
     switch(language){
         #define CASE(lang) \
-            case BGLib::Polyglot::Language::lang:\
+            case PolyglotLanguageTy::lang:\
                 return SSL10n::Language::L_##lang;
         FOR_EACH_LANGUAGE(CASE)
         #undef CASE
@@ -131,13 +132,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
 
         BSML::Lite::CreateUIButton(container->get_transform(), SSL10nGen::STR::SETTHING_APPLY_NOW(), [](){
           LangCtrl::SyncSelectedLanguage();
-          auto lists = UnityEngine::Resources::FindObjectsOfTypeAll<GlobalNamespace::MenuTransitionsHelper*>();
-          if(lists.size() > 0){
-            auto first = lists->First();
-            if(first){
-                first->RestartGame(nullptr);
-            }
-          }
+          RestartGame();
         });
 
         BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_EMBBED_DATA_TITLE(),{0,0},{0,5});

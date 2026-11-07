@@ -1,11 +1,11 @@
 #pragma once
-
-#include "BGLib/Polyglot/Language.hpp"
 #include "SSL10n.hpp"
 #include "modconfig.hpp"
 #include <optional>
 #include <set>
 #include <string>
+#include "GameCompat.hpp"
+
 namespace LangCtrl {
 
     extern bool is_initialized;
@@ -47,6 +47,6 @@ namespace LangCtrl {
     };
     void SyncSelectedLanguage();
 
-    std::optional<SSL10n::Language> getGameLanguage(::BGLib::Polyglot::Language language);
+    std::optional<SSL10n::Language> getGameLanguage(PolyglotLanguageTy language);
     std::optional<SSL10n::Language> getGameLanguage();
 }

@@ -62,7 +62,7 @@ jobs:
       if: steps.mod.outputs.has_new_data == 'true'
       run: |
         cd ${GITHUB_WORKSPACE}
-        qpm qmod zip
+        python3 scripts/build_all.py
 
     - name: Get Library Name
       if: steps.mod.outputs.has_new_data == 'true'
@@ -90,7 +90,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{env.qmod_name}}.qmod
-        path: ./${{ env.qmod_name }}.qmod
+        path: ./${{ env.qmod_name }}*.qmod
         if-no-files-found: error
     - name: Upload embbde data build report
       if: steps.mod.outputs.has_new_data == 'true'
@@ -120,7 +120,7 @@ jobs:
         files: |
           ./build/${{ steps.libname.outputs.NAME }}
           ./build/debug_${{ steps.libname.outputs.NAME }}
-          ./${{ env.qmod_name }}.qmod
+          ./${{ env.qmod_name }}*.qmod
           ./EmbbedDataReport.json
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

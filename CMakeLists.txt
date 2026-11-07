@@ -7,9 +7,17 @@ include(target.cmake)
 project(${COMPILE_ID})
 
 # C++ standard
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
+if(
+        (TARGET_GAME_VERSION STREQUAL "1_37_0") OR
+        (TARGET_GAME_VERSION STREQUAL "1_40_8")
+    )
+    set(CMAKE_CXX_STANDARD 20)
+    set(CMAKE_CXX_STANDARD_REQUIRED 20)
+else()
+    set(CMAKE_CXX_STANDARD 26)
+    set(CMAKE_CXX_STANDARD_REQUIRED 26)
+endif()
 # Provide compile commands so they can be used for intellisense
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
@@ -81,7 +89,7 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter)
 add_custom_command(
         OUTPUT ${EMBBED_DATA_CPP}
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/download_translates.py ${EMBBED_DATA_CPP}
-        DEPENDS ${ASSET_FILES}
+        DEPENDS 
         COMMENT "Download EmbbedData"
         VERBATIM
 )

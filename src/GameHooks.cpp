@@ -1,17 +1,15 @@
 #include "GameHooks.hpp"
 #include "LangCtrl.hpp"
 #include "SSL10n.hpp"
-#include "beatsaber-hook/shared/utils/hooking.hpp"
 #include "main.hpp"
-
-#include "BGLib/Polyglot/Language.hpp"
+#include "GameCompat.hpp"
 #include "BGLib/Polyglot/ILocalize.hpp"
 #include "BGLib/Polyglot/Localization.hpp"
 #include "BGLib/Polyglot/LocalizationModel.hpp"
 #include "BGLib/Polyglot/LocalizationImporter.hpp"
 #include "modconfig.hpp"
 
-static bool SyncPolyglotLanguageFromPolyglot(::BGLib::Polyglot::Language lang) {
+static bool SyncPolyglotLanguageFromPolyglot(PolyglotLanguageTy lang) {
     auto currentSelected = LangCtrl::getGameLanguage(lang);
     if(currentSelected.has_value()){
         SSL10n::LanguageController::SetCurrentLanguage(currentSelected.value());
@@ -23,7 +21,7 @@ static bool SyncPolyglotLanguageFromPolyglot(::BGLib::Polyglot::Language lang) {
 
 // sync game language settings
 MAKE_HOOK_MATCH(Localization_SetSelectLang, &BGLib::Polyglot::LocalizationModel::set_SelectedLanguage, void,
-                ::BGLib::Polyglot::LocalizationModel *self, ::BGLib::Polyglot::Language lang) {
+                ::BGLib::Polyglot::LocalizationModel *self, PolyglotLanguageTy lang) {
     Localization_SetSelectLang(self, lang);
 
     if (getConfig().SelectedLanguage.GetValue() == LangCtrl::L_FollowGame) {

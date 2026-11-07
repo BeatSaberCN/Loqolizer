@@ -1,11 +1,14 @@
 #include "PolyglotInject.hpp"
-#include "BGLib/Polyglot/Language.hpp"
 #include "EmbbedData.hpp"
 #include "SSL10n.hpp"
 #include "main.hpp"
+
+#include "GameCompat.hpp"
 #include "BGLib/Polyglot/LocalizationAsyncInstaller.hpp"
-#include "BGLib/Polyglot/Language.hpp"
 #include "BGLib/Polyglot/Localization.hpp"
+#include "System/Collections/Generic/IList_1.hpp"
+#include "System/Collections/Generic/List_1.hpp"
+#include "System/Collections/Generic/ICollection_1.hpp"
 #include "UnityEngine/TextAsset.hpp"
 #include <vector>
 #include <variant>
@@ -19,7 +22,7 @@ MAKE_HOOK_MATCH(LocalizationInstallerHook,
                 void, 
                 BGLib::Polyglot::LocalizationAsyncInstaller *self, 
                 System::Collections::Generic::IList_1<UnityW<UnityEngine::TextAsset>> * assets, 
-                BGLib::AppFlow::Initialization::AsyncInstaller::IInstallerRegistry* registry) {
+                IInstallerRegistry* registry) {
     PaperLogger.debug("Injecting languages for polyglot");
 
     std::string_view siraLocalizerRes = LangCtrl::siraLocalizerResource();
@@ -29,26 +32,26 @@ MAKE_HOOK_MATCH(LocalizationInstallerHook,
         );
     }
 
-    std::vector<BGLib::Polyglot::Language> toBeAdded {
-        BGLib::Polyglot::Language::Arabic,
-        BGLib::Polyglot::Language::Czech,
-        BGLib::Polyglot::Language::Danish,
-        BGLib::Polyglot::Language::Dutch,
-        // BGLib::Polyglot::Language::French,
-        // BGLib::Polyglot::Language::German,
-        BGLib::Polyglot::Language::Hebrew,
-        BGLib::Polyglot::Language::Hungarian,
-        BGLib::Polyglot::Language::Italian,
-        // BGLib::Polyglot::Language::Japanese,
-        // BGLib::Polyglot::Language::Korean,
-        BGLib::Polyglot::Language::Polish,
-        BGLib::Polyglot::Language::Portuguese_Brazil,
-        BGLib::Polyglot::Language::Romanian,
-        BGLib::Polyglot::Language::Russian,
-        BGLib::Polyglot::Language::Simplified_Chinese,
-        // BGLib::Polyglot::Language::Spanish,
-        BGLib::Polyglot::Language::Swedish,
-        BGLib::Polyglot::Language::Traditional_Chinese,
+    std::vector<PolyglotLanguageTy> toBeAdded {
+        PolyglotLanguageTy::Arabic,
+        PolyglotLanguageTy::Czech,
+        PolyglotLanguageTy::Danish,
+        PolyglotLanguageTy::Dutch,
+        // PolyglotLanguageTy::French,
+        // PolyglotLanguageTy::German,
+        PolyglotLanguageTy::Hebrew,
+        PolyglotLanguageTy::Hungarian,
+        PolyglotLanguageTy::Italian,
+        // PolyglotLanguageTy::Japanese,
+        // PolyglotLanguageTy::Korean,
+        PolyglotLanguageTy::Polish,
+        PolyglotLanguageTy::Portuguese_Brazil,
+        PolyglotLanguageTy::Romanian,
+        PolyglotLanguageTy::Russian,
+        PolyglotLanguageTy::Simplified_Chinese,
+        // PolyglotLanguageTy::Spanish,
+        PolyglotLanguageTy::Swedish,
+        PolyglotLanguageTy::Traditional_Chinese,
     };
 
     for(auto lang : toBeAdded){

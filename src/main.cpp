@@ -3,9 +3,9 @@
 #include "EmbbedData.hpp"
 #include "GameHooks.hpp"
 #include "HMUI/ViewController.hpp"
+#include "GameCompat.hpp"
 #include "PolyglotInject.hpp"
 #include "SSL10n.hpp"
-#include "beatsaber-hook/shared/utils/typedefs-string.hpp"
 #include "LangCtrl.hpp"
 #include "bsml/shared/BSML/Settings/BSMLSettings.hpp"
 #include "scotland2/shared/modloader.h"
@@ -36,7 +36,7 @@ MOD_EXTERN_FUNC void setup(CModInfo *info) noexcept {
 
 // Called later on in the game loading - a good time to install function hooks
 MOD_EXTERN_FUNC void late_load() noexcept {
-  il2cpp_functions::Init();
+  i2c::functions::initialize();
 
   PaperLogger.info("Install keys");
 
@@ -49,9 +49,13 @@ MOD_EXTERN_FUNC void late_load() noexcept {
 
   BSML::Init();
 
-  static SafePtr<BSML::SettingsMenu> menu = BSML::SettingsMenu::Make_new(SSL10nGen::STR::SETTHING_MENU_TITLE(), LangCtrl::DidActivate, false);
+  static SafePtrBSMLSettingsMenuTy menu = BSML::SettingsMenu::Make_new(SSL10nGen::STR::SETTHING_MENU_TITLE(), LangCtrl::DidActivate, false);
   if (BSML::BSMLSettings::get_instance()->TryAddSettingsMenu(&*menu)) {
+    #if defined(GAME_VER_1_40_8) || defined(GAME_VER_1_37_0)
       SSL10n::OnLanguageChangeCallback.addCallback([](){
+    #else
+      SSL10n::OnLanguageChangeCallback.add([](){
+    #endif
         menu->text = SSL10nGen::STR::SETTHING_MENU_TITLE();
       });
   }else{

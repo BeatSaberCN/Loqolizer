@@ -1,5 +1,6 @@
 {
   "workspace.qmodOutput": "Loqolizer.1_45_3.qmod",
+  "workspace.ndk": "29.0.14206865",
   "dependencies": [
     {
       "id": "mod-scripts",
@@ -17,6 +18,11 @@
       "additionalData": {
         "includeQmod": false
       }
+    },
+    {
+      "id": "bs-cordl",
+      "versionRange": "^4503.0.0",
+      "additionalData": {}
     },
     {
       "id": "paper2_scotland2",
@@ -40,7 +46,17 @@
     },
     {
       "id": "sslocalization",
-      "versionRange": "^0.8.0",
+      "versionRange": "^0.16.0",
+      "additionalData": {}
+    },
+    {
+      "id": "flamingo",
+      "versionRange": "^1.2.1",
+      "additionalData": {}
+    },
+    {
+      "id": "reflectcpp",
+      "versionRange": "^0.25.0",
       "additionalData": {}
     }
   ]
