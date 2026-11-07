@@ -4,123 +4,41 @@ on:
   workflow_dispatch:
   # schedule:
   #   - cron: '0 10 */5 * *'
-env:
-    module_id: "Loqolizer"
-    qmod_name: "Loqolizer"
+
+concurrency: auto-release
 
 jobs:
-  auto_rel:
+  prepare:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+    outputs:
+      has_new_data: ${{ steps.mod.outputs.has_new_data }}
+      next_ver: ${{ steps.mod.outputs.next_ver }}
     steps:
     - uses: actions/checkout@v2
       name: Checkout
-      with:
-        submodules: true
-        lfs: true
 
     - name: Check New Data
       id: mod
       run: python scripts/auto_release_helper.py
 
-    - name: Git commit bump for release
-      if: steps.mod.outputs.has_new_data == 'true'
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add .
-        git commit -m "Auto release for v${{ steps.mod.outputs.next_ver }}"
-
-
-    - uses: seanmiddleditch/gha-setup-ninja@v3
-      if: steps.mod.outputs.has_new_data == 'true'
-      
-    - name: Create ndkpath.txt
-      if: steps.mod.outputs.has_new_data == 'true'
-      run: |
-        echo $ANDROID_NDK_HOME > ${GITHUB_WORKSPACE}/ndkpath.txt
-        cat ${GITHUB_WORKSPACE}/ndkpath.txt
-
-    # get version from pushed tag
-    # - name: Extract version
-    #   if: startsWith(github.ref, 'refs/tags/v')
-    #   id: version
-    #   run: |
-    #     echo "TAG=${GITHUB_REF#refs/tags/}" >> ${GITHUB_OUTPUT}
-    #     echo "VERSION=${GITHUB_REF#refs/tags/v}" >> ${GITHUB_OUTPUT}
-
-    - name: Setup qpm
-      if: steps.mod.outputs.has_new_data == 'true'
-      uses: Fernthedev/qpm-action@v1
-      with:
-        workflow_token: ${{ secrets.GITHUB_TOKEN }}
-        restore: true
-        cache: true
-        publish: false
-
-    - name: Build & Create Qmod
-      if: steps.mod.outputs.has_new_data == 'true'
-      run: |
-        cd ${GITHUB_WORKSPACE}
-        python3 scripts/build_all.py
-
-    - name: Get Library Name
-      if: steps.mod.outputs.has_new_data == 'true'
-      id: libname
-      run: |
-        cd ./build/
-        pattern="lib${module_id}*.so"
-        files=( $pattern )
-        echo "NAME=${files[0]}" >> ${GITHUB_OUTPUT}
-
-    - name: Rename debug artifact
-      if: steps.mod.outputs.has_new_data == 'true'
-      run: mv "./build/debug/${{ steps.libname.outputs.NAME }}" "./build/debug_${{ steps.libname.outputs.NAME }}"
-
-    - name: Upload artifact
+    - name: Upload automatic release metadata
       if: steps.mod.outputs.has_new_data == 'true'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ steps.libname.outputs.NAME }}
-        path: ./build/${{ steps.libname.outputs.NAME }}
+        name: AutoReleaseMetadata
+        path: |
+          qpm.json
+          mod.template.json
+          AutoReleaseChangelog.txt
         if-no-files-found: error
 
-    - name: Upload qmod artifact
-      if: steps.mod.outputs.has_new_data == 'true'
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{env.qmod_name}}.qmod
-        path: ./${{ env.qmod_name }}*.qmod
-        if-no-files-found: error
-    - name: Upload embbde data build report
-      if: steps.mod.outputs.has_new_data == 'true'
-      uses: actions/upload-artifact@v4
-      with:
-        name: EmbbedDataReport.json
-        path: ./EmbbedDataReport.json
-        if-no-files-found: error
-
-    - name: Create and Push Tag
-      if: steps.mod.outputs.has_new_data == 'true'
-      run: |
-        git tag auto-v${{ steps.mod.outputs.next_ver }}
-        git push -f origin auto-v${{ steps.mod.outputs.next_ver }}
-
-
-    - name: Upload release artifacts
-      if: steps.mod.outputs.has_new_data == 'true'
-      id: upload_file_release
-      uses: softprops/action-gh-release@v0.1.15
-      with:
-        name: Automatic Release v${{ steps.mod.outputs.next_ver }}
-        tag_name: auto-v${{ steps.mod.outputs.next_ver }}
-        prerelease: true
-        generate_release_notes: true
-        body_path: AutoReleaseChangelog.txt
-        files: |
-          ./build/${{ steps.libname.outputs.NAME }}
-          ./build/debug_${{ steps.libname.outputs.NAME }}
-          ./${{ env.qmod_name }}*.qmod
-          ./EmbbedDataReport.json
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build_and_release:
+    needs: prepare
+    if: needs.prepare.outputs.has_new_data == 'true'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/build-ndk.yml
+    with:
+      auto_release_version: ${{ needs.prepare.outputs.next_ver }}
