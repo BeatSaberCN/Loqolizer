@@ -63,7 +63,62 @@ MAKE_HOOK_MATCH(LocalizationInstallerHook,
 }
 
 
+static bool isSimplifiedChinese(StringW serializedName) {
+    if (!serializedName) {
+        return false;
+    }
+
+    std::string name = serializedName;
+    std::ranges::transform(name, name.begin(), [](unsigned char c) -> char {
+        return c == '-' ? '_' : std::tolower(c);
+    });
+    return name == "zh_ch" || name == "zh";
+}
+
+#if defined(GAME_VER_1_40_8) || defined(GAME_VER_1_37_0)
+#include "BGLib/Polyglot/LanguageExtensions.hpp"
+// The game saves both Chinese as "zh" and both Portuguese as "pt", which parse back as Simplified Chinese and
+// Portuguese. This make sure they are saved correctly.
+MAKE_HOOK_MATCH(SerializedNameHook,
+                &BGLib::Polyglot::LanguageExtensions::ToSerializedName,
+                StringW,
+                BGLib::Polyglot::Language lang) {
+    using BGLib::Polyglot::Language;
+    if (lang == Language::Traditional_Chinese) {
+        return "zh-Hant";
+    }
+    if (lang == Language::Portuguese_Brazil) {
+        return "pt-BR";
+    }
+    return SerializedNameHook(lang);
+}
+static void installLangFixHook(){
+    INSTALL_HOOK(logger, SerializedNameHook)
+}
+#else
+
+#include "BGLib/Polyglot/LocalizationLanguageExtensions.hpp"
+
+// The game saves Simplified Chinese as "zh_CH" but expects "zh_CN" when parsing it back.
+// Anything else starting with "zh" becomes Traditional Chinese.
+// 1.40.8 saves "zh" so we should map this to Simplified Chinese too.
+MAKE_HOOK_MATCH(SimplifiedChineseParseHook,
+                &BGLib::Polyglot::LocalizationLanguageExtensions::ToLocalizationLanguage,
+                BGLib::Polyglot::LocalizationLanguage,
+                StringW serializedName) {
+    PaperLogger.debug("{} triggered!", name());
+    if (isSimplifiedChinese(serializedName)) {
+        return BGLib::Polyglot::LocalizationLanguage::Simplified_Chinese;
+    }
+    return SimplifiedChineseParseHook(serializedName);
+}
+static void installLangFixHook(){
+    INSTALL_HOOK(PaperLogger, SimplifiedChineseParseHook);
+}
+
+#endif
 void LangCtrl::PolyglotInjectInit(){
     PaperLogger.info("Installing hook for polyglot");
     INSTALL_HOOK(PaperLogger, LocalizationInstallerHook);
+    installLangFixHook();
 }
