@@ -55,6 +55,6 @@ inline void RestartGame(){
     helper->RestartGame(nullptr);
 }
 
-using SafePtrBSMLSettingsMenuTy = BSML::SettingsMenu*;
+using SafePtrBSMLSettingsMenuTy = safe_ptr<BSML::SettingsMenu*>;
 
 #endif

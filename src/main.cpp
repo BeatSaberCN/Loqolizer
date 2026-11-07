@@ -73,7 +73,7 @@ MOD_EXTERN_FUNC void late_load() noexcept {
   BSML::Init();
 
   static SafePtrBSMLSettingsMenuTy menu = BSML::SettingsMenu::Make_new(SSL10nGen::STR::SETTHING_MENU_TITLE(), LangCtrl::DidActivate, false);
-  if (BSML::BSMLSettings::get_instance()->TryAddSettingsMenu(&*menu)) {
+  if (BSML::BSMLSettings::get_instance()->TryAddSettingsMenu(menu.ptr())) {
     #if defined(GAME_VER_1_40_8) || defined(GAME_VER_1_37_0)
       SSL10n::OnLanguageChangeCallback.addCallback([](){
     #else
