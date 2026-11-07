@@ -51,6 +51,8 @@ jobs:
         cd ${GITHUB_WORKSPACE}
         mkdir build
         python3 scripts/download_translates.py build/EmbbedDataGenerated.cpp
+        ls -al
+        ls -al build
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
