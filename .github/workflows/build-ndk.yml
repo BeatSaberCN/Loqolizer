@@ -134,13 +134,6 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
-    # get mod version from pushed tag
-    - name: Extract version
-      id: version
-      run: |
-        echo "TAG=${GITHUB_REF#refs/tags/}" >> ${GITHUB_OUTPUT}
-        echo "VERSION=${GITHUB_REF#refs/tags/v}" >> ${GITHUB_OUTPUT}
-        
     - name: Download qmods
       uses: actions/download-artifact@v4
       with:
@@ -170,10 +163,13 @@ jobs:
       id: upload_file_release
       uses: softprops/action-gh-release@v0.1.15
       with:
-        tag_name: ${{ github.event.inputs.version }}
+        tag_name: ${{ github.ref_name }}
         draft: true
         generate_release_notes: true
+        fail_on_unmatched_files: true
         files: |
-          ./release_folder/
+          ./release_folder/Loqolizer.*.qmod
+          ./release_folder/EmbbedDataReport.json
+          ./release_folder/symbols.tgz
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
