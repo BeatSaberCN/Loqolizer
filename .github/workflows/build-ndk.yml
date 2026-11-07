@@ -38,9 +38,37 @@ env:
     qmod_name: "Loqolizer"
 
 jobs:
-  build:
+  download_resources:
     runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      name: Checkout
+      with:
+        submodules: true
+        lfs: true
+    - name: Download resources
+      run: |
+        cd ${GITHUB_WORKSPACE}
+        mkdir build
+        python3 scripts/download_translates.py build/EmbbedDataGenerated.cpp
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: EmbbedData
+        path: |
+          ${GITHUB_WORKSPACE}/build/EmbbedDataGenerated.cpp
+          ${GITHUB_WORKSPACE}/EmbbedDataReport.json
+        if-no-files-found: error
 
+
+  build:
+    strategy:
+      matrix:
+        game-version: [
+          "1.45.3",
+          "1.40.8"
+        ]
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       name: Checkout
@@ -63,6 +91,9 @@ jobs:
         echo "TAG=${GITHUB_REF#refs/tags/}" >> ${GITHUB_OUTPUT}
         echo "VERSION=${GITHUB_REF#refs/tags/v}" >> ${GITHUB_OUTPUT}
 
+    - name: Apply game version
+      run: python scripts/multibuild/apply.py ${{ matrix.game-version }}
+
     - name: Setup qpm
       uses: Fernthedev/qpm-action@v1
       with:
@@ -71,27 +102,26 @@ jobs:
         cache: true
         publish: false
 
+    - name: download embbed data
+      uses: actions/download-artifact@v4
+      with:
+        path: build
+        pattern: EmbbedData
+        merge-multiple: false
+    - name: list all
+      run: pwd && ls build
+
     - name: Build & Create Qmod
       run: |
         cd ${GITHUB_WORKSPACE}
-        python3 scripts/build_all.py
-
-    # we build a version related so file, like ./build/libLoqolizer.1.48.0.so or ./build/debug_libLoqolizer.1.48.0.so
-    # - name: Get Library Name
-    #   id: libname
-    #   run: |
-    #     cd ./build/
-    #     pattern="lib${module_id}*.so"
-    #     files=( $pattern )
-    #     echo "NAME=${files[0]}" >> ${GITHUB_OUTPUT}
-
-    # - name: Rename debug artifact
-    #   run: mv "./build/debug/${{ steps.libname.outputs.NAME }}" "./build/debug_${{ steps.libname.outputs.NAME }}"
-
-    - name: Upload artifact
+        qpm restore && qpm s build && qpm qmod zip
+        mv ./build/libLoqolizer.so ./build/libLoqolizer.${{ matrix.game-version }}.so
+        mv ./build/debug/libLoqolizer.so ./build/debug_libLoqolizer.${{ matrix.game-version }}.so
+    
+    - name: Upload so file artifact
       uses: actions/upload-artifact@v4
       with:
-        name: libLoqolizer
+        name: libLoqolizer.${{ matrix.game-version }}.so
         path: |
           ./build/libLoqolizer.*.so
           ./build/debug_libLoqolizer.*.so
@@ -100,19 +130,40 @@ jobs:
     - name: Upload qmod artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.qmod_name}}.qmod
-        path: ./${{ env.qmod_name }}*.qmod
-        if-no-files-found: error
-    - name: Upload embbde data build report
-      uses: actions/upload-artifact@v4
-      with:
-        name: EmbbedDataReport.json
-        path: ./EmbbedDataReport.json
+        name: Loqolizer.${{ matrix.game-version }}.qmod
+        path: ./Loqolizer.${{ matrix.game-version }}.qmod
         if-no-files-found: error
 
-    # if we had a tag, we should make a release
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download qmods
+      uses: actions/download-artifact@v4
+      with:
+        path: release_folder
+        pattern: Loqolizer.*.qmod
+        merge-multiple: true
+    - name: Download symbols
+      uses: actions/download-artifact@v4
+      with:
+        path: symbols
+        pattern: libLoqolizer.*.so
+        merge-multiple: true
+    - name: Download embbed datas
+      uses: actions/download-artifact@v4
+      with:
+        path: release_folder
+        pattern: EmbbedData
+        merge-multiple: true
+    - name: Zip datas
+      run: |
+        ls -l
+        ls -l release_folder
+        ls -l symbols
+        tar zcvf release_folder/symbols.tgz symbols
+
     - name: Upload release artifacts
-      if: startsWith(github.ref, 'refs/tags/v')
       id: upload_file_release
       uses: softprops/action-gh-release@v0.1.15
       with:
@@ -120,9 +171,6 @@ jobs:
         draft: true
         generate_release_notes: true
         files: |
-          ./build/libLoqolizer.*.so
-          ./build/debug_libLoqolizer.*.so
-          ./${{ env.qmod_name }}.*.qmod
-          ./EmbbedDataReport.json
+          ./release_folder/
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
