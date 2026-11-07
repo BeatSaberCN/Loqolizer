@@ -62,6 +62,7 @@ jobs:
 
 
   build:
+    needs: download_resources
     strategy:
       matrix:
         game-version: [
@@ -135,6 +136,7 @@ jobs:
         if-no-files-found: error
 
   release:
+    needs: build
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
