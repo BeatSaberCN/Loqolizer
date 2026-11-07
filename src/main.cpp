@@ -8,17 +8,38 @@
 #include "SSL10n.hpp"
 #include "LangCtrl.hpp"
 #include "bsml/shared/BSML/Settings/BSMLSettings.hpp"
-#include "scotland2/shared/modloader.h"
+#include "scotland2/shared/loader.hpp"
 #include "modconfig.hpp"
 #include "SSL10nGenerated.hpp"
 #include "bsml/shared/BSML.hpp"
 #include "bsml/shared/BSML/Settings/BSMLSettings.hpp"
 #include "bsml/shared/BSML/Settings/SettingsMenu.hpp"
 
+#include "flamingo/shared/installer.hpp"
+
 static modloader::ModInfo modInfo{MOD_ID, VERSION, 0};
 // Stores the ID and version of our mod, and is sent to
 // the modloader upon startup
 
+static void SkipPolyglotInjectLateLoad() noexcept {}
+
+static void SkipsPolyglotInjectMod() {
+  for (const auto& mod : modloader::get_loaded()) {
+    if (mod.path.filename() != "libPolyglotInject.so" || !mod.late_loadFn) {
+      continue;
+    }
+
+    auto* target = reinterpret_cast<void*>(*mod.late_loadFn);
+    auto* replacement = reinterpret_cast<void*>(&SkipPolyglotInjectLateLoad);
+    const bool installed = flamingo::Install(flamingo::HookInfo{replacement, target, nullptr}).has_value();
+    if (installed) {
+      PaperLogger.info("Disabled standalone PolyglotInject late_load");
+    } else {
+      PaperLogger.warn("Failed to disable standalone PolyglotInject late_load");
+    }
+    return;
+  }
+}
 
 // Called at the early stages of game loading
 MOD_EXTERN_FUNC void setup(CModInfo *info) noexcept {
@@ -28,6 +49,8 @@ MOD_EXTERN_FUNC void setup(CModInfo *info) noexcept {
 
   // File logging
   Paper::Logger::RegisterFileContextId(PaperLogger.tag);
+
+  SkipsPolyglotInjectMod();
 
   SSL10n::LanguageController::SetCurrentLanguage((SSL10n::Language)getConfig().LastGameLanguage.GetValue());
 
