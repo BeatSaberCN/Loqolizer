@@ -2,8 +2,8 @@ name: Auto release
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: '0 10 */5 * *'
+  schedule:
+    - cron: '0 10 */5 * *'
 
 concurrency: auto-release
 
