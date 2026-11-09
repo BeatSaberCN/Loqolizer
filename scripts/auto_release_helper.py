@@ -41,8 +41,14 @@ def test_has_new_data(local_json, remote_json):
 
 has_new_data = False
 
-local_releases_json = json.loads(urllib.request.urlopen("https://api.github.com/repos/BeatSaberCN/Loqolizer/releases").read().decode("utf8"))[0]
-local_release_latest_tag = local_releases_json['tag_name']
+local_releases_json = None
+for release in json.loads(urllib.request.urlopen("https://api.github.com/repos/BeatSaberCN/Loqolizer/releases").read().decode("utf8")):
+    if local_releases_json == None:
+        local_releases_json = release
+        local_release_latest_tag = local_releases_json['tag_name']
+    elif release['created_at'] > local_releases_json['created_at']:
+        local_releases_json = release
+        local_release_latest_tag = local_releases_json['tag_name']
 print(f"The latest release is {local_release_latest_tag}")
 ver_re = re.compile(r"^(auto-)?v(\d+)\.(\d+)\.(\d+)$")
 ver_match = ver_re.match(local_release_latest_tag)
