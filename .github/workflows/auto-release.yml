@@ -16,7 +16,7 @@ jobs:
       has_new_data: ${{ steps.mod.outputs.has_new_data }}
       next_ver: ${{ steps.mod.outputs.next_ver }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v5
       name: Checkout
 
     - name: Check New Data
@@ -25,7 +25,7 @@ jobs:
 
     - name: Upload automatic release metadata
       if: steps.mod.outputs.has_new_data == 'true'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: AutoReleaseMetadata
         path: |
@@ -39,6 +39,6 @@ jobs:
     if: needs.prepare.outputs.has_new_data == 'true'
     permissions:
       contents: write
-    uses: ./.github/workflows/build-ndk.yml
+    uses: ./.github/workflows/build.yml
     with:
       auto_release_version: ${{ needs.prepare.outputs.next_ver }}
