@@ -1,0 +1,185 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      auto_release_version:
+        description: Version for an automatic prerelease
+        type: string
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+    branches:
+      - "master"
+      - "main"
+      - "dev/*"
+      - "feat/*"
+      - "fix/*"
+    paths-ignore:
+      - "**.md"
+      - "**.yml"
+      - ".clangd"
+      - ".clang-format"
+      - ".gitignore"
+      - "!.github/workflows/build.yml"
+  pull_request:
+    branches:
+      - "master"
+      - "main"
+      - "dev/*"
+      - "feat/*"
+      - "fix/*"
+
+env:
+  module_id: Loqolizer
+
+jobs:
+  download_resources:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+        name: Checkout
+
+      - name: Download resources
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          mkdir build
+          python3 scripts/download_translates.py build/EmbbedDataGenerated.cpp
+          ls -al
+          ls -al build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: EmbbedData
+          path: |
+            build/EmbbedDataGenerated.cpp
+            EmbbedDataReport.json
+          if-no-files-found: error
+
+  build:
+    needs: download_resources
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        game-version:
+          - "1.45.3"
+          - "1.40.8"
+
+    steps:
+      - uses: actions/checkout@v5
+        name: Checkout
+        with:
+          submodules: true
+          lfs: true
+
+      - name: Download Automatic Release Metadata
+        if: inputs.auto_release_version
+        uses: actions/download-artifact@v7
+        with:
+          name: AutoReleaseMetadata
+
+      - name: Apply Game Version
+        run: python scripts/multibuild/apply.py ${{ matrix.game-version }}
+
+      # after the game version is applied, so restore and the NDK follow that version's qpm.json
+      - name: Setup QPM
+        uses: Fernthedev/qpm-action@v1
+        with:
+          workflow_token: ${{ secrets.GITHUB_TOKEN }}
+          restore: true
+          resolve_ndk: true
+          cache: true
+
+      # puts build/EmbbedDataGenerated.cpp in place, so CMake doesn't download it again
+      - name: Download Embbed Data
+        uses: actions/download-artifact@v7
+        with:
+          name: EmbbedData
+
+      - name: Build & Create QMOD
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          qpm qmod zip
+          mv ./build/lib${module_id}.so ./build/lib${module_id}.${{ matrix.game-version }}.so
+          mv ./build/debug/lib${module_id}.so ./build/debug_lib${module_id}.${{ matrix.game-version }}.so
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: lib${{ env.module_id }}.${{ matrix.game-version }}.so
+          path: |
+            ./build/lib${{ env.module_id }}.*.so
+            ./build/debug_lib${{ env.module_id }}.*.so
+          if-no-files-found: error
+
+      - name: Upload QMOD Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.module_id }}.${{ matrix.game-version }}.qmod
+          path: ./${{ env.module_id }}.*.qmod
+          if-no-files-found: error
+
+  release:
+    needs: build
+    if: inputs.auto_release_version || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ inputs.auto_release_version && format('auto-v{0}', inputs.auto_release_version) || github.ref_name }}
+
+    steps:
+      - name: Download Automatic Release Metadata
+        if: inputs.auto_release_version
+        uses: actions/download-artifact@v7
+        with:
+          name: AutoReleaseMetadata
+
+      - name: Download QMODs
+        uses: actions/download-artifact@v7
+        with:
+          path: release_folder
+          pattern: ${{ env.module_id }}.*.qmod
+          merge-multiple: true
+
+      - name: Download Symbols
+        uses: actions/download-artifact@v7
+        with:
+          path: symbols
+          pattern: lib${{ env.module_id }}.*.so
+          merge-multiple: true
+
+      - name: Download Embbed Data
+        uses: actions/download-artifact@v7
+        with:
+          name: EmbbedData
+          path: release_folder
+
+      - name: Zip Symbols
+        run: |
+          ls -l
+          ls -l release_folder
+          ls -l symbols
+          tar zcvf release_folder/symbols.tgz symbols
+
+      # automatic releases are published as prereleases, tag releases are drafts
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ inputs.auto_release_version && format('Automatic Release v{0}', inputs.auto_release_version) || '' }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          target_commitish: ${{ github.sha }}
+          draft: ${{ !inputs.auto_release_version }}
+          prerelease: ${{ inputs.auto_release_version && 'true' || '' }}
+          generate_release_notes: true
+          body_path: ${{ inputs.auto_release_version && 'AutoReleaseChangelog.txt' || '' }}
+          fail_on_unmatched_files: true
+          files: |
+            ./release_folder/${{ env.module_id }}.*.qmod
+            ./release_folder/EmbbedDataReport.json
+            ./release_folder/symbols.tgz

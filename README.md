@@ -59,7 +59,7 @@ The maintainer in this repo can test and update the pre-release to a latest-rele
 
 ## Option 2: manual release
 
-Just push a version tag `v*.*.*`, this will trigger the action `build-ndk.yml` and generate a draft release.
+Just push a version tag `v*.*.*`, this will trigger the action `build.yml` and generate a draft release.
 
 `git tag v0.6.4 && git push origin v0.6.4`
 
