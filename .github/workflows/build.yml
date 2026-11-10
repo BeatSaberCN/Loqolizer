@@ -37,10 +37,17 @@ env:
 jobs:
   download_resources:
     runs-on: ubuntu-latest
+    outputs:
+      build_time: ${{ steps.date.outputs.BUILD_TIME }}
 
     steps:
       - uses: actions/checkout@v5
         name: Checkout
+
+      # one build time for the whole run, so every game version's qmod has the same timestamp
+      - name: Get Build Time
+        id: date
+        run: echo "BUILD_TIME=$(date -u +%Y%m%dT%H%M%SZ)" >> $GITHUB_OUTPUT
 
       - name: Download resources
         run: |
@@ -100,27 +107,37 @@ jobs:
         with:
           name: EmbbedData
 
+      # outputs are named <module_id>-<version>-bs<packageVersion>-<build time, e.g. 20261110T030707Z>,
+      # read from the generated mod.json: the qmod, lib<name>.so and debug_lib<name>.so
       - name: Build & Create QMOD
+        id: names
         run: |
           cd ${GITHUB_WORKSPACE}
-          qpm qmod zip
-          mv ./build/lib${module_id}.so ./build/lib${module_id}.${{ matrix.game-version }}.so
-          mv ./build/debug/lib${module_id}.so ./build/debug_lib${module_id}.${{ matrix.game-version }}.so
+          qpm qmod manifest
+          version=$(jq -r .version mod.json)
+          bs_version=$(jq -r .packageVersion mod.json)
+          name="${module_id}-${version}-bs${bs_version}-${{ needs.download_resources.outputs.build_time }}"
+          qpm qmod zip "$name.qmod"
+          mv ./build/lib${module_id}.so ./build/lib$name.so
+          mv ./build/debug/lib${module_id}.so ./build/debug_lib$name.so
+          echo "QMOD=$name.qmod" >> $GITHUB_OUTPUT
+          echo "LIB=lib$name.so" >> $GITHUB_OUTPUT
+          echo "DEBUG_LIB=debug_lib$name.so" >> $GITHUB_OUTPUT
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v6
         with:
-          name: lib${{ env.module_id }}.${{ matrix.game-version }}.so
+          name: ${{ steps.names.outputs.LIB }}
           path: |
-            ./build/lib${{ env.module_id }}.*.so
-            ./build/debug_lib${{ env.module_id }}.*.so
+            ./build/${{ steps.names.outputs.LIB }}
+            ./build/${{ steps.names.outputs.DEBUG_LIB }}
           if-no-files-found: error
 
       - name: Upload QMOD Artifact
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ env.module_id }}.${{ matrix.game-version }}.qmod
-          path: ./${{ env.module_id }}.*.qmod
+          name: ${{ steps.names.outputs.QMOD }}
+          path: ./${{ steps.names.outputs.QMOD }}
           if-no-files-found: error
 
   release:
@@ -143,14 +160,14 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           path: release_folder
-          pattern: ${{ env.module_id }}.*.qmod
+          pattern: ${{ env.module_id }}-*.qmod
           merge-multiple: true
 
       - name: Download Symbols
         uses: actions/download-artifact@v7
         with:
           path: symbols
-          pattern: lib${{ env.module_id }}.*.so
+          pattern: lib${{ env.module_id }}-*.so
           merge-multiple: true
 
       - name: Download Embbed Data
@@ -180,6 +197,6 @@ jobs:
           body_path: ${{ inputs.auto_release_version && 'AutoReleaseChangelog.txt' || '' }}
           fail_on_unmatched_files: true
           files: |
-            ./release_folder/${{ env.module_id }}.*.qmod
+            ./release_folder/${{ env.module_id }}-*.qmod
             ./release_folder/EmbbedDataReport.json
             ./release_folder/symbols.tgz
