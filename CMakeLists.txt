@@ -85,16 +85,27 @@ add_custom_command(
 ################# download embbed data #####################
 
 set(EMBBED_DATA_CPP   ${CMAKE_CURRENT_BINARY_DIR}/EmbbedDataGenerated.cpp)
-find_package(Python3 REQUIRED COMPONENTS Interpreter)
-add_custom_command(
-        OUTPUT ${EMBBED_DATA_CPP}
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/download_translates.py ${EMBBED_DATA_CPP}
-        DEPENDS 
-        COMMENT "Download EmbbedData"
-        VERBATIM
-)
-add_custom_target(download_embbed_data DEPENDS ${EMBBED_DATA_CPP})
-add_dependencies(${COMPILE_ID} download_embbed_data)
+
+# On CI (GitHub Actions sets CI=true), a previous step downloads the data once and the same file is used in every build,
+# so all game versions embed the same data. Don't download it again here.
+set(IS_CI "$ENV{CI}")
+if(IS_CI)
+    if(NOT EXISTS ${EMBBED_DATA_CPP})
+        message(FATAL_ERROR "CI build without EmbbedData, the workflow should provide ${EMBBED_DATA_CPP}")
+    endif()
+    message(STATUS "CI build, using provided EmbbedData: ${EMBBED_DATA_CPP}")
+else()
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+    add_custom_command(
+            OUTPUT ${EMBBED_DATA_CPP}
+            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/download_translates.py ${EMBBED_DATA_CPP}
+            DEPENDS
+            COMMENT "Download EmbbedData"
+            VERBATIM
+    )
+    add_custom_target(download_embbed_data DEPENDS ${EMBBED_DATA_CPP})
+    add_dependencies(${COMPILE_ID} download_embbed_data)
+endif()
 target_sources(${COMPILE_ID} PRIVATE ${EMBBED_DATA_CPP})
 
 ############## end of download embbed data ################
