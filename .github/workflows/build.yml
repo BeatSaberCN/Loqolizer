@@ -58,7 +58,7 @@ jobs:
           ls -al build
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: EmbbedData
           path: |
@@ -85,7 +85,7 @@ jobs:
 
       - name: Download Automatic Release Metadata
         if: inputs.auto_release_version
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: AutoReleaseMetadata
 
@@ -103,7 +103,7 @@ jobs:
 
       # puts build/EmbbedDataGenerated.cpp in place, so CMake doesn't download it again
       - name: Download Embbed Data
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: EmbbedData
 
@@ -124,20 +124,26 @@ jobs:
           echo "LIB=lib$name.so" >> $GITHUB_OUTPUT
           echo "DEBUG_LIB=debug_lib$name.so" >> $GITHUB_OUTPUT
 
+      # archive: false uploads each file as is instead of wrapping it in a zip; the artifact is named after the file
       - name: Upload Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
-          name: ${{ steps.names.outputs.LIB }}
-          path: |
-            ./build/${{ steps.names.outputs.LIB }}
-            ./build/${{ steps.names.outputs.DEBUG_LIB }}
+          path: ./build/${{ steps.names.outputs.LIB }}
+          archive: false
+          if-no-files-found: error
+
+      - name: Upload Debug Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          path: ./build/${{ steps.names.outputs.DEBUG_LIB }}
+          archive: false
           if-no-files-found: error
 
       - name: Upload QMOD Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
-          name: ${{ steps.names.outputs.QMOD }}
           path: ./${{ steps.names.outputs.QMOD }}
+          archive: false
           if-no-files-found: error
 
   release:
@@ -152,26 +158,27 @@ jobs:
     steps:
       - name: Download Automatic Release Metadata
         if: inputs.auto_release_version
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: AutoReleaseMetadata
 
       - name: Download QMODs
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           path: release_folder
           pattern: ${{ env.module_id }}-*.qmod
           merge-multiple: true
 
       - name: Download Symbols
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           path: symbols
-          pattern: lib${{ env.module_id }}-*.so
+          # matches both lib<name>.so and debug_lib<name>.so
+          pattern: "*lib${{ env.module_id }}-*.so"
           merge-multiple: true
 
       - name: Download Embbed Data
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: EmbbedData
           path: release_folder
