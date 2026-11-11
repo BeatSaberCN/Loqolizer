@@ -16,7 +16,7 @@
   "workspace": {
     "scripts": {
       "build": [
-        "./scripts/build_thirdparty.sh",
+        "cargo build --release --target aarch64-linux-android --manifest-path third_party/semver_rustlibrary/Cargo.toml --target-dir build/semver",
         "python3 ./extern/includes/mod-scripts/shared/build.py $0:?"
       ],
       "copy": [

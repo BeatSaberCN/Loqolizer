@@ -11,7 +11,10 @@ Translate your game and mods. This mod is for player. For other part, refert to 
 
 For this mod's developer...
 
-Don't forget clone submodules if you git clone this repo.
+**Pre-request**: You need install rust. Follow [the rust's official guide](https://rust-lang.org/tools/install/).
+
+And run: `rustup target add aarch64-linux-android`
+
 
 ```
 git clone --recursive https://github.com/BeatSaberCN/Loqolizer.git
