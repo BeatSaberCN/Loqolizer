@@ -35,7 +35,7 @@ This mod download translate from [ssl10n.csv](https://github.com/frto027/ssl10n.
 
 During load time, the Loqolizer find avaliable mods and load avaliable translates for them. Every translate can declare a mod version range. Therefore, modders don't need to worry about translate compatibility issues between mod versions.
 
-We use [Neargye/semver](https://github.com/Neargye/semver) to match the mod version range. Specially, version number `*` for any version. Otherwise, follow the Readme file in that library.
+We use Rust's [semver](https://docs.rs/semver/latest/semver/) library to match the mod version range. Specially, version number `*` for any version. Otherwise, follow the Readme file in that library.
 
 ## Embbed Data Version Check
 

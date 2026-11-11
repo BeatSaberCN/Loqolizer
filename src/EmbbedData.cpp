@@ -3,8 +3,9 @@
 #include "main.hpp"
 #include "scotland2/shared/loader.hpp"
 #include "SSL10n.hpp"
-#include "semver.hpp"
-
+#include "semver_rustlibrary_include.hpp"
+#include <cstddef>
+#include <cstring>
 void LangCtrl::InitEmbbedData(){
     std::string_view siraLocalizerRes = LangCtrl::siraLocalizerResource();
     if(siraLocalizerRes.size() > 0){
@@ -49,19 +50,20 @@ void LangCtrl::InitEmbbedData(){
                 // load the version
                 PaperLogger.info("Translate will load.");
             }else{
-                auto mod_version = semver::try_parse(mod.info.version);
-                if(mod_version.has_value()){
-                    semver::range_set rs;
-                    if(semver::parse(versionRange, rs)){
-                        if(!rs.contains(mod_version.value())){
-                            PaperLogger.info("Mod version {} doesn't match embbed data version {}, skip this.", mod.info.version, versionRange);
-                            continue;
-                        }
-                    }else{
-                        PaperLogger.info("Version '{}' broken in embbed data. Anyway we will load the translate.", versionData.version);
-                    }
-                }else{
+                if(mod.info.version == "" || semver_set_mod_version(mod.info.version.c_str(), mod.info.version.size()) == 0){
                     PaperLogger.info("Mod version parse failed. Anyway we will load the translate.");
+                }else{
+                    int match_result = semver_test_version_match(versionRange, strlen(versionRange));
+                    if(match_result == -1){
+                        PaperLogger.info("Version '{}' broken in embbed data. Anyway we will load the translate.", versionData.version);
+                    }else if(match_result == 0){
+                        PaperLogger.info("Mod version {} doesn't match embbed data version {}, skip this.", mod.info.version, versionRange);
+                        continue;
+                    }else if(match_result == 1){
+                        //matched
+                    }else{
+                        PaperLogger.info("Impossible result, something wrong.");
+                    }
                 }
             }
 

@@ -16,6 +16,7 @@
   "workspace": {
     "scripts": {
       "build": [
+        "./scripts/build_thirdparty.sh",
         "python3 ./extern/includes/mod-scripts/shared/build.py $0:?"
       ],
       "copy": [
