@@ -33,6 +33,18 @@ inline void RestartGame(){
 
 using SafePtrBSMLSettingsMenuTy = SafePtr<BSML::SettingsMenu>;
 
+namespace Compat {
+    template <typename T>
+    inline System::Type* TypeOf() {
+        return csTypeOf(T*);
+    }
+
+    template <typename T>
+    inline T* Cast(Il2CppObject* obj) {
+        return il2cpp_utils::cast<T>(obj);
+    }
+}
+
 
 #else
 #include "beatsaber-hook/shared/hooking.hpp"
@@ -56,5 +68,17 @@ inline void RestartGame(){
 }
 
 using SafePtrBSMLSettingsMenuTy = safe_ptr<BSML::SettingsMenu*>;
+
+namespace Compat {
+    template <typename T>
+    inline System::Type* TypeOf() {
+        return i2c::cs_type_of<T*>();
+    }
+
+    template <typename T>
+    inline T* Cast(Il2CppObject* obj) {
+        return i2c::cast<T*>(obj);
+    }
+}
 
 #endif

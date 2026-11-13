@@ -12,5 +12,10 @@
   "modFiles": ["${binary}"],
   "coverImage": "Loqolizer.png",
   "libraryFiles": [],
-  "fileCopies": []
+  "fileCopies": [
+    {
+      "name": "fonts.bundle",
+      "destination": "/sdcard/ModData/com.beatgames.beatsaber/Mods/Loqolizer/fonts.bundle"
+    }
+  ]
 }
