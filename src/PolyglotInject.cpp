@@ -32,47 +32,28 @@ MAKE_HOOK_MATCH(LocalizationInstallerHook,
         );
     }
 
+    // Match SiraLocalizer
     std::vector<PolyglotLanguageTy> toBeAdded {
-        PolyglotLanguageTy::Arabic,
-        PolyglotLanguageTy::Czech,
-        PolyglotLanguageTy::Danish,
-        PolyglotLanguageTy::Dutch,
-        // PolyglotLanguageTy::French,
-        // PolyglotLanguageTy::German,
-        PolyglotLanguageTy::Hebrew,
-        PolyglotLanguageTy::Hungarian,
         PolyglotLanguageTy::Italian,
-        // PolyglotLanguageTy::Japanese,
-        // PolyglotLanguageTy::Korean,
-        PolyglotLanguageTy::Polish,
         PolyglotLanguageTy::Portuguese_Brazil,
-        PolyglotLanguageTy::Romanian,
         PolyglotLanguageTy::Russian,
-        PolyglotLanguageTy::Simplified_Chinese,
-        // PolyglotLanguageTy::Spanish,
+        PolyglotLanguageTy::Danish,
         PolyglotLanguageTy::Swedish,
+        PolyglotLanguageTy::Dutch,
+        PolyglotLanguageTy::Simplified_Chinese,
         PolyglotLanguageTy::Traditional_Chinese,
+        PolyglotLanguageTy::Czech,
+        PolyglotLanguageTy::Hungarian,
+        PolyglotLanguageTy::Hebrew,
     };
 
+    auto supportedLanguages = self->_mainPolyglotAsset->supportedLanguages;
     for(auto lang : toBeAdded){
-        if(!self->____mainPolyglotAsset->___supportedLanguages->Contains(lang))
-            self->_mainPolyglotAsset->supportedLanguages->Add(lang);
+        if(!supportedLanguages->Contains(lang))
+            supportedLanguages->Add(lang);
     }
-    
+
     LocalizationInstallerHook(self, assets, registry);
-}
-
-
-static bool isSimplifiedChinese(StringW serializedName) {
-    if (!serializedName) {
-        return false;
-    }
-
-    std::string name = serializedName;
-    std::ranges::transform(name, name.begin(), [](unsigned char c) -> char {
-        return c == '-' ? '_' : std::tolower(c);
-    });
-    return name == "zh_ch" || name == "zh";
 }
 
 #if defined(GAME_VER_1_40_8)
@@ -98,6 +79,18 @@ static void installLangFixHook(){
 #else
 
 #include "BGLib/Polyglot/LocalizationLanguageExtensions.hpp"
+
+static bool isSimplifiedChinese(StringW serializedName) {
+    if (!serializedName) {
+        return false;
+    }
+
+    std::string name = serializedName;
+    std::ranges::transform(name, name.begin(), [](unsigned char c) -> char {
+        return c == '-' ? '_' : std::tolower(c);
+    });
+    return name == "zh_ch" || name == "zh";
+}
 
 // The game saves Simplified Chinese as "zh_CH" but expects "zh_CN" when parsing it back.
 // Anything else starting with "zh" becomes Traditional Chinese.
