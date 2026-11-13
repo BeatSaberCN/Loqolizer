@@ -38,7 +38,8 @@
       "ndk": "^27.3.13750724",
       "qmodIncludeDirs": [
         "./build",
-        "./extern/libs"
+        "./extern/libs",
+        "."
       ],
       "qmodIncludeFiles": [],
       "qmodOutput": "./Loqolizer.qmod"

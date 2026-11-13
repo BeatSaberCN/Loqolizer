@@ -10,7 +10,7 @@
   "description": "Translate your game and mods",
   "dependencies": [],
   "modFiles": ["${binary}"],
-
+  "coverImage": "Loqolizer.png",
   "libraryFiles": [],
   "fileCopies": []
 }
