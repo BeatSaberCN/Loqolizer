@@ -65,11 +65,6 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
     if(firstActivation) {
         // Create a container that has a scroll bar
         UnityEngine::GameObject* container = BSML::Lite::CreateScrollableSettingsContainer(self->get_transform());
-        
-        BSML::Lite::AddHoverHint(BSML::Lite::CreateToggle(container->get_transform(), "*"+SSL10nGen::STR::SETTHING_ENABLE_GAME_LOCALIZE(), getConfig().EnableGameLocalize.GetValue(), [](bool v){
-           getConfig().EnableGameLocalize.SetValue(v); 
-        }), SSL10nGen::STR::SETTHING_ENABLE_GAME_LOCALIZE_HINT());
-        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_HINT_RESTART_REQUIRED(), {0,0},{0,5});
 
         int old_config = getConfig().SelectedLanguage.GetValue();
         if(old_config < 0 || old_config >= languages.size()){
