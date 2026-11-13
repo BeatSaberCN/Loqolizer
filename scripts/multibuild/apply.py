@@ -23,9 +23,9 @@ if VERSION_FOLDER.parent != Path(__file__).parent:
 for f in VERSION_FOLDER.glob("*"):
     t = PROJECT_ROOT / f.name
     if f.name.endswith(".json"):
-        with f.open('r') as fp:
+        with f.open('r', encoding='utf-8') as fp:
             _tmp = json.load(fp)
-        with t.open('r') as fp:
+        with t.open('r', encoding='utf-8') as fp:
             _target = json.load(fp)
         print(f"overwriting keys from file: {f}")
         for k in _tmp:
@@ -39,8 +39,9 @@ for f in VERSION_FOLDER.glob("*"):
                 left = left[kk]
             left[keys[-1]] = right[k]
             
-        with t.open('w') as fp:
-            json.dump(_target, fp)
+        with t.open('w', encoding='utf-8') as fp:
+            json.dump(_target, fp, indent=2, ensure_ascii=False)
+            fp.write('\n')
         continue
 
     print(f"copy {f} to {t}")
