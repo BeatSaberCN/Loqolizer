@@ -2,7 +2,7 @@
 
 #include "BGLib/Polyglot/LocalizationAsyncInstaller.hpp"
 
-#if defined(GAME_VER_1_40_8) || defined(GAME_VER_1_37_0)
+#if defined(GAME_VER_1_40_8)
 #include "beatsaber-hook/shared/utils/hooking.hpp"
 #include "beatsaber-hook/shared/utils/typedefs-string.hpp"
 #include "BGLib/Polyglot/Language.hpp"

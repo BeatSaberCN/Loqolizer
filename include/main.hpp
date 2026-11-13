@@ -4,7 +4,7 @@
 // this is, and the version etc.
 #include "scotland2/shared/modloader.h"
 
-#if defined(GAME_VER_1_40_8) || defined(GAME_VER_1_37_0)
+#if defined(GAME_VER_1_40_8)
 // beatsaber-hook is a modding framework that lets us call functions and fetch
 // field values from in the game It also allows creating objects, configuration,
 // and importantly, hooking methods to modify their values

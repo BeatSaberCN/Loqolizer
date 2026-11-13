@@ -75,7 +75,7 @@ static bool isSimplifiedChinese(StringW serializedName) {
     return name == "zh_ch" || name == "zh";
 }
 
-#if defined(GAME_VER_1_40_8) || defined(GAME_VER_1_37_0)
+#if defined(GAME_VER_1_40_8)
 #include "BGLib/Polyglot/LanguageExtensions.hpp"
 // The game saves both Chinese as "zh" and both Portuguese as "pt", which parse back as Simplified Chinese and
 // Portuguese. This make sure they are saved correctly.

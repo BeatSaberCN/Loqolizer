@@ -8,10 +8,7 @@ project(${COMPILE_ID})
 
 # C++ standard
 
-if(
-        (TARGET_GAME_VERSION STREQUAL "1_37_0") OR
-        (TARGET_GAME_VERSION STREQUAL "1_40_8")
-    )
+if(TARGET_GAME_VERSION STREQUAL "1_40_8")
     set(CMAKE_CXX_STANDARD 20)
     set(CMAKE_CXX_STANDARD_REQUIRED 20)
 else()
