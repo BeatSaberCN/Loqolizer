@@ -3,6 +3,7 @@
 #include "GameCompat.hpp"
 #include "main.hpp"
 
+#include "bsml/shared/BSML/MainThreadScheduler.hpp"
 #include "lapiz/shared/zenject/Zenjector.hpp"
 
 #include "BGLib/Polyglot/Localization.hpp"
@@ -133,30 +134,35 @@ namespace LangCtrl::SiraLocalizer::UI {
         INSTALL_HOOK(PaperLogger, LoadFontFaceHook);
 #endif
 
-        // The menu is installed after the game has set up Polyglot and its settings, both at startup and after a soft
-        // restart, which is how the language changes
-        Lapiz::Zenject::Zenjector::Get()->Install(Lapiz::Zenject::Location::Menu, [this](::Zenject::DiContainer*) { OnMenuInstalled(); });
-    }
-
-    void FontLoader::OnMenuInstalled() {
-        try {
-            if (!_sceneLoadedSubscribed) {
+        // BSML creates its scheduler in its own late_load, and Unity is ready by the next frame.
+        BSML::MainThreadScheduler::ScheduleNextFrame([this]() {
+            try {
                 // Fonts that load with a later scene only get their fallbacks here
                 SceneManager::add_sceneLoaded(custom_types::MakeDelegate<Events::UnityAction_2<Scene, LoadSceneMode>*>(
                     std::function([this](Scene, LoadSceneMode) { OnSceneLoaded(); })));
-                _sceneLoadedSubscribed = true;
-            }
 
-            // The fonts stay loaded across soft restarts, like the game's fonts they're added to
-            if (_fallbackFontAssets.empty()) {
+                // The fonts are needed before the menu, e.g. on the health and safety warning. Without them, Unicode
+                // crashes the game when it has to draw the missing characters, at least for Hebrew.
                 PaperLogger.info("Loading fonts");
                 LoadFallbackFonts();
+                SetCjkFace(kJapaneseFace);
+                ApplyFallbackFonts();
+            } catch (std::exception const& e) {
+                PaperLogger.error("Failed to load fonts: {}", e.what());
             }
+        });
 
+        // The menu is installed after the game has set up Polyglot and its settings, both at startup and after a soft
+        // restart, which is how the language changes
+        Lapiz::Zenject::Zenjector::Get()->Install(Lapiz::Zenject::Location::Menu, [this](::Zenject::DiContainer*) { OnMenuInstalling(); });
+    }
+
+    void FontLoader::OnMenuInstalling() {
+        try {
             SetCjkFace(GetCjkFace());
             ApplyFallbackFonts();
         } catch (std::exception const& e) {
-            PaperLogger.error("Failed to load fonts: {}", e.what());
+            PaperLogger.error("Failed to apply fallback fonts: {}", e.what());
         }
     }
 
@@ -233,7 +239,6 @@ namespace LangCtrl::SiraLocalizer::UI {
     }
 
     void FontLoader::ApplyFallbackFonts() {
-        // Nothing to add before the menu has loaded
         if (_fallbackFontAssets.empty()) {
             return;
         }

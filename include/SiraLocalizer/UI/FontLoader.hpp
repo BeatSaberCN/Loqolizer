@@ -15,7 +15,7 @@ namespace LangCtrl::SiraLocalizer::UI {
         void Initialize();
 
        private:
-        void OnMenuInstalled();
+        void OnMenuInstalling();
         void OnSceneLoaded();
         void LoadFallbackFonts();
         void LoadFontAsset(UnityEngine::AssetBundle* assetBundle, std::string_view name);
@@ -27,11 +27,10 @@ namespace LangCtrl::SiraLocalizer::UI {
         void ReplaceCjkFallback(TMPro::TMP_FontAsset* fontAsset, TMPro::TMP_FontAsset* cjkFontAsset);
 #endif
 
-        bool _sceneLoadedSubscribed = false;
         std::vector<UnityW<TMPro::TMP_FontAsset>> _fallbackFontAssets;
         // Instance ids, because the address of a destroyed font can be reused.
         std::unordered_set<int> _processedFontAssets;
-        // The CJK fallback for the language, set when the menu is installed
+        // The CJK fallback for the language, which is only known once the menu is being installed
         UnityW<TMPro::TMP_FontAsset> _cjkFontAsset;
     };
 }
