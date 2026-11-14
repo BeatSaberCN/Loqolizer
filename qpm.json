@@ -91,6 +91,11 @@
       "id": "flamingo",
       "versionRange": "^1.2.1",
       "additionalData": {}
+    },
+    {
+      "id": "web-utils",
+      "versionRange": "^0.6.10",
+      "additionalData": {}
     }
   ]
 }
