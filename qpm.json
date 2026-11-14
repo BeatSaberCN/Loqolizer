@@ -6,7 +6,7 @@
   "info": {
     "name": "Loqolizer",
     "id": "Loqolizer",
-    "version": "0.7.0",
+    "version": "0.7.2",
     "url": null,
     "additionalData": {
       "overrideSoName": "libLoqolizer.so",
