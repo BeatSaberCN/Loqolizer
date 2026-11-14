@@ -1,5 +1,6 @@
 {
   "workspace.qmodOutput": "Loqolizer.1_40_8.qmod",
+  "workspace.qmodIncludeDirs": ["./build", "./extern/libs", "./fonts/1.40.8", "."],
   "workspace.ndk": "27.3.13750724",
   "dependencies": [
     {

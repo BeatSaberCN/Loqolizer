@@ -38,6 +38,7 @@
     "qmodIncludeDirs": [
       "./build",
       "./extern/libs",
+      "./fonts/1.40.8",
       "."
     ],
     "qmodIncludeFiles": [],

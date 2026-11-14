@@ -1,5 +1,6 @@
 {
   "workspace.qmodOutput": "Loqolizer.1_45_3.qmod",
+  "workspace.qmodIncludeDirs": ["./build", "./extern/libs", "./fonts/1.45.3", "."],
   "workspace.ndk": "29.0.14206865",
   "dependencies": [
     {
@@ -31,7 +32,7 @@
     },
     {
       "id": "bsml",
-      "versionRange": "^0.6.5",
+      "versionRange": "^0.6.7",
       "additionalData": {}
     },
     {

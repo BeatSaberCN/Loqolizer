@@ -17,9 +17,13 @@
 
 #include "flamingo/shared/installer.hpp"
 
+#include "SiraLocalizer/UI/FontLoader.hpp"
+
 static modloader::ModInfo modInfo{MOD_ID, VERSION, 0};
 // Stores the ID and version of our mod, and is sent to
 // the modloader upon startup
+
+static LangCtrl::SiraLocalizer::UI::FontLoader fontLoader;
 
 static void SkipPolyglotInjectLateLoad() noexcept {}
 
@@ -95,6 +99,10 @@ MOD_EXTERN_FUNC void late_load() noexcept {
   PaperLogger.info("Init GameHooks...");
 
   LangCtrl::GameHooks::Init();
+
+  PaperLogger.info("Init FontLoader...");
+
+  fontLoader.Initialize();
 
   PaperLogger.info("Done");
 
