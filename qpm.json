@@ -40,7 +40,7 @@
         "python3 ./scripts/setup_protobuf.py",
         "cmake -S third_party/protobuf -B third_party/protobuf_build -G Ninja -DCMAKE_INSTALL_PREFIX=third_party/protobuf_install -DCMAKE_BUILD_TYPE=Release",
         "cmake --build third_party/protobuf_build --parallel 10",
-        "cmake --install build/protobuf"
+        "cmake --install third_party/protobuf_build"
       ]
     },
     "ndk": "^27.3.13750724",
