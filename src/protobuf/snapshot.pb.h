@@ -91,6 +91,14 @@ extern const ::google::protobuf::internal::ClassDataFull Snapshot_ModsEntry_DoNo
 #else
 extern const Snapshot_ModsEntry_DoNotUseGlobalsTypeInternal Snapshot_ModsEntry_DoNotUse_globals_;
 #endif  // PROTOBUF_MESSAGE_GLOBALS
+class Snapshot_PcModsEntry_DoNotUse;
+struct Snapshot_PcModsEntry_DoNotUseGlobalsTypeInternal;
+#ifndef PROTOBUF_MESSAGE_GLOBALS
+extern Snapshot_PcModsEntry_DoNotUseGlobalsTypeInternal Snapshot_PcModsEntry_DoNotUse_globals_;
+extern const ::google::protobuf::internal::ClassDataFull Snapshot_PcModsEntry_DoNotUse_class_data_;
+#else
+extern const Snapshot_PcModsEntry_DoNotUseGlobalsTypeInternal Snapshot_PcModsEntry_DoNotUse_globals_;
+#endif  // PROTOBUF_MESSAGE_GLOBALS
 namespace google {
 namespace protobuf {
 template <>
@@ -204,7 +212,7 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED SnapshotInformation final : public 
   [[nodiscard]] static const SnapshotInformation& default_instance() {
     return *::google::protobuf::internal::MessageGlobalsBase::ToDefaultInstance<SnapshotInformation>(&SnapshotInformation_globals_);
   }
-  static constexpr int kIndexInFileMessages = 4;
+  static constexpr int kIndexInFileMessages = 5;
   friend void swap(SnapshotInformation& a, SnapshotInformation& b) { a.Swap(&b); }
   inline void Swap(SnapshotInformation* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -383,6 +391,56 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED SnapshotInformation final : public 
 };
 // -------------------------------------------------------------------
 
+class PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED Snapshot_PcModsEntry_DoNotUse final
+    : public ::google::protobuf::internal::MapEntry<::std::string, ::std::string,
+                             ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+                             ::google::protobuf::internal::WireFormatLite::TYPE_BYTES> {
+  using Super_ =
+      ::google::protobuf::internal::MapEntry<::std::string, ::std::string,
+                      ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+                      ::google::protobuf::internal::WireFormatLite::TYPE_BYTES>;
+
+ public:
+  Snapshot_PcModsEntry_DoNotUse();
+  template <typename = void>
+  explicit constexpr Snapshot_PcModsEntry_DoNotUse(::google::protobuf::internal::ConstantInitialized,
+                           const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL
+                               class_data);
+  explicit Snapshot_PcModsEntry_DoNotUse(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr const void* PROTOBUF_NONNULL internal_message_globals() {
+    return &Snapshot_PcModsEntry_DoNotUse_globals_;
+  }
+
+
+  static constexpr auto InternalGenerateClassData_(
+      const ::google::protobuf::MessageLite& prototype,
+      const ::google::protobuf::internal::TcParseTableBase* PROTOBUF_NULLABLE tc_table = nullptr);
+
+ private:
+  friend class ::google::protobuf::MessageLite;
+  friend struct ::TableStruct_snapshot_2eproto;
+  friend ::google::protobuf::internal::PrivateAccess;
+  friend Snapshot_PcModsEntry_DoNotUseGlobalsTypeInternal;
+
+  using ParseTableT_ =
+      ::google::protobuf::internal::TcParseTable<1, 2,
+                          0, 32,
+                          2>;
+  static constexpr ParseTableT_ InternalGenerateParseTable_(
+      const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL class_data);
+  friend class ::google::protobuf::internal::TcParser;
+  #ifndef PROTOBUF_MESSAGE_GLOBALS
+  static const ParseTableT_ _table_;
+  #endif
+
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+};
+// -------------------------------------------------------------------
+
 class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED ModData final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:ModData) */ {
   using Super_ = ::google::protobuf::Message;
@@ -441,7 +499,7 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED ModData final : public ::google::pr
   [[nodiscard]] static const ModData& default_instance() {
     return *::google::protobuf::internal::MessageGlobalsBase::ToDefaultInstance<ModData>(&ModData_globals_);
   }
-  static constexpr int kIndexInFileMessages = 3;
+  static constexpr int kIndexInFileMessages = 4;
   friend void swap(ModData& a, ModData& b) { a.Swap(&b); }
   inline void Swap(ModData* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -664,7 +722,7 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED Mod final : public ::google::protob
   [[nodiscard]] static const Mod& default_instance() {
     return *::google::protobuf::internal::MessageGlobalsBase::ToDefaultInstance<Mod>(&Mod_globals_);
   }
-  static constexpr int kIndexInFileMessages = 2;
+  static constexpr int kIndexInFileMessages = 3;
   friend void swap(Mod& a, Mod& b) { a.Swap(&b); }
   inline void Swap(Mod* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -959,7 +1017,7 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED Snapshot final : public ::google::p
   [[nodiscard]] static const Snapshot& default_instance() {
     return *::google::protobuf::internal::MessageGlobalsBase::ToDefaultInstance<Snapshot>(&Snapshot_globals_);
   }
-  static constexpr int kIndexInFileMessages = 1;
+  static constexpr int kIndexInFileMessages = 2;
   friend void swap(Snapshot& a, Snapshot& b) { a.Swap(&b); }
   inline void Swap(Snapshot* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1054,6 +1112,7 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED Snapshot final : public ::google::p
     kDisplayMessageFieldNumber = 2,
     kTimestampFieldNumber = 1,
     kModsFieldNumber = 4,
+    kPcModsFieldNumber = 6,
   };
   // optional bytes baseGameCsvTranslation = 3;
   [[nodiscard]] bool has_basegamecsvtranslation() const;
@@ -1126,12 +1185,27 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED Snapshot final : public ::google::p
   ::google::protobuf::Map<::std::string, ::Mod>* PROTOBUF_NONNULL _internal_mutable_mods();
 
   public:
+  // map<string, bytes> pcMods = 6;
+  [[nodiscard]] int pcmods_size() const;
+  private:
+  int _internal_pcmods_size() const;
+
+  public:
+  void clear_pcmods() ;
+  [[nodiscard]] const ::google::protobuf::Map<::std::string, ::std::string>& pcmods() const;
+  [[nodiscard]] ::google::protobuf::Map<::std::string, ::std::string>* PROTOBUF_NONNULL mutable_pcmods();
+
+  private:
+  const ::google::protobuf::Map<::std::string, ::std::string>& _internal_pcmods() const;
+  ::google::protobuf::Map<::std::string, ::std::string>* PROTOBUF_NONNULL _internal_mutable_pcmods();
+
+  public:
   // @@protoc_insertion_point(class_scope:Snapshot)
  private:
   class _Internal;
   using ParseTableT_ =
-      ::google::protobuf::internal::TcParseTable<3, 5,
-                          3, 31,
+      ::google::protobuf::internal::TcParseTable<3, 6,
+                          4, 37,
                           2>;
   static constexpr ParseTableT_ InternalGenerateParseTable_(
       const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL class_data);
@@ -1164,6 +1238,7 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED Snapshot final : public ::google::p
     ::SnapshotInformation* PROTOBUF_NULLABLE displaymessage_;
     ::uint64_t timestamp_;
     ::google::protobuf::internal::MapField<Snapshot_ModsEntry_DoNotUse, ::std::string, ::Mod> mods_;
+    ::google::protobuf::internal::MapField<Snapshot_PcModsEntry_DoNotUse, ::std::string, ::std::string> pcmods_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1182,6 +1257,8 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED Snapshot final : public ::google::p
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -1471,6 +1548,37 @@ inline void Snapshot::set_allocated_modshashes(::std::string* PROTOBUF_NULLABLE 
     _impl_.modshashes_.Set("", GetArena());
   }
   // @@protoc_insertion_point(field_set_allocated:Snapshot.modsHashes)
+}
+
+// map<string, bytes> pcMods = 6;
+inline int Snapshot::_internal_pcmods_size() const {
+  return _internal_pcmods().size();
+}
+inline int Snapshot::pcmods_size() const {
+  return _internal_pcmods_size();
+}
+inline void Snapshot::clear_pcmods() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pcmods_.Clear();
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+}
+inline const ::google::protobuf::Map<::std::string, ::std::string>& Snapshot::_internal_pcmods() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.pcmods_.GetMap();
+}
+inline const ::google::protobuf::Map<::std::string, ::std::string>& Snapshot::pcmods() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_map:Snapshot.pcMods)
+  return _internal_pcmods();
+}
+inline ::google::protobuf::Map<::std::string, ::std::string>* PROTOBUF_NONNULL Snapshot::_internal_mutable_pcmods() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.pcmods_.MutableMap();
+}
+inline ::google::protobuf::Map<::std::string, ::std::string>* PROTOBUF_NONNULL Snapshot::mutable_pcmods()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  // @@protoc_insertion_point(field_mutable_map:Snapshot.pcMods)
+  return _internal_mutable_pcmods();
 }
 
 // -------------------------------------------------------------------

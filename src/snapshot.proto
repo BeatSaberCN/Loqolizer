@@ -6,6 +6,7 @@ message Snapshot{
     optional bytes baseGameCsvTranslation = 3;
     map<string /*id*/, Mod> mods = 4;
     string modsHashes = 5;
+    map<string /*id*/, bytes> pcMods = 6;
 }
 
 message Mod{

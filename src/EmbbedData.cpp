@@ -45,10 +45,14 @@ void LangCtrl::LoadSnapshot(Snapshot&& data){
         SSL10n::Database::PolyglotFormat::AddCSVContent(base_translate.data(), base_translate.size());
     }
     
-    // TODO
-    // auto siraRes = LangCtrl::siraLocalizerModResource();
-    // SSL10n::Database::PolyglotFormat::AddCSVContent(siraRes.data(), siraRes.size());
 
+    {
+        auto sira = snapshot.pcmods().find("SiraLocalizer");
+        if(sira != snapshot.pcmods().end()){
+            SSL10n::Database::PolyglotFormat::AddCSVContent(sira->second.data(), sira->second.size());
+        }
+    }
+    
     auto loaded_mods = modloader::get_loaded();
     auto metadata = snapshot.mods().find("ModMetadata");
     if(metadata != snapshot.mods().end()){

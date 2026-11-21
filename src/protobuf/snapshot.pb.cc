@@ -31,6 +31,8 @@ PROTOBUF_CONSTINIT ::google::protobuf::internal::ReflectionData
     file_reflection_data[] = {
         // ::Snapshot_ModsEntry_DoNotUse
         {&::_pbi::kDescriptorMethods, &::descriptor_table_snapshot_2eproto, /* tracker*/ nullptr,},
+        // ::Snapshot_PcModsEntry_DoNotUse
+        {&::_pbi::kDescriptorMethods, &::descriptor_table_snapshot_2eproto, /* tracker*/ nullptr,},
         // ::Snapshot
         {&::_pbi::kDescriptorMethods, &::descriptor_table_snapshot_2eproto, /* tracker*/ nullptr,},
         // ::Mod
@@ -143,7 +145,7 @@ constexpr auto SnapshotInformation::InternalGenerateClassData_(
           false,
       },
 #ifdef PROTOBUF_MESSAGE_GLOBALS
-      &file_reflection_data[4],
+      &file_reflection_data[5],
 #else   // !PROTOBUF_MESSAGE_GLOBALS
       &::_pbi::kDescriptorMethods,
       &descriptor_table_snapshot_2eproto,
@@ -190,6 +192,141 @@ const ::_pbi::ClassData* SnapshotInformation_get_class_data() {
   return SnapshotInformation_globals_.GetClassData();
 #else
   return SnapshotInformation_class_data_.base();
+#endif  // PROTOBUF_MESSAGE_GLOBALS
+}
+}  // namespace
+#endif  // PROTOBUF_CUSTOM_VTABLE
+constexpr Snapshot_PcModsEntry_DoNotUse::ParseTableT_ Snapshot_PcModsEntry_DoNotUse::InternalGenerateParseTable_(const ::_pbi::ClassData* class_data) {
+  return ParseTableT_{
+    {
+      PROTOBUF_FIELD_OFFSET(Snapshot_PcModsEntry_DoNotUse, _impl_._has_bits_),
+      0, // no _extensions_
+      2, 8,  // max_field_number, fast_idx_mask
+      offsetof(ParseTableT_, field_lookup_table),
+      4294967292,  // skipmap
+      offsetof(ParseTableT_, field_entries),
+      2,  // num_field_entries
+      0,  // num_aux_entries
+      offsetof(ParseTableT_, field_names),  // no aux_entries
+      class_data,
+      nullptr,  // post_loop_handler
+      ::_pbi::TcParser::DiscardEverythingFallback,  // fallback
+      #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+      ::_pbi::TcParser::GetTable<::Snapshot_PcModsEntry_DoNotUse>(),  // to_prefetch
+      #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+    }, {{
+      // bytes value = 2;
+      {::_pbi::TcParser::FastBS1,
+       {18, 1, 0,
+        PROTOBUF_FIELD_OFFSET(Snapshot_PcModsEntry_DoNotUse, _impl_.value_)}},
+      // string key = 1;
+      {::_pbi::TcParser::FastUS1,
+       {10, 0, 0,
+        PROTOBUF_FIELD_OFFSET(Snapshot_PcModsEntry_DoNotUse, _impl_.key_)}},
+    }}, {{
+      65535, 65535
+    }}, {{
+      // string key = 1;
+      {PROTOBUF_FIELD_OFFSET(Snapshot_PcModsEntry_DoNotUse, _impl_.key_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+      // bytes value = 2;
+      {PROTOBUF_FIELD_OFFSET(Snapshot_PcModsEntry_DoNotUse, _impl_.value_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kBytes | ::_fl::kRepAString)},
+    }},
+    // no aux_entries
+    {{
+      "\24\3\0\0\0\0\0\0"
+      "Snapshot.PcModsEntry"
+      "key"
+    }},
+  };
+}
+
+template <typename>
+constexpr Snapshot_PcModsEntry_DoNotUse::Snapshot_PcModsEntry_DoNotUse(::_pbi::ConstantInitialized,
+                       const ::_pbi::ClassData* PROTOBUF_NONNULL class_data)
+    : Super_(
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+          class_data
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      ) {
+}
+inline void* PROTOBUF_NONNULL Snapshot_PcModsEntry_DoNotUse::PlacementNew_(
+    const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena) {
+  return ::new (mem) Snapshot_PcModsEntry_DoNotUse(arena);
+}
+constexpr auto Snapshot_PcModsEntry_DoNotUse::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::CopyInit(sizeof(Snapshot_PcModsEntry_DoNotUse), alignof(Snapshot_PcModsEntry_DoNotUse));
+}
+constexpr auto Snapshot_PcModsEntry_DoNotUse::InternalGenerateClassData_(
+    const MessageLite& prototype,
+    const ::google::protobuf::internal::TcParseTableBase* tc_table) {
+  return ::google::protobuf::internal::ClassDataFull{
+      ::google::protobuf::internal::ClassData{
+          &prototype,
+#ifndef PROTOBUF_MESSAGE_GLOBALS
+          &_table_.header,
+#else
+          tc_table,
+#endif
+          nullptr,  // IsInitialized
+          &Snapshot_PcModsEntry_DoNotUse::MergeImpl,
+          Super_::GetNewImpl<Snapshot_PcModsEntry_DoNotUse>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+          &Snapshot_PcModsEntry_DoNotUse::SharedDtor,
+          static_cast<void (::google::protobuf::MessageLite::*)()>(&Snapshot_PcModsEntry_DoNotUse::ClearImpl),
+              Super_::ByteSizeLongImpl, Super_::_InternalSerializeImpl,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          PROTOBUF_FIELD_OFFSET(Snapshot_PcModsEntry_DoNotUse, _impl_._cached_size_),
+          false,
+      },
+#ifdef PROTOBUF_MESSAGE_GLOBALS
+      &file_reflection_data[1],
+#else   // !PROTOBUF_MESSAGE_GLOBALS
+      &::_pbi::kDescriptorMethods,
+      &descriptor_table_snapshot_2eproto,
+      nullptr,  // tracker
+#endif  // PROTOBUF_MESSAGE_GLOBALS
+  };
+}
+struct Snapshot_PcModsEntry_DoNotUseGlobalsTypeInternal : ::_pbi::MessageGlobalsBase {
+  constexpr Snapshot_PcModsEntry_DoNotUseGlobalsTypeInternal()
+      :
+#ifndef PROTOBUF_MESSAGE_GLOBALS
+        _default(::_pbi::ConstantInitialized{},
+                 Snapshot_PcModsEntry_DoNotUse_class_data_.base())
+#else   // !PROTOBUF_MESSAGE_GLOBALS
+        MessageGlobalsBase(Snapshot_PcModsEntry_DoNotUse::InternalGenerateClassData_(
+            _default, &Snapshot_PcModsEntry_DoNotUse_globals_._table.header)),
+        _default(::_pbi::ConstantInitialized{}, GetClassData()),
+        _table(::_pbi::PrivateAccess::GenerateParseTable<Snapshot_PcModsEntry_DoNotUse>(
+            GetClassData()))
+#endif  // PROTOBUF_MESSAGE_GLOBALS
+  {
+  }
+  ~Snapshot_PcModsEntry_DoNotUseGlobalsTypeInternal() {}
+  union {
+    alignas(::_pbi::kMaxMessageAlignment) Snapshot_PcModsEntry_DoNotUse _default;
+  };
+#ifdef PROTOBUF_MESSAGE_GLOBALS
+  decltype(::_pbi::PrivateAccess::GenerateParseTable<Snapshot_PcModsEntry_DoNotUse>(
+      ::std::declval<const ::_pbi::ClassData*>())) _table;
+#endif
+};
+#ifdef PROTOBUF_MESSAGE_GLOBALS
+static_assert(PROTOBUF_FIELD_OFFSET(Snapshot_PcModsEntry_DoNotUseGlobalsTypeInternal, _default) ==
+              ::_pbi::MessageGlobalsBase::OffsetToDefault());
+#endif  // PROTOBUF_MESSAGE_GLOBALS
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PROTOBUF_MESSAGE_GLOBALS_CONST Snapshot_PcModsEntry_DoNotUseGlobalsTypeInternal Snapshot_PcModsEntry_DoNotUse_globals_
+        PROTOBUF_MESSAGE_GLOBALS_SECTION(.data.rel.ro);
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+namespace {
+const ::_pbi::ClassData* Snapshot_PcModsEntry_DoNotUse_get_class_data() {
+#ifdef PROTOBUF_MESSAGE_GLOBALS
+  return Snapshot_PcModsEntry_DoNotUse_globals_.GetClassData();
+#else
+  return Snapshot_PcModsEntry_DoNotUse_class_data_.base();
 #endif  // PROTOBUF_MESSAGE_GLOBALS
 }
 }  // namespace
@@ -297,7 +434,7 @@ constexpr auto ModData::InternalGenerateClassData_(
           false,
       },
 #ifdef PROTOBUF_MESSAGE_GLOBALS
-      &file_reflection_data[3],
+      &file_reflection_data[4],
 #else   // !PROTOBUF_MESSAGE_GLOBALS
       &::_pbi::kDescriptorMethods,
       &descriptor_table_snapshot_2eproto,
@@ -470,7 +607,7 @@ constexpr auto Mod::InternalGenerateClassData_(
           false,
       },
 #ifdef PROTOBUF_MESSAGE_GLOBALS
-      &file_reflection_data[2],
+      &file_reflection_data[3],
 #else   // !PROTOBUF_MESSAGE_GLOBALS
       &::_pbi::kDescriptorMethods,
       &descriptor_table_snapshot_2eproto,
@@ -674,12 +811,12 @@ constexpr Snapshot::ParseTableT_ Snapshot::InternalGenerateParseTable_(const ::_
     {
       PROTOBUF_FIELD_OFFSET(Snapshot, _impl_._has_bits_),
       0, // no _extensions_
-      5, 56,  // max_field_number, fast_idx_mask
+      6, 56,  // max_field_number, fast_idx_mask
       offsetof(ParseTableT_, field_lookup_table),
-      4294967264,  // skipmap
+      4294967232,  // skipmap
       offsetof(ParseTableT_, field_entries),
-      5,  // num_field_entries
-      3,  // num_aux_entries
+      6,  // num_field_entries
+      4,  // num_aux_entries
       offsetof(ParseTableT_, aux_entries),
       class_data,
       nullptr,  // post_loop_handler
@@ -711,7 +848,12 @@ constexpr Snapshot::ParseTableT_ Snapshot::InternalGenerateParseTable_(const ::_
       {::_pbi::TcParser::FastUS1,
        {42, 1, 0,
         PROTOBUF_FIELD_OFFSET(Snapshot, _impl_.modshashes_)}},
-      {::_pbi::TcParser::MiniParse, {}},
+      // map<string, bytes> pcMods = 6;
+      {::_pbi::TcParser::FastMiniParse1,
+       {50, ::uint8_t{7},
+        ::uint32_t{
+            PROTOBUF_FIELD_OFFSET(ParseTableT_, field_entries) +
+            sizeof(_pbi::TcParseTableBase::FieldEntry) * 5}}},
       {::_pbi::TcParser::MiniParse, {}},
     }}, {{
       65535, 65535
@@ -726,6 +868,8 @@ constexpr Snapshot::ParseTableT_ Snapshot::InternalGenerateParseTable_(const ::_
       {PROTOBUF_FIELD_OFFSET(Snapshot, _impl_.mods_), _Internal::kHasBitsOffset + 4, 1, (0 | ::_fl::kFcRepeated | ::_fl::kMap)},
       // string modsHashes = 5;
       {PROTOBUF_FIELD_OFFSET(Snapshot, _impl_.modshashes_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+      // map<string, bytes> pcMods = 6;
+      {PROTOBUF_FIELD_OFFSET(Snapshot, _impl_.pcmods_), _Internal::kHasBitsOffset + 5, 3, (0 | ::_fl::kFcRepeated | ::_fl::kMap)},
     }},
     {{
         #ifndef PROTOBUF_MESSAGE_GLOBALS
@@ -740,12 +884,15 @@ constexpr Snapshot::ParseTableT_ Snapshot::InternalGenerateParseTable_(const ::_
         #else
         {::_pbi::FieldAuxMessageGlobals(), &::Mod_globals_},
         #endif
+        {::_pbi::TcParser::GetMapAuxInfo(
+            1, 0, 9, 12, 0)},
     }},
     {{
-      "\10\0\0\0\4\12\0\0"
+      "\10\0\0\0\4\12\6\0"
       "Snapshot"
       "mods"
       "modsHashes"
+      "pcMods"
     }},
   };
 }
@@ -765,6 +912,11 @@ inline constexpr Snapshot::Impl_::Impl_(
         mods_ { visibility, ::_pbi::InternalMetadataOffset::Build<
             ::Snapshot,
             PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_.mods_)>()
+         }
+        ,
+        pcmods_ { visibility, ::_pbi::InternalMetadataOffset::Build<
+            ::Snapshot,
+            PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_.pcmods_)>()
          }
      {}
 
@@ -809,7 +961,7 @@ constexpr auto Snapshot::InternalGenerateClassData_(
           false,
       },
 #ifdef PROTOBUF_MESSAGE_GLOBALS
-      &file_reflection_data[1],
+      &file_reflection_data[2],
 #else   // !PROTOBUF_MESSAGE_GLOBALS
       &::_pbi::kDescriptorMethods,
       &descriptor_table_snapshot_2eproto,
@@ -875,18 +1027,27 @@ const ::uint32_t
         0,
         1,
         0x081, // bitmap
+        PROTOBUF_FIELD_OFFSET(::Snapshot_PcModsEntry_DoNotUse, _impl_._has_bits_),
+        5, // hasbit index offset
+        PROTOBUF_FIELD_OFFSET(::Snapshot_PcModsEntry_DoNotUse, _impl_.key_),
+        PROTOBUF_FIELD_OFFSET(::Snapshot_PcModsEntry_DoNotUse, _impl_.value_),
+        0,
+        1,
+        0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_._has_bits_),
-        8, // hasbit index offset
+        9, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_.timestamp_),
         PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_.displaymessage_),
         PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_.basegamecsvtranslation_),
         PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_.mods_),
         PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_.modshashes_),
+        PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_.pcmods_),
         3,
         2,
         0,
         4,
         1,
+        5,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::Mod, _impl_._has_bits_),
         6, // hasbit index offset
@@ -915,14 +1076,16 @@ const ::uint32_t
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, sizeof(::Snapshot_ModsEntry_DoNotUse)},
-        {7, sizeof(::Snapshot)},
-        {20, sizeof(::Mod)},
-        {29, sizeof(::ModData)},
-        {36, sizeof(::SnapshotInformation)},
+        {7, sizeof(::Snapshot_PcModsEntry_DoNotUse)},
+        {14, sizeof(::Snapshot)},
+        {29, sizeof(::Mod)},
+        {38, sizeof(::ModData)},
+        {45, sizeof(::SnapshotInformation)},
 };
 static const ::_pbi::MessageGlobalsBase* PROTOBUF_NONNULL const
     file_message_globals[] = {
         &::Snapshot_ModsEntry_DoNotUse_globals_,
+        &::Snapshot_PcModsEntry_DoNotUse_globals_,
         &::Snapshot_globals_,
         &::Mod_globals_,
         &::ModData_globals_,
@@ -930,32 +1093,34 @@ static const ::_pbi::MessageGlobalsBase* PROTOBUF_NONNULL const
 };
 const char descriptor_table_protodef_snapshot_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
-    "\n\016snapshot.proto\"\215\002\n\010Snapshot\022\021\n\ttimesta"
+    "\n\016snapshot.proto\"\343\002\n\010Snapshot\022\021\n\ttimesta"
     "mp\030\001 \001(\004\0221\n\016displayMessage\030\002 \001(\0132\024.Snaps"
     "hotInformationH\000\210\001\001\022#\n\026baseGameCsvTransl"
     "ation\030\003 \001(\014H\001\210\001\001\022!\n\004mods\030\004 \003(\0132\023.Snapsho"
-    "t.ModsEntry\022\022\n\nmodsHashes\030\005 \001(\t\0321\n\tModsE"
-    "ntry\022\013\n\003key\030\001 \001(\t\022\023\n\005value\030\002 \001(\0132\004.Mod:\002"
-    "8\001B\021\n\017_displayMessageB\031\n\027_baseGameCsvTra"
-    "nslation\"8\n\003Mod\022\n\n\002id\030\001 \001(\t\022\014\n\004name\030\002 \001("
-    "\t\022\027\n\005datas\030\003 \003(\0132\010.ModData\"/\n\007ModData\022\017\n"
-    "\007version\030\001 \001(\t\022\023\n\013csv_content\030\002 \001(\014\"\204\001\n\023"
-    "SnapshotInformation\022\017\n\007message\030\001 \001(\t\0226\n\010"
-    "position\030\002 \001(\0162$.SnapshotInformation.Dis"
-    "playPosition\"$\n\017DisplayPosition\022\021\n\rSI_DT"
-    "_IN_MENU\020\000b\006proto3"
+    "t.ModsEntry\022\022\n\nmodsHashes\030\005 \001(\t\022%\n\006pcMod"
+    "s\030\006 \003(\0132\025.Snapshot.PcModsEntry\0321\n\tModsEn"
+    "try\022\013\n\003key\030\001 \001(\t\022\023\n\005value\030\002 \001(\0132\004.Mod:\0028"
+    "\001\032-\n\013PcModsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002"
+    " \001(\014:\0028\001B\021\n\017_displayMessageB\031\n\027_baseGame"
+    "CsvTranslation\"8\n\003Mod\022\n\n\002id\030\001 \001(\t\022\014\n\004nam"
+    "e\030\002 \001(\t\022\027\n\005datas\030\003 \003(\0132\010.ModData\"/\n\007ModD"
+    "ata\022\017\n\007version\030\001 \001(\t\022\023\n\013csv_content\030\002 \001("
+    "\014\"\204\001\n\023SnapshotInformation\022\017\n\007message\030\001 \001"
+    "(\t\0226\n\010position\030\002 \001(\0162$.SnapshotInformati"
+    "on.DisplayPosition\"$\n\017DisplayPosition\022\021\n"
+    "\rSI_DT_IN_MENU\020\000b\006proto3"
 };
 static ::absl::once_flag descriptor_table_snapshot_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_snapshot_2eproto = {
     false,
     false,
-    538,
+    624,
     descriptor_table_protodef_snapshot_2eproto,
     "snapshot.proto",
     &descriptor_table_snapshot_2eproto_once,
     nullptr,
     0,
-    5,
+    6,
     schemas,
     file_message_globals,
     TableStruct_snapshot_2eproto::offsets,
@@ -1009,6 +1174,44 @@ PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 const Snapshot_ModsEntry_DoNotUse::ParseTableT
 #endif  // !PROTOBUF_MESSAGE_GLOBALS
 // ===================================================================
 
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+Snapshot_PcModsEntry_DoNotUse::Snapshot_PcModsEntry_DoNotUse() : Super_(Snapshot_PcModsEntry_DoNotUse_get_class_data()) {}
+Snapshot_PcModsEntry_DoNotUse::Snapshot_PcModsEntry_DoNotUse(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
+    : Super_(arena, Snapshot_PcModsEntry_DoNotUse_get_class_data()) {}
+#else   // PROTOBUF_CUSTOM_VTABLE
+Snapshot_PcModsEntry_DoNotUse::Snapshot_PcModsEntry_DoNotUse() : Super_() {}
+Snapshot_PcModsEntry_DoNotUse::Snapshot_PcModsEntry_DoNotUse(::google::protobuf::Arena* PROTOBUF_NULLABLE arena) : Super_(arena) {}
+#endif  // PROTOBUF_CUSTOM_VTABLE
+#ifndef PROTOBUF_MESSAGE_GLOBALS
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 const
+    ::google::protobuf::internal::ClassDataFull Snapshot_PcModsEntry_DoNotUse_class_data_ =
+        Snapshot_PcModsEntry_DoNotUse::InternalGenerateClassData_(Snapshot_PcModsEntry_DoNotUse_globals_._default);
+
+// including ~ all the vtables and everything they use become part
+// of the same ~ SCC.
+PROTOBUF_ATTRIBUTE_WEAK const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL
+Snapshot_PcModsEntry_DoNotUse::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&Snapshot_PcModsEntry_DoNotUse_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(Snapshot_PcModsEntry_DoNotUse_class_data_.tc_table);
+  return Snapshot_PcModsEntry_DoNotUse_class_data_.base();
+}
+#else
+PROTOBUF_ATTRIBUTE_WEAK const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL
+Snapshot_PcModsEntry_DoNotUse::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&Snapshot_PcModsEntry_DoNotUse_globals_);
+  ::google::protobuf::internal::PrefetchToLocalCache(
+      ::google::protobuf::internal::MessageGlobalsBase::ToParseTableBase(&Snapshot_PcModsEntry_DoNotUse_globals_));
+  return Snapshot_PcModsEntry_DoNotUse_globals_.GetClassData();
+}
+#endif  // !PROTOBUF_MESSAGE_GLOBALS
+#ifndef PROTOBUF_MESSAGE_GLOBALS
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 const Snapshot_PcModsEntry_DoNotUse::ParseTableT_
+    Snapshot_PcModsEntry_DoNotUse::_table_ =
+        Snapshot_PcModsEntry_DoNotUse::InternalGenerateParseTable_(Snapshot_PcModsEntry_DoNotUse_class_data_.base());
+#endif  // !PROTOBUF_MESSAGE_GLOBALS
+// ===================================================================
+
 Snapshot::Snapshot(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : Super_(arena, Snapshot_get_class_data()) {
@@ -1030,6 +1233,13 @@ PROTOBUF_NDEBUG_INLINE Snapshot::Impl_::Impl_(
               ::Snapshot,
               PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_.mods_)>()
           , arena, from.mods_
+        }
+        ,
+        pcmods_ {
+          visibility, ::_pbi::InternalMetadataOffset::Build<
+              ::Snapshot,
+              PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_.pcmods_)>()
+          , arena, from.pcmods_
         }
      {}
 
@@ -1063,6 +1273,11 @@ PROTOBUF_NDEBUG_INLINE Snapshot::Impl_::Impl_(
         mods_ { visibility, ::_pbi::InternalMetadataOffset::Build<
             ::Snapshot,
             PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_.mods_)>()
+         }
+        ,
+        pcmods_ { visibility, ::_pbi::InternalMetadataOffset::Build<
+            ::Snapshot,
+            PROTOBUF_FIELD_OFFSET(::Snapshot, _impl_.pcmods_)>()
          }
      {}
 
@@ -1137,10 +1352,13 @@ PROTOBUF_NOINLINE void Snapshot::Clear() {
       this_._impl_.displaymessage_->Clear();
     }
   }
-  if (BatchCheckHasBit(cached_has_bits, 0x00000018U)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x00000038U)) {
     this_._impl_.timestamp_ = ::uint64_t{0u};
     if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       _impl_.mods_.Clear();
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      _impl_.pcmods_.Clear();
     }
   }
   _impl_._has_bits_.Clear();
@@ -1227,6 +1445,35 @@ PROTOBUF_NOINLINE void Snapshot::Clear() {
     }
   }
 
+  // map<string, bytes> pcMods = 6;
+  if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+    if (!this_._internal_pcmods().empty()) {
+      using MapType = ::google::protobuf::Map<::std::string, ::std::string>;
+      using WireHelper = _pbi::MapEntryFuncs<::std::string, ::std::string,
+                                     _pbi::WireFormatLite::TYPE_STRING,
+                                     _pbi::WireFormatLite::TYPE_BYTES>;
+      const auto& field = this_._internal_pcmods();
+
+      if (stream->IsSerializationDeterministic() && field.size() > 1) {
+        for (const auto& entry : ::google::protobuf::internal::MapSorterPtr<MapType>(field)) {
+          target = WireHelper::InternalSerialize(
+              6, entry.first, entry.second, target, stream);
+          ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+              entry.first.data(), static_cast<int>(entry.first.length()),
+ ::google::protobuf::internal::WireFormatLite::SERIALIZE, "Snapshot.pcMods");
+        }
+      } else {
+        for (const auto& entry : field) {
+          target = WireHelper::InternalSerialize(
+              6, entry.first, entry.second, target, stream);
+          ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+              entry.first.data(), static_cast<int>(entry.first.length()),
+ ::google::protobuf::internal::WireFormatLite::SERIALIZE, "Snapshot.pcMods");
+        }
+      }
+    }
+  }
+
   if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
     target =
         ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -1250,7 +1497,7 @@ PROTOBUF_NOINLINE void Snapshot::Clear() {
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
   cached_has_bits = this_._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000003fU)) {
     // optional bytes baseGameCsvTranslation = 3;
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       total_size += 1 + ::google::protobuf::internal::WireFormatLite::BytesSize(
@@ -1285,6 +1532,16 @@ PROTOBUF_NOINLINE void Snapshot::Clear() {
                                        _pbi::WireFormatLite::TYPE_MESSAGE>::ByteSizeLong(entry.first, entry.second);
       }
     }
+    // map<string, bytes> pcMods = 6;
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      total_size +=
+          1 * ::google::protobuf::internal::FromIntSize(this_._internal_pcmods_size());
+      for (const auto& entry : this_._internal_pcmods()) {
+        total_size += _pbi::MapEntryFuncs<::std::string, ::std::string,
+                                       _pbi::WireFormatLite::TYPE_STRING,
+                                       _pbi::WireFormatLite::TYPE_BYTES>::ByteSizeLong(entry.first, entry.second);
+      }
+    }
   }
   return this_.MaybeComputeUnknownFieldsSize(total_size,
                                              &this_._impl_._cached_size_);
@@ -1304,7 +1561,7 @@ void Snapshot::MergeImpl(::google::protobuf::MessageLite& to_msg,
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000003fU)) {
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       _this->_internal_set_basegamecsvtranslation(from._internal_basegamecsvtranslation());
     }
@@ -1332,6 +1589,9 @@ void Snapshot::MergeImpl(::google::protobuf::MessageLite& to_msg,
     }
     if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       _this->_impl_.mods_.MergeFrom(from._impl_.mods_);
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      _this->_impl_.pcmods_.MergeFrom(from._impl_.pcmods_);
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -1362,6 +1622,7 @@ void Snapshot::InternalSwap(Snapshot* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) 
           reinterpret_cast<char*>(&_impl_.displaymessage_),
           reinterpret_cast<char*>(&other->_impl_.displaymessage_));
   _impl_.mods_.InternalSwap(&other->_impl_.mods_);
+  _impl_.pcmods_.InternalSwap(&other->_impl_.pcmods_);
 }
 
 ::google::protobuf::Metadata Snapshot::GetMetadata() const {
