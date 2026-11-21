@@ -33,6 +33,7 @@ MAKE_HOOK_MATCH(LocalizationInstallerHook,
         assets->i___System__Collections__Generic__ICollection_1_T_()->Add(
             UnityEngine::TextAsset::New_ctor(LangCtrl::activated_snapshot->basegamecsvtranslation())
         );
+    }
 
     // Match SiraLocalizer
     std::vector<PolyglotLanguageTy> toBeAdded {
