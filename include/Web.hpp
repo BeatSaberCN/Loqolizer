@@ -1,48 +1,31 @@
 #pragma once
 
+#include "EmbbedData.hpp"
 #include "bsml/shared/BSML/MainThreadScheduler.hpp"
 #include "web-utils/shared/WebUtils.hpp"
 #include <cstdint>
+#include <filesystem>
+#include <fstream>
 #include <map>
 #include <mutex>
 #include <optional>
 #include <string>
+#include <utility>
 #include <vector>
+#include <string>
+
+#include "../src/protobuf/snapshot.pb.h"
 
 namespace Web{
-struct SSL10nManifestResponse : public WebUtils::JsonResponse {
-
-};
-
-struct CsvDownloadResponse : public WebUtils::DataResponse {
-
-};
-
-struct ModItem{
-    std::string version;
-    std::string csv_url;
-    std::string md5;
-    
-    std::optional<std::vector<uint8_t>> data;
-    // std::string csv_name; not used
-};
-
-struct ModInfo{
-    std::string name;
-    std::vector<ModItem> datas;
-};
-
-struct FutureDownloadTask{
-    ModInfo * modInfo;
-    ModItem * modItem;
-
-};
 
 class NetDataManager{
 public:
 enum DownloadStatus{
     Idle,
     DownloadingManifest,
+    AlreadyLatest,
+
+    NewDataAvaliable,
     DownloadingMods,
     Success,
     Failed
@@ -50,23 +33,22 @@ enum DownloadStatus{
     DownloadStatus status = Idle;
     int download_epoch = 0;
 
-    float manifestDownloadingProgress = 0;
-    std::map<std::string /* mod id */, ModInfo> mods;
-    std::mutex mods_lock;
+    float downloadingProgress = 0;
+    std::string statusString = "";
 
-    std::optional<std::string> statusString;
-    std::optional<std::string> remoteMessage;
+    std::string remoteProtobufDownloadUrl = "";
 
-    void StartNetworkDownload(){
+
+    void FetchManifest(){
         // clear data
         download_epoch++;
         std::atomic_thread_fence(std::memory_order_release);
-        manifestDownloadingProgress = 0;
+        downloadingProgress = 0;
         status = DownloadingManifest;
-        mods.clear();
+        
         statusString = "Downloading";
 
-        WebUtils::GetAsync<SSL10nManifestResponse>(WebUtils::URLOptions("https://frto027.github.io/ssl10n.csv/manifest.json"), [this, download_epoch = this->download_epoch](auto response){
+        WebUtils::GetAsync<WebUtils::JsonResponse>(WebUtils::URLOptions(LangCtrl::getManifestUrl()), [this, download_epoch = this->download_epoch](auto response){
             BSML::MainThreadScheduler::ScheduleNextFrame([this,download_epoch, response = std::move(response)](){
                 if(this->download_epoch != download_epoch)
                     return ;
@@ -76,174 +58,139 @@ enum DownloadStatus{
             if(this->download_epoch != download_epoch)
                 return;
             std::atomic_thread_fence(std::memory_order_release);
-            manifestDownloadingProgress = prog;
+            downloadingProgress = prog;
         });
     }
 
-private:
-    std::vector<FutureDownloadTask> downloadTask;
-    int nextDownloadTask;
-
-    void DownloadModDatas(const SSL10nManifestResponse& response){
-        if(!response.IsSuccessful()){
-            status = Failed;
-            statusString = "Can't download manifest";
+    void DownloadData(){
+        if(status != NewDataAvaliable){
             return;
         }
         status = DownloadingMods;
-        statusString = "Downloading Mods";
+        WebUtils::GetAsync<WebUtils::DataResponse>(WebUtils::URLOptions(remoteProtobufDownloadUrl), [this, download_epoch = this->download_epoch](auto response){
+            BSML::MainThreadScheduler::ScheduleNextFrame([this,download_epoch, response = std::move(response)](){
+                if(this->download_epoch != download_epoch)
+                    return ;
+                OnDownloadDone(response);
+            });
+        },[this, download_epoch = this->download_epoch](float prog){
+            if(this->download_epoch != download_epoch)
+                return;
+            std::atomic_thread_fence(std::memory_order_release);
+            downloadingProgress = prog;
+        });
+
+    }
+private:
+    void Status(const std::string& str){
+        BSML::MainThreadScheduler::Schedule([this, str = str](){
+            statusString = str;
+        });
+    }
+    void DownloadModDatas(const WebUtils::JsonResponse& response){
+        if(!response.IsSuccessful()){
+            status = Failed;
+            Status("Can't download manifest");
+            return;
+        }
+
+        status = DownloadingMods;
+        Status("Downloading Mods");
         if(!ParseManifest(response))
             return;
-
-        if(!ScheduleDownloadTasks())
-            return;
-
-        nextDownloadTask = 0;
-        NextDownloadTask(this->download_epoch);
     }
 
 
-    bool ParseManifest(const SSL10nManifestResponse& response){
+    bool ParseManifest(const WebUtils::JsonResponse& response){
         auto & data = response.responseData;
         if(!data.has_value() || !data->IsObject()){
             status = Failed;
-            statusString = "Invalid Manifest";
+            Status("Invalid Manifest");
             return false;
         }
 
+        std::string remoteModHashesStr;
         {
-            auto remoteMsg = data->FindMember("message");
-            if(remoteMsg != data->MemberEnd()){
-                if(remoteMsg->value.IsString()){
-                    remoteMessage = remoteMsg->value.GetString();
-                }
+            auto remoteModHashes = data->FindMember("modsHashesInProtobuf");
+            if(remoteModHashes == data->MemberEnd() || !remoteModHashes->value.IsString()){
+                status = Failed;
+                Status("Invalid Manifest(mod hashes not found)");
+                return false;
             }
+            remoteModHashesStr = remoteModHashes->value.GetString();
         }
-        auto mods = data->FindMember("mods");
-        if(mods == data->MemberEnd()){
-            status = Success;
-            statusString = "Success, no mods.";
-            return false;
-        }
-        
-        if(!mods->value.IsObject()){
-            status = Failed;
-            statusString = "Failed, invalid manifest(mods).";
-            return false;
+        {
+            auto binUrl = data->FindMember("protobufSnapshotBinaryUrl");
+            if(binUrl == data->MemberEnd() || !binUrl->value.IsString()){
+                status = Failed;
+                Status("Invalid Manifest(url not found)");
+                return false;
+            }
+            remoteProtobufDownloadUrl = binUrl->value.GetString();
         }
 
-        for(auto it = mods->value.MemberBegin(), end = mods->value.MemberEnd(); it != end; ++it){
-            if(!it->name.IsString())
-                continue;
-            if(!it->value.IsObject())
-                continue;
-            std::string mod_id = it->name.GetString();
-            auto jsonName = it->value.FindMember("name");
-            auto jsonDatas = it->value.FindMember("datas");
-            if(jsonName == it->value.MemberEnd() || !jsonName->value.IsString()|| jsonDatas == it->value.MemberEnd() || !jsonDatas->value.IsArray()){
-                continue;
-            }
-            ModInfo info {
-                .name = jsonName->value.GetString()
-            };
-            const auto & jsonDatasArr = jsonDatas->value.GetArray();
-            for(auto i=0;i<jsonDatasArr.Size();i++){
-                auto & elem = jsonDatasArr[i];
-                if(!elem.IsObject())
-                    continue;
-                auto ver = elem.FindMember("version");
-                auto url = elem.FindMember("csv_url");
-                //auto name = elem.FindMember("csv_name");
-                auto md5 = elem.FindMember("md5");
-                if(
-                    ver == elem.MemberEnd() ||
-                    url == elem.MemberEnd() ||
-                    //name == elem.MemberEnd() ||
-                    md5 == elem.MemberEnd() ||
-                    !ver->value.IsString() ||
-                    !url->value.IsString() ||
-                    //!name->value.IsString() ||
-                    !md5->value.IsString()
-                ){
-                    continue;
-                }
-                info.datas.push_back({
-                    .version = ver->value.GetString(),
-                    .csv_url = url->value.GetString(),
-                    .md5 = md5->value.GetString(),
-                    .data = std::nullopt
-                });
-            }
 
-            if(info.datas.size() > 0){
-                this->mods[mod_id] = std::move(info);
+        BSML::MainThreadScheduler::Schedule([this, remoteModHashesStr](){
+            if(LangCtrl::activated_snapshot && LangCtrl::activated_snapshot->modshashes() == remoteModHashesStr){
+                status = AlreadyLatest;
+                return ;
             }
-        }
-        return true;
-    }
-
-    bool ScheduleDownloadTasks(){
-        downloadTask.clear();
-        for(auto & mod : this->mods){
-            for(auto & item : mod.second.datas){
-                downloadTask.push_back({
-                    .modInfo = &mod.second,
-                    .modItem = &item
-                });
-            }
-        }
-        if(downloadTask.size() == 0){
-            status = Success;
-            statusString = "No mods need download.";
-            return false;
-        }
-        return true;
-    }
-
-
-    void NextDownloadTask(int epoch){
-        if(epoch != this->download_epoch)
-            return;
-        if(this->nextDownloadTask >= this->downloadTask.size()){
-            DownloadDone(epoch);
-            return;
-        }
-        statusString = "Downloading...";
-        WebUtils::GetAsync<CsvDownloadResponse>(WebUtils::URLOptions(this->downloadTask[this->nextDownloadTask].modItem->csv_url), [this, currentIndex = this->nextDownloadTask, epoch](auto response){
-            BSML::MainThreadScheduler::ScheduleNextFrame([this,epoch, currentIndex, response = std::move(response)](){
-                if(this->download_epoch != epoch)
-                    return ;
-                const CsvDownloadResponse & resp = response;
-                if(!resp.IsSuccessful()){
-                    statusString = "Download Failed.";
-                    status = Failed;
-                    //TODO retry?
-                    return;
-                }
-                //TODO checksum
-                this->downloadTask[currentIndex].modItem->data = resp.GetParsedData();
-                if(!checksum(this->downloadTask[currentIndex].modItem)){
-                    statusString = "Download Failed. Invalid checksum.";
-                    status = Failed;
-                    return;
-                }
-                this->nextDownloadTask++;
-                this->NextDownloadTask(epoch);
-            });
-        },[this, epoch](float prog){
-            //do nothing...
+            status = NewDataAvaliable;
         });
-    }
 
-    bool checksum(ModItem * item){
         return true;
     }
-    void DownloadDone(int epoch){
-        //TODO: save disk
 
-        status = Success;
-        statusString = "Download success";
+    bool OnDownloadDone(const WebUtils::DataResponse& response){
+        if(!response.IsSuccessful() || !response.responseData.has_value()){
+            status = Failed;
+            Status("Download Failed.");
+            return false;
+        }
+
+        // try parse
+        Snapshot snapshot;
+        if(snapshot.ParseFromArray(response.responseData->data(), response.responseData->size())){
+            BSML::MainThreadScheduler::Schedule([this, download_epoch = this->download_epoch, snapshot = std::move(snapshot)]() mutable {
+                if(this->download_epoch != download_epoch)
+                    return;
+
+                std::error_code error;
+                std::filesystem::create_directories(MOD_STORAGE_FOLDER, error);
+                if(error){
+                    status = Failed;
+                    statusString = "Can't create snapshot cache directory";
+                    return;
+                }
+
+                std::ofstream cache(MOD_REMOTE_CACHE, std::ios::binary | std::ios::trunc);
+                if(!cache || !snapshot.SerializeToOstream(&cache)){
+                    status = Failed;
+                    statusString = "Can't save snapshot";
+                    return;
+                }
+                cache.close();
+                if(!cache){
+                    status = Failed;
+                    statusString = "Can't save snapshot";
+                    return;
+                }
+
+                LangCtrl::LoadSnapshot(std::move(snapshot));
+                LangCtrl::activated_snapshot_status = LangCtrl::Snapshot_REMOTE;
+                downloadingProgress = 1;
+                statusString = "Download success";
+                status = Success;
+            });
+        }else{
+            status = Failed;
+            Status("Invalid binary");
+            return false;
+        }
+
+        return true;
     }
+
 };
 
 }

@@ -17,6 +17,7 @@
 #include "modconfig.hpp"
 #include <fmt/format.h>
 #include <optional>
+#include <string>
 #include "GameCompat.hpp"
 #include "BGLib/Polyglot/Localization.hpp"
 #include "BGLib/Polyglot/LocalizationModel.hpp"
@@ -28,7 +29,6 @@
 #include "protobuf/snapshot.pb.h"
 #define TEXT_FOLLOW_GAME "FollowGame"
 
-std::set<std::string> LangCtrl::loadedResourceMd5;
 
 bool LangCtrl::is_initialized = false;
 
@@ -137,13 +137,12 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         }
         for(auto & data : activated_snapshot->mods()){
             bool loaded = false;
-            // TODO
-            // for(auto & ver:data.second.datas()){
-            //     // if(loadedResourceMd5.contains(ver.md5))
-            //         loaded = true;
-            // }
+            if(loadedMods.contains(data.first))
+                loaded = true;
             std::string desc = loaded ? SSL10nGen::STR::TRANSLATE_LOADED() : SSL10nGen::STR::TRANSLATE_NOT_LOADED();
             // std::string desc = std::string("(") + data.second.version + ")";
+            if(loaded)
+                desc += fmt::format("({})", loadedMods[data.first]);
 
             auto text = SSL10n::GetOptional(fmt::format("QMOD_META_{}_NAME", data.second.id())).value_or(data.second.name()) + desc;
             BSML::Lite::CreateText(container->get_transform(), text, {0,0},{0,5})
