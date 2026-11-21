@@ -107,7 +107,17 @@ jobs:
         with:
           name: EmbbedData
 
+      - name: Cache protobuf
+        id: protobuf-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            third_party/protobuf_build
+            third_party/protobuf_install
+          key: ${{ runner.os }}-${{ runner.arch }}-protobuf-${{ matrix.game-version }}-${{ hashFiles('third_party/protobuf/CMakeLists.txt', 'qpm.json', 'qpm_defines.cmake', 'scripts/setup_protobuf.py') }}
+
       - name: Build protobuf library
+        if: steps.protobuf-cache.outputs.cache-hit != 'true'
         run: |
           cd ${GITHUB_WORKSPACE}
             qpm s protobuf_build

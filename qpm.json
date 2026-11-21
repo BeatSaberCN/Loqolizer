@@ -38,8 +38,8 @@
       ],
       "protobuf_build":[
         "python3 ./scripts/setup_protobuf.py",
-        "cmake -S third_party/protobuf -B build/protobuf -G Ninja -DCMAKE_INSTALL_PREFIX=third_party/protobuf_install -DCMAKE_BUILD_TYPE=Release",
-        "cmake --build build/protobuf --parallel 10",
+        "cmake -S third_party/protobuf -B third_party/protobuf_build -G Ninja -DCMAKE_INSTALL_PREFIX=third_party/protobuf_install -DCMAKE_BUILD_TYPE=Release",
+        "cmake --build third_party/protobuf_build --parallel 10",
         "cmake --install build/protobuf"
       ]
     },
