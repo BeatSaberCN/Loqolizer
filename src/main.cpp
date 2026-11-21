@@ -7,6 +7,8 @@
 #include "PolyglotInject.hpp"
 #include "SSL10n.hpp"
 #include "LangCtrl.hpp"
+#include "Web.hpp"
+#include "custom-types/shared/register.hpp"
 #include "bsml/shared/BSML/Settings/BSMLSettings.hpp"
 #include "scotland2/shared/loader.hpp"
 #include "modconfig.hpp"
@@ -64,6 +66,7 @@ MOD_EXTERN_FUNC void setup(CModInfo *info) noexcept {
 // Called later on in the game loading - a good time to install function hooks
 MOD_EXTERN_FUNC void late_load() noexcept {
   i2c::functions::initialize();
+  custom_types::Register::AutoRegister();
 
   PaperLogger.info("Install keys");
 
@@ -89,9 +92,6 @@ MOD_EXTERN_FUNC void late_load() noexcept {
     PaperLogger.info("Menu init failed");
   }
 
-  // TODO: figure out why I did this again...
-  BSML::Register::RegisterSettingsMenu(SSL10nGen::STR::SETTHING_MENU_TITLE(),LangCtrl::DidActivate, false);
-
   PaperLogger.info("Init PolyglotInject");
 
   LangCtrl::PolyglotInjectInit();
@@ -107,4 +107,6 @@ MOD_EXTERN_FUNC void late_load() noexcept {
   PaperLogger.info("Done");
 
   LangCtrl::is_initialized = true;
+
+  Web::NetDataManager::instance.FetchManifest();
 }

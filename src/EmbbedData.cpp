@@ -39,6 +39,7 @@ void LangCtrl::LoadSnapshot(Snapshot&& data){
     static Snapshot snapshot;
     snapshot = std::move(data);
     activated_snapshot = &snapshot;
+    loadedMods.clear();
 
     if(snapshot.has_basegamecsvtranslation()){
         auto & base_translate = snapshot.basegamecsvtranslation();
