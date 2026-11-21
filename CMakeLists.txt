@@ -46,7 +46,8 @@ add_compile_definitions("PAPER_ROOT_FOLDER_LENGTH=${FOLDER_LENGTH}")
 
 # Define the code directories
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/third_party/semver/include)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/third_party/semver/include
+    third_party/protobuf_install/include)
 
 # Recursively get all source files
 recurse_files(cpp_file_list ${SOURCE_DIR}/*.cpp)
@@ -59,13 +60,110 @@ recurse_files(inline_hook_cpp ${EXTERN_DIR}/includes/beatsaber-hook/shared/inlin
 # Add all source files to compilation
 add_library(
     ${COMPILE_ID} SHARED ${cpp_file_list} ${c_file_list} ${inline_hook_cpp} ${inline_hook_c}
+    ${SOURCE_DIR}/protobuf/snapshot.pb.cc
 )
 
 # Add include directories to compilation
 target_include_directories(${COMPILE_ID} PRIVATE ${INCLUDE_DIR})
 
 # Link necessary Android libraries
-target_link_libraries(${COMPILE_ID} PRIVATE -llog)
+target_link_libraries(${COMPILE_ID} PRIVATE -llog
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_base.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_city.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_civil_time.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_cord_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_cord.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_cordz_functions.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_cordz_handle.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_cordz_info.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_cordz_sample_token.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_crc_cord_state.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_crc_cpu_detect.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_crc_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_crc32c.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_debugging_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_decode_rust_punycode.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_demangle_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_demangle_rust.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_die_if_null.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_examine_stack.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_exponential_biased.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_failure_signal_handler.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_flags_commandlineflag_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_flags_commandlineflag.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_flags_config.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_flags_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_flags_marshalling.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_flags_parse.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_flags_private_handle_accessor.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_flags_program_name.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_flags_reflection.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_flags_usage_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_flags_usage.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_graphcycles_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_hash.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_hashtablez_sampler.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_int128.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_kernel_timeout_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_leak_check.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_flags.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_globals.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_initialize.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_internal_check_op.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_internal_conditions.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_internal_fnmatch.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_internal_format.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_internal_globals.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_internal_log_sink_set.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_internal_message.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_internal_nullguard.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_internal_proto.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_internal_structured_proto.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_severity.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_log_sink.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_low_level_hash.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_malloc_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_periodic_sampler.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_poison.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_random_distributions.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_random_internal_distribution_test_util.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_random_internal_entropy_pool.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_random_internal_platform.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_random_internal_randen_hwaes_impl.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_random_internal_randen_hwaes.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_random_internal_randen_slow.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_random_internal_randen.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_random_internal_seed_material.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_random_seed_gen_exception.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_random_seed_sequences.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_raw_hash_set.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_raw_logging_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_scoped_set_env.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_spinlock_wait.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_stacktrace.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_status.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_statusor.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_str_format_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_strerror.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_string_view.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_strings_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_strings.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_symbolize.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_synchronization.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_throw_delegate.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_time_zone.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_time.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_tracing_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_utf8_for_code_point.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libabsl_vlog_config_internal.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libprotobuf-lite.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libprotobuf.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libprotoc.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libupb.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libutf8_range.a
+    ${CMAKE_SOURCE_DIR}/third_party/protobuf_install/lib/libutf8_validity.a
+
+    )
 
 # Add autogenerated definitions and link libraries for dependencies
 include(extern.cmake)

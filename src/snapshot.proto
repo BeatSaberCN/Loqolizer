@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+message Snapshot{
+    uint64 timestamp = 1;
+    optional SnapshotInformation displayMessage = 2;
+    optional bytes baseGameCsvTranslation = 3;
+    map<string /*id*/, Mod> mods = 4;
+    string modsHashes = 5;
+}
+
+message Mod{
+    string id = 1;
+    string name = 2;
+    repeated ModData datas = 3; /* datas for different mod versions */
+}
+
+message ModData{
+    string version = 1;
+    bytes csv_content = 2;
+}
+
+message SnapshotInformation{
+    enum DisplayPosition {
+        SI_DT_IN_MENU = 0;
+    }
+    string message = 1;
+    DisplayPosition position = 2;
+}

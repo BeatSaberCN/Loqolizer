@@ -69,3 +69,5 @@ extern.cmake
 mod.json.schema
 
 EmbbedDataReport.json
+
+third_party/protobuf_install

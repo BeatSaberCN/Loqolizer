@@ -6,28 +6,15 @@
 #include <map>
 #include <vector>
 
+class Snapshot;
+
 namespace LangCtrl{
 
 void InitEmbbedData();
 
-struct DataVersionSource{
-    const char * csv_buffer;
-    size_t csv_buffer_size;
-    const char * md5;
-    const char * version;
-};
+std::string_view embbedDataSnapshot();
 
-struct DataModInfo{
-    const char * modId;
-    const char * name;
+extern Snapshot *activated_snapshot;
 
-    std::vector<DataVersionSource> datas;
-};
-
-extern std::map<std::string, DataModInfo> embbedData;
-extern const char * embbedDataTimestamp;
-
-std::string_view siraLocalizerResource();
-std::string_view siraLocalizerModResource();
 }
 

@@ -10,10 +10,12 @@
 #include "System/Collections/Generic/List_1.hpp"
 #include "System/Collections/Generic/ICollection_1.hpp"
 #include "UnityEngine/TextAsset.hpp"
+#include <cstddef>
 #include <vector>
 #include <variant>
 #include <string>
 #include <string_view>
+#include "protobuf/snapshot.pb.h"
 
 /* this is modified from https://github.com/qe201020335/PolyglotInject */
 
@@ -25,12 +27,12 @@ MAKE_HOOK_MATCH(LocalizationInstallerHook,
                 IInstallerRegistry* registry) {
     PaperLogger.debug("Injecting languages for polyglot");
 
-    std::string_view siraLocalizerRes = LangCtrl::siraLocalizerResource();
-    if(siraLocalizerRes.size() > 0){
+    if(LangCtrl::activated_snapshot == nullptr || !LangCtrl::activated_snapshot->has_basegamecsvtranslation()){
+        PaperLogger.critical("No base game translations in the snapshot!");
+    }else{
         assets->i___System__Collections__Generic__ICollection_1_T_()->Add(
-            UnityEngine::TextAsset::New_ctor( siraLocalizerRes)
+            UnityEngine::TextAsset::New_ctor(LangCtrl::activated_snapshot->basegamecsvtranslation())
         );
-    }
 
     // Match SiraLocalizer
     std::vector<PolyglotLanguageTy> toBeAdded {

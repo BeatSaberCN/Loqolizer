@@ -107,6 +107,11 @@ jobs:
         with:
           name: EmbbedData
 
+      - name: Build protobuf library
+        run: |
+          cd ${GITHUB_WORKSPACE}
+            qpm s protobuf_build
+
       # outputs are named <module_id>-<version>-bs<packageVersion>-<build time, e.g. 20261110T030707Z>,
       # read from the generated mod.json: the qmod, lib<name>.so and debug_lib<name>.so
       - name: Build & Create QMOD

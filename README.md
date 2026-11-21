@@ -24,7 +24,7 @@ git submodule init
 git submodule update
 ```
 
-Use `qpm s build` to build.  
+Use `qpm s protobuf_build && qpm s build` to build.  
 Use `qpm qmod zip` to get release mod.
 
 # Embbed Data
@@ -47,11 +47,17 @@ WIP, online data download feature not avaliable.
 
 The mod will iterates every avaliable version data for every mod, and use the first matched data.
 
+# Protobuf Integration
+
+- if you update `src/snapshot.proto`, you should install [protoc](https://github.com/protocolbuffers/protobuf/releases) and run `qpm s protobuf`.
+
 # How to release this mod
 
 For maintainer of this repo.
 
 ## Option 1: auto pre-release
+
+This mode has been disabled for temporary.
 
 In action `auto-release.yml`, the mod check if the latest release(including pre-release) is synchronized with `ssl10n.csv`. If not, auto bump version and make a pre-release. Based on the `master` branch.
 

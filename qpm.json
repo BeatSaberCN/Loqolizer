@@ -32,6 +32,15 @@
       ],
       "restart": [
         "python3 ./extern/includes/mod-scripts/shared/restart.py $0:?"
+      ],
+      "protobuf": [
+        "protoc -I=./src --cpp_out=./src/protobuf ./src/snapshot.proto"
+      ],
+      "protobuf_build":[
+        "python3 ./scripts/setup_protobuf.py",
+        "cmake -S third_party/protobuf -B build/protobuf -G Ninja -DCMAKE_INSTALL_PREFIX=third_party/protobuf_install -DCMAKE_BUILD_TYPE=Release",
+        "cmake --build build/protobuf --parallel 10",
+        "cmake --install build/protobuf"
       ]
     },
     "ndk": "^27.3.13750724",
