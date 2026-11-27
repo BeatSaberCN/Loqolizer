@@ -7,11 +7,13 @@
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/BeatSaberCN/Loqolizer/auto-release.yml?label=auto-releasing)](https://github.com/BeatSaberCN/Loqolizer/actions/workflows/auto-release.yml)
 ![GitHub Release Date](https://img.shields.io/github/release-date-pre/BeatSaberCN/Loqolizer?style=social&label=release%20at)
 
-Translate your game and mods. This mod is for player. For other part, refert to [this](https://github.com/frto027/ssl10n.csv/tree/master).
+Translate your game and mods with the power of community translations
 
-For this mod's developer...
+This mod is for players. For modders, refer to [this](https://github.com/frto027/ssl10n.csv/tree/master).
 
-Don't forget clone submodules if you git clone this repo.
+## For this mod's developer...
+
+Don't forget to clone submodules if you git clone this repo.
 
 ```
 git clone --recursive https://github.com/BeatSaberCN/Loqolizer.git
@@ -25,51 +27,51 @@ git submodule update
 ```
 
 Use `qpm s build` to build.  
-Use `qpm qmod zip` to get release mod.
+Use `qpm qmod zip` to get the `qmod` file.
 
-# Embbed Data
+## Embedded Data
 
-This mod download translate from [ssl10n.csv](https://github.com/frto027/ssl10n.csv) at build time, including the translate's version number.
+This mod downloads translations from [ssl10n.csv](https://github.com/frto027/ssl10n.csv) at build time, including the translation's version number.
 
-# Version check
+## Version check
 
-During load time, the Loqolizer find avaliable mods and load avaliable translates for them. Every translate can declare a mod version range. Therefore, modders don't need to worry about translate compatibility issues between mod versions.
+During load time, the Loqolizer finds available mods and loads available translations for them. Every translate can declare a mod version range. Therefore, modders don't need to worry about translate compatibility issues between mod versions.
 
-We use [Neargye/semver](https://github.com/Neargye/semver) to match the mod version range. Specially, version number `*` for any version. Otherwise, follow the Readme file in that library.
+We use [Neargye/semver](https://github.com/Neargye/semver) to match the mod version range. Specifically, use version number `*` for any version. Otherwise, follow the README file in that library.
 
-## Embbed Data Version Check
+### Embedded Data Version Check
 
-When game start, the mod check every mod's id and version. The mismatched translate will be skipped. Mailformed version will be loaded.
+When the game starts, the mod checks every mod's id and version. The mismatched translation will be skipped. Malformed versions will be loaded.
 
-## Online Data Version Check
+### Online Data Version Check
 
-WIP, online data download feature not avaliable.
+WIP, online data download feature not available.
 
-The mod will iterates every avaliable version data for every mod, and use the first matched data.
+The mod will iterate over every available version of data for every mod, and use the first matched data.
 
-# How to release this mod
+## How to release this mod
 
-For maintainer of this repo.
+For maintainers of this repo.
 
-## Option 1: auto pre-release
+### Option 1: auto pre-release
 
-In action `auto-release.yml`, the mod check if the latest release(including pre-release) is synchronized with `ssl10n.csv`. If not, auto bump version and make a pre-release. Based on the `master` branch.
+In the action `auto-release.yml`, the mod checks whether the latest release (including pre-release) is synchronized with `ssl10n.csv`. If not, auto-bump the version and make a pre-release. Based on the `master` branch.
 
-The maintainer in this repo can test and update the pre-release to a latest-release.
+The maintainer in this repo can test and update the pre-release to the latest release.
 
-## Option 2: manual release
+### Option 2: manual release
 
-Just push a version tag `v*.*.*`, this will trigger the action `build.yml` and generate a draft release.
+Simply push a version tag `v*.*.*`. This will trigger the action `build.yml,` which creates a draft release.
 
 `git tag v0.6.4 && git push origin v0.6.4`
 
 Make sure your release will not break `auto pre-release`. The next time when auto release happens, the version number is based on your release.
 
-# Contribution Guide
+## Contribution Guide
 
-Don't develop in master branch, unless your code is ready to use. This branch is used by auto update.
+Don't develop in the master branch unless your code is ready to use. This branch is used by auto update.
 
-This does not apply to pull requests. Feel free to open pull requests to the master branch, the maintainer will handle it.
+This does not apply to pull requests. Feel free to open pull requests to the master branch. the maintainer will handle it.
 
 ## Credits
 * Frto027 (mod dev)
