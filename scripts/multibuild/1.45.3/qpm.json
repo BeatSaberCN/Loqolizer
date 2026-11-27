@@ -59,6 +59,11 @@
       "id": "reflectcpp",
       "versionRange": "^0.25.0",
       "additionalData": {}
+    },
+    {
+      "id": "web-utils",
+      "versionRange": "^0.6.10",
+      "additionalData": {}
     }
   ]
 }

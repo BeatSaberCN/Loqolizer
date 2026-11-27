@@ -70,4 +70,5 @@ mod.json.schema
 
 EmbbedDataReport.json
 
+third_party/protobuf_build
 third_party/protobuf_install

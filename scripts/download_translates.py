@@ -19,7 +19,6 @@ protobuf = urllib.request.urlopen(manifest['protobufSnapshotBinaryUrl']).read()
 protobuf_txt =  ",".join([str(x) for x in protobuf]) 
 
 
-print(protobuf)
 output = """#include "EmbbedData.hpp"
 
 namespace LangCtrl{
