@@ -9,4 +9,6 @@ LOQOLIZER_SETTHING_EMBBED_DATA_TITLE,title of embbed data list view,Embbed Datas
 LOQOLIZER_FOLLOW_GAME,the first option in language select dropdown,Follow Game,,,,,,,,,,,,,,,,,,,,,,,,,,,
 LOQOLIZER_TRANSLATE_LOADED,display if a mod's translate is loaded,[loaded],,,,,,,,,,,,,,,,,,,,,,,,,,,
 LOQOLIZER_TRANSLATE_NOT_LOADED,display if a mod's translate is not loaded,[not loaded],,,,,,,,,,,,,,,,,,,,,,,,,,,
-LOQOLIZER_GAME_TRANSLATED_BY,,Game is translated by <color=#bababa>{0}</color>,,,,,,,,,,,,,,,,,,,,,,,,,,,
+LOQOLIZER_GAME_TRANSLATED_BY,,Base game is translated by <color=#bababa>{0}</color>,,,,,,,,,,,,,,,,,,,,,,,,,,,
+LOQOLIZER_REFRESH_MANIFEST,manifest tells the mod if we have newer translates in internet,Refresh manifest,,,,,,,,,,,,,,,,,,,,,,,,,,,
+LOQOLIZER_DOWNLOAD_TRANSLATE,click this button will download translate from the internet,Download,,,,,,,,,,,,,,,,,,,,,,,,,,,

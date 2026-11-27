@@ -222,11 +222,11 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
             ->AddComponent<UnityEngine::UI::ContentSizeFitter*>();
         messageFitter->set_horizontalFit(UnityEngine::UI::ContentSizeFitter::FitMode::Unconstrained);
         messageFitter->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
-        updater->refreshButton = BSML::Lite::CreateUIButton(container->get_transform(), "Refresh manifest", [updater](){
+        updater->refreshButton = BSML::Lite::CreateUIButton(container->get_transform(), SSL10nGen::STR::REFRESH_MANIFEST(), [updater](){
             Web::NetDataManager::instance.FetchManifest();
             updater->Refresh();
         });
-        updater->downloadButton = BSML::Lite::CreateUIButton(container->get_transform(), "Download", [updater](){
+        updater->downloadButton = BSML::Lite::CreateUIButton(container->get_transform(), SSL10nGen::STR::DOWNLOAD_TRANSLATE(), [updater](){
             Web::NetDataManager::instance.DownloadData();
             updater->Refresh();
         });
