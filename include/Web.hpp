@@ -51,6 +51,7 @@ enum DownloadStatus{
     }
 
     void FetchManifest(){
+        return;//network functions is not avaliable
         if(IsBusy()) return;
         remoteProtobufDownloadUrl.clear();
         // clear data

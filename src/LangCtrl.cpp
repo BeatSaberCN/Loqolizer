@@ -17,6 +17,7 @@
 #include "modconfig.hpp"
 #include <fmt/format.h>
 #include <optional>
+#include <sstream>
 #include <string>
 #include "GameCompat.hpp"
 #include "BGLib/Polyglot/Localization.hpp"
@@ -82,9 +83,11 @@ void LangCtrl::MenuUpdater::Refresh() {
     if (fillRect->get_anchorMax().x != progress)
         fillRect->set_anchorMax({progress, 1});
     bool canRefresh = !manager.IsBusy();
+    canRefresh = false;
     if (refreshButton->get_interactable() != canRefresh)
         refreshButton->set_interactable(canRefresh);
     bool canDownload = manager.CanDownload();
+    canDownload = false;
     if (downloadButton->get_interactable() != canDownload)
         downloadButton->set_interactable(canDownload);
 
@@ -99,20 +102,20 @@ void LangCtrl::MenuUpdater::Refresh() {
     if (messageObject->get_activeSelf() != !message.empty())
         messageObject->SetActive(!message.empty());
 
-    std::string translations;
+    std::stringstream translations;
     if (activated_snapshot) {
         for (const auto& [id, data] : activated_snapshot->mods()) {
             auto loaded = loadedMods.find(id);
             bool isLoaded = loaded != loadedMods.end();
             auto name = SSL10n::GetOptional(fmt::format("QMOD_META_{}_NAME", data.id())).value_or(data.name());
-            translations += isLoaded ? "<color=#00FF00>" : "<color=#808080>";
-            translations += name;
-            translations += isLoaded ? SSL10nGen::STR::TRANSLATE_LOADED() : SSL10nGen::STR::TRANSLATE_NOT_LOADED();
-            if (isLoaded) translations += fmt::format("({})", loaded->second);
-            translations += "</color>\n";
+            translations << (isLoaded ? "<color=#00FF00>" : "<color=#808080>");
+            translations << name;
+            translations << (isLoaded ? SSL10nGen::STR::TRANSLATE_LOADED() : SSL10nGen::STR::TRANSLATE_NOT_LOADED());
+            if (isLoaded) translations << fmt::format("({})", loaded->second);
+            translations << "</color>\n";
         }
     }
-    setTextIfChanged(translationsText, translations);
+    setTextIfChanged(translationsText, translations.str());
 }
 
 bool LangCtrl::is_initialized = false;
@@ -189,7 +192,7 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
 
 
         auto gameLang = getGameLanguage().value_or(SSL10n::Language::L_English);
-        std::optional<std::string> sira_game_translator = SSL10n::GetOptional("SIRALOCALIZER_LANGUAGE_CONTRIBUTORS", gameLang, false);
+        std::optional<std::string> sira_game_translator = SSL10n::GetOptional("LANGUAGE_CONTRIBUTORS", gameLang, false);
         if(sira_game_translator.has_value() && gameLang != SSL10n::L_English){
             auto text = BSML::Lite::CreateText(container->get_transform(),
                 SSL10nGen::FMT::GAME_TRANSLATED_BY(sira_game_translator.value()), {0,0}, {70,0});
@@ -211,7 +214,6 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
           RestartGame();
         });
 
-        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_EMBBED_DATA_TITLE(),{0,0},{0,5});
         updater->displayMessageText = BSML::Lite::CreateText(container->get_transform(), "", {0,0}, {70,0});
         updater->displayMessageText->set_enableWordWrapping(true);
         updater->displayMessageText->get_gameObject()->GetComponent<UnityEngine::UI::LayoutElement*>()
@@ -248,9 +250,20 @@ void LangCtrl::DidActivate(HMUI::ViewController* self, bool firstActivation, boo
         fillRect->set_offsetMin({0,0});
         fillRect->set_offsetMax({0,0});
         updater->progressText = BSML::Lite::CreateText(container->get_transform(), "0%", {0,0}, {70,5});
+
+        BSML::Lite::CreateText(container->get_transform(), SSL10nGen::STR::SETTHING_EMBBED_DATA_TITLE(),{0,0},{0,5});
         updater->translationsText = BSML::Lite::CreateText(container->get_transform(), "", {0,0}, {70,5});
         updater->translationsText->get_gameObject()->AddComponent<UnityEngine::UI::ContentSizeFitter*>()
             ->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
+
+        //Do not display the download button. We don't support that in this version.
+        updater->refreshButton->set_enabled(false);
+        updater->downloadButton->set_enabled(false);
+        updater->statusText->set_enabled(false);
+        background->set_enabled(false);
+        updater->progressFill->set_enabled(false);
+        updater->progressText->set_enabled(false);
+
     }
     auto updater = self->get_gameObject()->GetComponent<LangCtrl::MenuUpdater*>();
     updater->elapsed = 0;
