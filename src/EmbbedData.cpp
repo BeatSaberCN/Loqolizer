@@ -9,11 +9,13 @@
 #include <string>
 #include <string_view>
 #include <utility>
+#include <vector>
 #include "protobuf/snapshot.pb.h"
 
 Snapshot* LangCtrl::activated_snapshot = nullptr;
 std::map<std::string/*mod id*/, std::string/*mod version*/> LangCtrl::loadedMods;
 LangCtrl::SnapshotStatus LangCtrl::activated_snapshot_status = LangCtrl::SnapshotStatus::Snapshot_INVALID;
+std::vector<std::string> LangCtrl::loadedPcMods;
 
 void LangCtrl::InitEmbbedData(){
     std::string_view embbedDataSnapshot = LangCtrl::embbedDataSnapshot();
@@ -40,19 +42,22 @@ void LangCtrl::LoadSnapshot(Snapshot&& data){
     snapshot = std::move(data);
     activated_snapshot = &snapshot;
     loadedMods.clear();
+    loadedPcMods.clear();
 
     if(snapshot.has_basegamecsvtranslation()){
         auto & base_translate = snapshot.basegamecsvtranslation();
         SSL10n::Database::PolyglotFormat::AddCSVContent(base_translate.data(), base_translate.size());
     }
     
-
-    {
-        auto sira = snapshot.pcmods().find("SiraLocalizer");
-        if(sira != snapshot.pcmods().end()){
-            SSL10n::Database::PolyglotFormat::AddCSVContent(sira->second.data(), sira->second.size());
+    auto loadPcMod = [](const char * pcmod){
+        auto dat = snapshot.pcmods().find(pcmod);
+        if(dat != snapshot.pcmods().end()){
+            loadedPcMods.push_back(pcmod);
+            SSL10n::Database::PolyglotFormat::AddCSVContent(dat->second.data(), dat->second.size());
         }
-    }
+    };
+    loadPcMod("SiraLocalizer");
+    loadPcMod("BSML");
     
     auto loaded_mods = modloader::get_loaded();
     auto metadata = snapshot.mods().find("ModMetadata");

@@ -29,6 +29,7 @@ std::string_view embbedDataSnapshot();
 extern Snapshot *activated_snapshot;
 extern SnapshotStatus activated_snapshot_status;
 extern std::map<std::string/*mod id*/, std::string/*mod version*/> loadedMods;
+extern std::vector<std::string> loadedPcMods;
 
 }
 

@@ -114,6 +114,10 @@ void LangCtrl::MenuUpdater::Refresh() {
             if (isLoaded) translations << fmt::format("({})", loaded->second);
             translations << "</color>\n";
         }
+
+        for (const auto &pcmod : loadedPcMods){
+            translations << "<color=#00FF00>" << pcmod << " (PC)" << "</color>\n";
+        }
     }
     setTextIfChanged(translationsText, translations.str());
 }
