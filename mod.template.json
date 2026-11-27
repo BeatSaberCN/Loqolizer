@@ -7,7 +7,7 @@
   "version": "0.7.2",
   "packageId": "com.beatgames.beatsaber",
   "packageVersion": "1.40.8_7379",
-  "description": "Translate your game and mods",
+  "description": "Translate your game and mods with the power of community translations",
   "dependencies": [],
   "modFiles": ["${binary}"],
   "coverImage": "Loqolizer.png",
