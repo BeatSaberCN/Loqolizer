@@ -41,6 +41,11 @@
       "additionalData": {}
     },
     {
+      "id": "lapiz",
+      "versionRange": "^0.2.23",
+      "additionalData": {}
+    },
+    {
       "id": "sslocalization",
       "versionRange": "^0.7.0",
       "additionalData": {}
